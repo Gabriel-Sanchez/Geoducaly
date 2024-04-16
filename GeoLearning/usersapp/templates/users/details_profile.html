@@ -1,0 +1,667 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{request.user}}
+{% endblock title %}
+
+{% block head %}
+<link href="https://cdn.bokeh.org/bokeh/release/bokeh-3.1.0.min.css" rel="stylesheet" type="text/css">
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.1.0.min.js"></script>
+
+{{ bokeh_css|safe }}
+  {{ bokeh_js|safe }}
+{{ script|safe }}
+
+
+
+  
+{% endblock head %}
+
+{% block content %}
+
+<style>
+    .btn-secondary{
+      background-color: var(--GcolorTitulosFondo);
+      color: white;
+    }
+  
+    .btn-secondary:hover{
+      background-color: var(--GcolorTitulosFondo_puro);
+      color: white;
+    }
+  </style>
+
+<link rel="stylesheet" href="{% static 'usersapp/details_profile.css' %}">
+<h1 class="h3"
+    style="text-align: center; color: rgb(255, 255, 255); background-color: var(--Gprimary-color) ; padding-top: 10px; padding-bottom: 10px;">
+    PERFIL</h1>
+<div class="container" style="max-width: 800;">
+
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} fixed-bottom m-3" id="message" style="display: none;">
+            <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <script>
+        
+        function showMessage() {
+            var messageDiv = document.getElementById('message');
+            if (messageDiv) {
+                messageDiv.style.display = 'block';
+            }
+        }
+    
+        
+        setTimeout(function() {
+            var messageDiv = document.getElementById('message');
+            if (messageDiv) {
+                messageDiv.style.display = 'none';
+            }
+        }, 3000);
+    
+        
+        showMessage();
+    </script>
+    
+    
+    
+    
+
+
+    <div class="row" >
+
+        <div class="col-md-4">
+            <div class="card mb-3" >
+                <div class="row g-0">
+                    <div class="col d-flex justify-content-center" >
+                        <!-- <img
+                    src="https://mdbootstrap.com/wp-content/uploads/2020/06/vertical.jpg"
+                    alt="..."
+                    class="img-fluid"
+                    /> -->
+                        {% if estudiante.picture.url != null %}
+                        <!-- <img class="rounded-circle" src="{{ estudiante.picture.url }}" width="150px" height="150px" style="
+                    margin-left: 20px; 
+                    margin-right: 20px;
+                    margin-top: 10px;
+                    "> -->
+
+                    <div style="width: 150px; height: 150px; overflow: hidden; position: relative; border-radius: 50%; margin:auto; margin-top: 20px;">
+                        <img src="{{ estudiante.picture.url }}" style="display:block; margin:auto; width: 100%;  position: absolute;    width: 100%;
+                        height: 100%;
+                        object-fit: cover;">
+                    </div>
+                        {% else %}
+                        <img class="rounded-circle" src="{% static '..\media\default\user.png' %}" width="150px"
+                            height="150px" class="d-inline-block align-top" alt="" loading="lazy" style="
+                        margin-left: 20px; 
+                        margin-right: 20px;
+                        padding-right:10px;
+                        margin-top: 10px;
+                        ">
+                        {% endif %}
+                    </div>
+                    <div class="col me-auto ms-auto">
+                        <div class="card-body">
+                            <h2 class="card-title"> {{ request.user.first_name }} {{ request.user.last_name }} - {{request.user.username}} </h2>
+    
+                            {% if estudiante.type == "1" %}
+                            <h5 class="card-title">Estudiante</h5>
+                            
+                            {% else %}
+                            <h5 class="card-title">Profesor</h5>
+    
+                            {% endif %}
+                        
+                            <br>
+
+                            {% if request.user.estudiante %}
+
+                            <div>
+                                <i title="Puntaje perfecto" class="fas fa-star text-warning"></i> =
+                                {% if request.user.estudiante.total_score_perfect  %}
+                                {{request.user.estudiante.total_score_perfect|floatformat:0}}/ {{num_total_juegos}}
+                                
+                                {% else %}
+                                0/ {{num_total_juegos}}
+                                
+                                {% endif %}
+
+
+                            </div>
+                              
+                            {% endif %}
+
+                        </div>
+                        <!-- <form action="{% url 'update_profile' %}" method="GET">
+                            {% csrf_token %}
+                            <i class="fa fa-align-right" aria-hidden="true"><button class="btn btn-success">Editar</button>
+                            </i>
+                        </form> -->
+
+                        <a href="{% url 'update_profile' %}" style=" margin-left: 17px; margin-bottom: 10px;" class="btn gcolorbuttonsSmall">Editar Perfil</a>
+                        <!-- {% if estudiante.type == "2" %}
+        
+                        <a href="{% url 'prof_charts' %}" style=" margin-left: 17px; margin-bottom: 10px;" class="btn gcolorbuttonsSmall">Resultado de los Estudiantes</a>
+                        
+    
+                        {% endif %} -->
+                    </div>
+                </div>
+            </div>
+
+            {% if request.user.estudiante %}
+              
+            <div class="card mb-3 p-3" >
+                <h5 class="card-title d-flex justify-content-center">Experiencia semanal</h5>
+                <div class="d-flex justify-content-center " >
+                    
+                    {{ div|safe }}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+        
+        <div class="col-md-8" >
+            <div class="accordion-item Gscroll " style="height: 500px; margin-bottom: 15px;">
+                <!-- Tabs navs -->
+                <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="ex2-tab-1" data-mdb-toggle="tab" href="#ex2-tabs-1" role="tab"
+                            aria-controls="ex2-tabs-1" aria-selected="true">Información de la cuenta</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="ex2-tab-2" data-mdb-toggle="tab" href="#ex2-tabs-2" role="tab"
+                            aria-controls="ex2-tabs-2" aria-selected="false">Mis grupos</a>
+                    </li>
+                    {% if estudiante.type == "1" %}
+                    <!-- <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="ex2-tab-3" data-mdb-toggle="tab" href="#ex2-tabs-3" role="tab"
+                            aria-controls="ex2-tabs-3" aria-selected="false">Mis Profesores</a>
+                        </li> -->
+                            {% else %}
+                        <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="ex2-tab-3" data-mdb-toggle="tab" href="#ex2-tabs-3" role="tab"
+                            aria-controls="ex2-tabs-3" aria-selected="false">Mis Estudiantes</a>
+                        </li>
+                        {% endif %}
+                    {% if estudiante.type == "1" %}
+                    <li class="nav-item" role="presentation">
+                        
+                        <a class="nav-link" id="ex2-tab-4" data-mdb-toggle="tab" href="#ex2-tabs-4" role="tab"
+                            aria-controls="ex2-tabs-4" aria-selected="false">Mis Puntos</a>
+                    </li>
+                    {% endif %}
+    
+                </ul>
+                <!-- Tabs navs -->
+                <!-- Tabs content -->
+                <div class="tab-content" id="ex2-content">
+                    <div class="tab-pane fade show active" id="ex2-tabs-1" role="tabpanel" aria-labelledby="ex2-tab-1"
+                        style="padding-left: 20px; padding-right: 20px ; padding-top: 5px;  flex-wrap: nowrap;">
+                        <!-- <p class="card-text" style="text-align: left ; padding-left: 10px;">
+                            <strong>Nombre de usuario:</strong> 
+                            <br>                    
+                            {{ request.user.username }}
+                            <br>
+                            <strong>Correo electronico:</strong> 
+                            <br>
+                            {{ request.user.email }}
+                            <br>
+                            <strong>Número de celular:</strong> 
+                            <br>
+                            {{ estudiante.phone_number }}
+                            <br>
+                            <strong>Biografía:</strong> 
+                            <br>
+                            {{ estudiante.biography }}
+                        </p> -->
+                        <div class="row">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Nombre de usuario:</strong> {{ request.user.username }}</li>
+                                <li class="list-group-item"><strong>Correo electrónico:</strong> {{ request.user.email }}</li>
+                                <li class="list-group-item"><strong>Número de celular:</strong> {{ estudiante.phone_number }}</li>
+                                <li class="list-group-item"><strong>Biografía:</strong> <br> {{ estudiante.biography }} </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="ex2-tabs-2" role="tabpanel" aria-labelledby="ex2-tab-2">
+                        <ul class="list-group list-group-flush">
+                            {% if estudiante.type == "2" %}
+                   
+                            
+                            <li class="list-group-item" style="background-color: rgba(137, 247, 247, 0.163);" > 
+                                <div class="d-flex align-items-center" >
+                                    <div class="p-2">
+                                        
+                                        <strong>Crea un Grupo</strong>
+                                    </div>
+                                    <div class="ms-auto p-2" >
+                                        
+                                        <a  href="{% url 'courses:crea_grupo' %}" type="button" class="gcolorbuttonsSmall btn btn-floating "> <i class="fas fa-plus"></i></a>
+                                    </div>
+    
+                                </div> 
+                            </li>
+
+                            {% else %}
+
+
+                            <li class="list-group-item" style="background-color: rgba(137, 247, 247, 0.163);" > 
+                                <div class="d-flex" >
+                                    <div class="p-2">
+                                        
+                                        <strong>Únete a un Grupo</strong>
+                                    </div>
+                                    <div class="ms-auto p-2" >
+                                        
+                                        <a  href="{% url 'courses:lista_grupo' %}" type="button" class="gcolorbuttonsSmall btn btn-floating "> <i class="fas fa-plus"></i></a>
+                                    </div>
+    
+                                </div> 
+                            </li>
+                            
+
+                            {% endif %}
+
+
+                            {% for list in listaCursos %}
+                        
+                        
+                            {% if estudiante.type == "1" %}
+                            <!-- <a href="{% url 'view_grupo_general' list.grupo.id  %}" class="d-flex justify-content-between" > -->
+
+                                <li class="list-group-item d-flex justify-content-between row" >  
+
+                                    <div class="col">
+
+                                        <span>
+    
+                                            <strong class="ps-2">Grupo:
+    
+                                            </strong> 
+                                            {{ list.grupo|safe }} 
+                                        </span>
+                                    </div>
+
+                                    <div class="col">
+
+                                        <span>
+    
+                                            <strong   >Profesor:
+    
+                                            </strong> 
+                                            {{ list.grupo.profesor |safe }} 
+                                        </span>
+                                    </div>
+
+
+
+                                    <div  class="col d-flex justify-content-end">
+                                        <a class="btn gcolorbuttonsSmall me-2" href="{% url 'view_grupo_general' list.grupo.id  %}">Ir</a>
+
+                                        <a id="openModalButton" class="btn gcolorbuttonsSmallEliminar " data-toggle="modal" data-target="#confirmDeleteModal{{ list.grupo.id }}">Salir Grupo</a>
+                                    </div>
+
+              
+
+
+
+
+
+                                                                            <!-- Modal -->
+                                        <div class="modal fade" id="confirmDeleteModal{{ list.grupo.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body" style="text-align: center;">
+                                                ¿Estás seguro de que deseas salir del grupo {{ list.grupo|safe }} ? 
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                <form action="{% url 'courses:salirse_grupo_estudiante' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="texto" value="{{ list.grupo.id }}">
+                                                    <button type="submit" class="btn gcolorbuttonsSmallEliminar">Salir</button>
+                                                </form>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <script>
+                                            $(document).ready(function(){
+                                                $('#openModalButton').on('click', function(){
+                                                    $('#confirmDeleteModal{{ list.grupo.id }}').modal('show');
+                                                });
+                                                });
+                                                
+                                        </script>
+
+
+
+                                
+                                </li>
+                            <!-- </a> -->
+                            {% else %}
+                            <li class="list-group-item div d-flex  justify-content-between align-items-center"> 
+
+                                <div class="col-4" title="{{ list | safe }}  ">
+
+                                    <p style="  overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap; 
+                                    max-width: 200px; ">
+
+                                        <span class="ps-2">
+    
+                                            <strong >Grupo:</strong> {{ list | safe }}  
+                                        </span>
+                                    </p>
+
+                                </div>
+
+                                <div class="col-3">
+
+                                    <span>
+    
+                                        <strong>Código único:</strong> {{list.codigo_unico |safe }}
+                                    </span>
+                                </div>
+                                
+
+                                 
+                                    <div class="col-5 d-flex justify-content-end" >
+
+                                        
+
+                                            <!-- <a href="{% url 'courses:list_quices' list.id %}" class="btn gcolorbuttonsSmall">Lista de Quices</a> -->
+                                            <a href="{% url 'courses:edita_grupo' list.id %}" class="btn gcolorbuttonsSmall me-2">Editar grupo</a>
+                                            <a href="{% url 'courses:detalles_grupo' list.id %}" class="btn gcolorbuttonsSmall"> Administrar juegos</a>
+                                        
+                                       
+                                    </div>
+    
+    
+                                
+                            </li>
+                        
+                            
+                            {% endif %}
+                            
+                            
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade ps-4 pe-4" id="ex2-tabs-3" role="tabpanel" aria-labelledby="ex2-tab-3">
+                        {% for lista in List_estudiantesPorCurso %}
+                        <!-- <h6 class="bg-light p-2 border-top border-bottom">{{ lista.0.grupo.course }}</h6> -->
+                        <h6 style="margin-left: 1%;"> <strong> Grupo: {{ lista.0.grupo }}</strong> </h6>
+                    
+                            <!-- <strong style="margin-left: 2%;">Estudiantes: </strong>  -->
+                
+    
+                        {% for list in lista %}
+                        <!-- <ul class="list-group list-group-flush"> -->
+                            <ul class="list-group list-group-light ">
+                            
+    
+                                    {% if estudiante.type == "1" %}
+                                    
+                                    <li class="list-group-item"><strong>Profesor: </strong> 
+                                    
+                                        <p  style="margin-left: 2%;"  >
+                                            {{ list.grupo.profesor }} 
+                                        </p>
+                                    </li>
+                                    {% else %}
+    
+                                                    <!-- <li class="list-group-item" style="margin-left: 2%;"  >
+                                                
+                                                        {{ list.estudiante }} 
+                            
+                                                
+                                                    </li> -->
+    
+    
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    {% if list.estudiante.picture.url != null %}
+                                    <img src="{{list.estudiante.picture.url}}" alt="" style="width: 45px; height: 45px"
+                                    class="rounded-circle" />
+                                    
+                                    {% else %}
+                                    <img src="{% static '..\media\default\user.png' %}" alt="" style="width: 45px; height: 45px"
+                                    class="rounded-circle" />
+    
+                                    {% endif %}
+                                    
+    
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">{{ list.estudiante }} </p>
+                                    <!-- <p class="text-muted mb-0">soraya.letto@gmail.com</p> -->
+                                    <p class="text-muted mb-0">{{ list.estudiante.user.email }}</p>
+                                </div>
+                                </div>
+                            </li>
+    
+    
+    
+    
+    
+                            {% endif %}
+                        
+                            
+                        </ul>
+                        {% endfor %}
+                        <br>
+                        {% endfor %}
+    
+                    </div>
+                    <div class="tab-pane fade" id="ex2-tabs-4" role="tabpanel" aria-labelledby="ex2-tab-4">
+
+<!-- ejemplo de grafico
+
+<div class="d-flex justify-content-center" >
+
+    {{ div|safe }}
+</div> -->
+
+
+                        
+
+                       
+
+                        <table class="table">
+                            <thead style="background-color: #ecfefe" >
+                                <tr>
+                                    <th scope="col">N</th>
+                                    <th scope="col">Juegos</th>
+                                    <th scope="col">Lecciones</th>
+                                    <th scope="col">EXP</th>
+                                    <th scope="col" title="Puntuación perfecta">Perf.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            
+                                {% for nota in notas %}
+                                
+                                
+                                <tr>
+                                        
+                                        <th>{{ forloop.counter }}</th>
+                                        <th><a href="{{ nota.juego_lesson.lesson.get_absolute_url }}" style="color: #3467c9;">
+
+                                            {{ nota.juego_lesson.nombre_juego }}
+                                        </a>
+                                    </th>
+                                        <th>
+                                            <a href="{{ nota.juego_lesson.lesson.get_absolute_url }}" style="color: #3467c9;">
+                                                {{ nota.juego_lesson.lesson }}
+                                            </a>
+                                        </th>
+                                        <th style="width: 85px;"> 
+                                            <p style="display: inline-block;">
+                                                <!-- {% if nota.score_perfecto %}
+                                                <i title="Puntaje perfecto" class="fas fa-star text-warning"></i> 
+                                                {% endif %} -->
+
+                                                {{ nota.score|floatformat:0 }}
+                                                
+                                                
+                                                
+                                                
+                                                
+
+                                            </p> 
+                                        </th>
+                                        <th>{% if nota.score_perfecto %}
+                                            <i title="Puntaje perfecto" class="fas fa-star text-warning"></i> 
+                                            {% else %}
+                                            <i title="Puntaje perfecto" class="fas fa-star " style="color: gray;"></i> 
+                                            {% endif %}</th>
+                                    </tr>
+                               
+            
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                       
+
+
+
+
+
+                        {% for notas in list_notas_por_grupo %}
+    
+                        
+                    
+    
+                        {% for key,nota in notas.items %}
+                        
+                        
+                        <ul class="list-group list-group-flush">
+                            
+                            
+                            <li class="list-group-item">
+                                
+                                {% if key == 'curso' %}
+    
+                                
+                                <div style="margin-left: 1%;" >
+                                    <strong> {{key}} </strong> 
+                                    {{nota}}
+                                </div>
+                                {% else %}
+                                <strong style="margin-left: 1%;" > {{key}} </strong> 
+                                {% for k,detalle_nota in nota %}
+    
+                            
+                                <div style="margin-left: 2%;" >
+                                    {{k}}:
+                                    {{detalle_nota}}
+                                    
+                                </div>
+                                
+                                {% endfor %} 
+                                
+                                {% endif %}
+                                
+    
+                            
+                            </li>
+                            
+                        </ul>
+                        {% endfor %}
+                        
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Tabs content -->
+            </div>
+            
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="row justify-content-center">
+    <div class="col-x2-6 col-sm-4 ">
+        <div class="card">
+            <div class="card-block bg-secondary text-black">
+                <h2 class="card-header text-center">Perfil</h2>
+                <div class="card-body">
+
+                    <h3>Detalles:</h3>
+
+                    {% if estudiante.picture.url != null %}
+
+
+                    <img class="rounded-circle" src="{{ estudiante.picture.url }}" width="200-50%" height="200-50%">
+                    {% else %}
+                    <img class="rounded-circle" src="{% static '..\media\default\user.png' %}" width="300"
+                        height="300" class="d-inline-block align-top" alt="" loading="lazy">
+                    {% endif %}
+
+                    <h4>Nombre de usuario: {{ request.user.username }} </h4>
+                    <h4>Nombre: {{ request.user.first_name }} </h4>
+                    <h4>Apellido: {{ request.user.last_name }} </h4>
+                    <h4>Correo electronico: {{ request.user.email }} </h4>
+                    <h4>Número de celular: {{ estudiante.phone_number }} </h4>
+                    <h4>Biografía: {{ estudiante.biography }} </h4>
+                    <br>
+
+                    <form action="{% url 'update_profile' %}" method="GET">
+                        {% csrf_token %}
+                        <i class="fa fa-align-right" aria-hidden="true"><button class="btn btn-success">Editar</button>
+                        </i>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+{% endblock %}

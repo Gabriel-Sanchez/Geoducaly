@@ -1,0 +1,41 @@
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'cursosLeccionesapp\course_list.css' %}">
+
+
+  <h1 tabindex="0" class="gsubtitulo h2 ">Cursos</h1>
+
+
+ 
+
+  <div style=" padding-bottom: 2%;">
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+
+
+      {% for object in object_list %}
+
+
+      <div class="col">
+        <div class="card h-100 bg-image hover-zoom" style="border-top-left-radius:3% ; border-top-right-radius: 3%;">
+          <a href="{{object.get_absolute_url}}" style="color: black;">
+            <img src="{{ object.miniatura.url }}" class="w-100 card-img-top" alt="{{object.alt}}" style="max-height: 20rem;" />
+            <div class="card-body">
+              <h5 class="card-title">{{ object }}</h5>
+              <p class="card-text">
+                 <!-- {{ object.description}} -->
+              </p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+
+      {% endfor %}
+    </div>
+  </div>
+
+
+
+

@@ -1,0 +1,34 @@
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} fixed-bottom m-3" id="message" style="display: none;">
+        <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<script>
+    
+    function showMessage() {
+        var messageDiv = document.getElementById('message');
+        if (messageDiv) {
+            messageDiv.style.display = 'block';
+        }
+    }
+
+    
+    setTimeout(function() {
+        var messageDiv = document.getElementById('message');
+        if (messageDiv) {
+            messageDiv.style.display = 'none';
+        }
+    }, 3000);
+
+    
+    showMessage();
+</script>
+
+

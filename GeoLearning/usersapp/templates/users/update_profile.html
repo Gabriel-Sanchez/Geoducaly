@@ -1,0 +1,439 @@
+{% extends "baseapp/base.html" %}
+{% load static %}
+{% block title %}
+Configuración de Perfil
+{% endblock title %}
+{% block content %}
+
+<style>
+    .error-message{
+        display: none;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+    .error-message_2{
+
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+  
+</style>
+
+<main class="">
+    <h2 class="gtitulo" style="margin-bottom: 2%;">Configuración de cuenta
+    </h2>
+    <div class="container">
+
+
+        <div id="mdb-panel-tab-content" class="tab-content pt-2">
+
+            <div class="row mb-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card mb-4">
+                        <div class="card-header">Configuración de imagen</div>
+
+                        <div class="card-body">
+                            <form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data" id="form-img">
+                                {% csrf_token %}
+
+                                <div class="media">
+                                    {% if estudiante.picture.url != null %}
+                                    <!-- <img class="rounded-circle" src="{{ estudiante.picture.url }}" width="100-50%"
+                                        height="100-50%" style="display:block; margin:auto;"> -->
+                                        <div style="width: 100px; height: 100px; overflow: hidden; position: relative; border-radius: 50%; margin:auto;">
+                                            <img src="{{ estudiante.picture.url }}" style="display:block; margin:auto; width: 100%;  position: absolute;    width: 100%;
+                                            height: 100%;
+                                            object-fit: cover;">
+                                        </div>
+                                        
+                                        
+                                    {% else %}
+                                    <img class="rounded-circle" src="{% static '..\media\default\user.png' %}"
+                                        width="100-50%" height="100-50%" style="display:block; margin:auto;">
+                                    {% endif %}
+                                </div>
+                                <div class="media-body" style="padding-bottom: 10px;">
+                                    <h5 class="ml-4" style="text-align: center;"> {{user.username}} |
+                                        {{user.get_fullname}} </h5>
+
+                                    <label class="form-label" for="customFile">Subir imagen</label>
+                                    <input type="file" name="picture" class="form-control" id="customFile"
+                                        required="true" accept="image/*" />
+                                        <div id="error-message-img" style="color: red; display: none;">
+                                            El archivo seleccionado no es una imagen. Por favor, elige un archivo de imagen.
+                                        </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <span id="error_message_img" class="alert-info p-2" style="display: none;">
+                                        Por favor, haz un cambio en el formulario antes de enviarlo.
+                                    </span>
+                                    <button id="edit-user-account"
+                                        class="btn btn-md waves-effect waves-light gcolorbuttonsSmall">
+                                        Guardar cambios</button>
+                                </div>
+                                <input type="hidden" name="form_type" value="form1">
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">Información personal</div>
+
+                        <div class="card-body">
+                            <form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data" id="form_info_public">
+                                {% csrf_token %}
+
+
+                                <input value="{{user.first_name}}" name="firstname" type="text" id="edit-first-name"
+                                    class="form-control " placeholder="Primer Nombre">
+                                    <div class="mb-3">
+
+                                        <span id="error1" class="error-message alert alert-danger"></span>
+                                    </div>
+
+                                <input value="{{user.last_name}}" name="lastname" type="text" id="edit-last-name"
+                                    class="form-control" placeholder="Apellido">
+                                    <div class="mb-3">
+
+                                        <span id="error2" class="error-message alert alert-danger"></span>
+                                    </div>
+
+                                <input value="{{ estudiante.phone_number }}" name="phone_number" type="text"
+                                    id="edit-company" class="form-control " placeholder="Número de teléfono">
+                                    <div class="mb-3">
+
+                                        <span id="error3" class="error-message alert alert-danger"></span>
+                                    </div>
+
+                                <input value="{{ estudiante.country }}" name="country" type="text" id="edit-country"
+                                    class="form-control " placeholder="País">
+                                    <div class="mb-3">
+
+                                        <span id="error4" class="error-message alert alert-danger"></span>
+                                    </div>
+
+                                <input value="{{ estudiante.city }}" name="city" type="text" id="edit-city"
+                                    class="form-control" placeholder="ciudad">
+                                    <div class="mb-3">
+                                        <span id="error5" class="error-message alert alert-danger"></span>
+                                    </div>
+
+                                <textarea type="text" name="biography" id="edit-description"
+                                    class="form-control md-textarea"
+                                    placeholder="Biografía">{{estudiante.biography}}</textarea>
+                                    <span id="error6" class="error-message alert alert-danger"></span>
+
+                                <div class="text-center" style="padding-top: 10px;">
+                                    <span id="error_message_form_info_public" class="alert-info p-2" style="display: none;">
+                                        Por favor, haz un cambio en el formulario antes de enviarlo.
+                                    </span>
+                                    <button id="btn_info_public" type="submit"
+                                        class="btn btn-md waves-effect waves-light gcolorbuttonsSmall" >
+                                        Guardar cambios</button>
+                                </div>
+                                <input type="hidden" name="form_type" value="form2">
+                            </form>
+                        </div>
+                    </div>
+
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script>
+                        $(document).ready(function() {
+                            var formulario = $('#form_info_public');
+                            var estadoInicial = formulario.serialize();
+                    
+                            formulario.submit(function(event) {
+                                if (formulario.serialize() === estadoInicial) {
+                                    event.preventDefault();
+                                    document.getElementById('error_message_form_info_public').style.display = 'block';
+                                   
+                                }
+                            });
+                        });
+                    </script>
+                    <script>
+                        $(document).ready(function() {
+                            var formulario = $('#form_num_3');
+                            var estadoInicial = formulario.serialize();
+                    
+                            formulario.submit(function(event) {
+                                if (formulario.serialize() === estadoInicial) {
+                                    event.preventDefault();
+                                    document.getElementById('error_message_form_3').style.display = 'block';
+                                   
+                                }
+                            });
+                        });
+                    </script>
+                    <script>
+                        $(document).ready(function() {
+                            var formulario = $('#form_num_4');
+                            var estadoInicial = formulario.serialize();
+                    
+                            formulario.submit(function(event) {
+                                if (formulario.serialize() === estadoInicial) {
+                                    event.preventDefault();
+                                    document.getElementById('error_message_form_4').style.display = 'block';
+                                   
+                                }
+                            });
+                        });
+                    </script>
+
+                    <script>
+                        document.getElementById("form_info_public").addEventListener("submit", function(event){
+                            var inputs = document.querySelectorAll('#form_info_public input[type="text"]:not([style="display:none"]), #form_info_public input[type="password"]:not([style="display:none"]), #form_info_public textarea:not([style="display:none"])');
+                          
+                            
+                            console.log(inputs)
+                            for(var i = 0; i < inputs.length; i++) {
+                                var errorMessage = document.getElementById('error' +  (i + 1));
+                                if (inputs[i].value.trim().length === 0 && inputs[i].value.length !== 0) {
+                                    errorMessage.textContent = 'Este campo no puede contener solo espacios en blanco.';
+                                    errorMessage.style.display = 'block';
+                                    event.preventDefault();
+                                } else {
+                                    errorMessage.textContent = '';
+                                    errorMessage.style.display = 'none';
+                                }
+                            }
+
+                        });
+                        
+                    </script>
+
+                    
+
+                    <!-- <script>
+                        var formulario = document.getElementById('form_info_public');
+                        console.log(formulario)
+                        var botonEnvio = document.getElementById('btn_info_public');
+                        console.log(botonEnvio)
+
+                        var estadoInicial = formulario.innerHTML;
+
+
+                    
+                        formulario.addEventListener('change', function() {
+                            botonEnvio.disabled = false;
+                        });
+                        formulario.addEventListener('submit', function(event) {
+                            if (formulario.innerHTML === estadoInicial) {
+                                event.preventDefault();
+                                alert('Por favor, haz un cambio en el formulario antes de enviarlo.');
+                            }
+                        });
+                    </script> -->
+
+                    <!-- <script>
+                        document.getElementById("form_info_public").addEventListener("submit", function(event){
+                            var inputs = document.getElementsByTagName('input');
+                            console.log(inputs)
+                          
+                            for(var i = 0; i < inputs.length; i++) {
+                              if(inputs[i].type.toLowerCase() == 'text' || inputs[i].type.toLowerCase() == 'password') {
+                                var errorMessage = document.getElementById('error' + (i - 2 ));
+                                if(!inputs[i].value.trim() || inputs[i].value.includes(" ")){
+                                  errorMessage.textContent = 'Este campo no puede estar vacío o contener solo espacios.';
+                                  errorMessage.style.display = 'block';
+                                  event.preventDefault();
+                                } else {
+                                  errorMessage.textContent = '';
+                                  errorMessage.style.display = 'none';
+                                }
+                              }
+                            }
+                          });
+                    </script> -->
+
+
+
+
+                </div>
+
+                <div class="col-md-6 mb-4">
+
+                    <div class="card mb-4">
+                        <div class="card-header">Configuración de cuenta</div>
+
+                        <div class="card-body">
+                            <form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data" id="form_num_3" onsubmit="return validarFormularioform_num_3();">
+                                {% csrf_token %}
+
+                                <input value="{{ request.user.username }}" name="username" type="text" id="display_name"
+                                    class="form-control mb-3" placeholder="Nombre de Usuario">
+
+                                    {% if messages %}
+                                    <div class="alert-container">
+                                        {% for message in messages %}
+                                        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}  p-1" id="message" >
+                                            <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                                                {{ message }}
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <script>
+                                        // Seleccionar el mensaje
+                                        const messageElement = document.getElementById('message');
+                                
+                                        // Mostrar el mensaje
+                                        messageElement.style.display = 'block';
+                                
+                                        // Ocultar el mensaje después de 3 segundos
+                                        setTimeout(function() {
+                                            messageElement.style.display = 'none';
+                                        }, 3000); // 3000 milisegundos = 3 segundos
+                                    </script>
+                                    {% endif %}
+                                    
+                                 
+
+                                <input value="{{ request.user.email }}" name="email" type="email" id="user_email"
+                                    class="form-control mb-3" placeholder="Dirección de correo electrónico">
+
+                                <div class="text-center">
+                                    <span id="error_message_form_3" class="alert-info p-2" style="display: none;">
+                                        Por favor, haz un cambio en el formulario antes de enviarlo.
+                                    </span>
+                                    <button id="edit-user-account"
+                                        class="btn  btn-md waves-effect waves-light gcolorbuttonsSmall">Guardar cambios</button>
+                                </div>
+                                <input type="hidden" name="form_type" value="form3">
+                            </form>
+                        </div>
+
+                                                    
+                            <script>
+                                function validarFormularioform_num_3() {
+                                    var inputs = document.querySelectorAll('#form_num_3 input[type=text]');
+                                    var isValid = true;
+                            
+                                    for (var i = 0; i < inputs.length; i++) {
+                                        var input = inputs[i];
+                                        var displayStyle = window.getComputedStyle(input).display;
+                                        var mensajeId = 'mensajeform_num_3' + i;
+                                        var mensajeExistente = document.getElementById(mensajeId);
+                            
+                                        if (displayStyle !== 'none') {
+                                            if (input.value.trim() === '') {
+                                                isValid = false;
+                                                input.style.border = '1px solid red';
+                            
+                                                // Si el mensaje ya existe, actualizamos su texto
+                                                if (mensajeExistente) {
+                                                    mensajeExistente.innerText = 'Este campo no puede estar vacío.';
+                                                } else {
+                                                    // Si el mensaje no existe, lo creamos
+                                                    var mensaje = document.createElement('div');
+                                                    mensaje.id = mensajeId;
+                                                    mensaje.className = 'error-message_2 alert alert-danger';  // Aquí agregas la clase
+                                                    //mensaje.style.color = 'white';
+                                                    mensaje.innerText = 'Este campo no puede estar vacío.';
+                                                    input.parentNode.insertBefore(mensaje, input.nextSibling);
+                                                }
+                                            } else if (/^[^a-zA-Z0-9]+$/.test(input.value)) {
+                                                isValid = false;
+                                                input.style.border = '1px solid red';
+                            
+                                                // Si el mensaje ya existe, actualizamos su texto
+                                                if (mensajeExistente) {
+                                                    mensajeExistente.innerText = 'Este campo no puede contener solo caracteres especiales.';
+                                                } else {
+                                                    // Si el mensaje no existe, lo creamos
+                                                    var mensaje = document.createElement('div');
+                                                    mensaje.id = mensajeId;
+                                                    mensaje.className = 'error-message_2 alert alert-danger';  // Aquí agregas la clase
+                                                    //mensaje.style.color = 'white';
+                                                    mensaje.innerText = 'Este campo no puede contener solo caracteres especiales.';
+                                                    input.parentNode.insertBefore(mensaje, input.nextSibling);
+                                                }
+                                            } else {
+                                                // Si el usuario ha agregado texto válido en el campo, eliminamos el mensaje
+                                                if (mensajeExistente) {
+                                                    mensajeExistente.remove();
+                                                }
+                                                input.style.border = '1px solid #bdbdbd'
+                                            }
+                                        }
+                                    }
+                            
+                                    return isValid;
+                                }
+                            </script>
+                    </div>
+
+                    <div class="card mb-4">
+
+                        <div class="card-header">Cambiar contraseña</div>
+                        <div class="card-body">
+
+                           
+
+                            <form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data" id="form_num_4"> 
+                                {% csrf_token %}
+
+                                <input type="password" name="currentPass" id="current_password"
+                                    class="form-control mb-3" placeholder="contraseña actual">
+
+                                <input type="password" name="newPass" id="new_password" class="form-control mb-3"
+                                    placeholder="nueva contraseña">
+
+                                <input type="password" name="confirmPass" id="confirm_new_password"
+                                    class="form-control mb-3" placeholder="Confirmar nueva contraseña">
+
+                                <div class="text-center">
+                                    <span id="error_message_form_4" class="alert-info p-2" style="display: none;">
+                                        Por favor, haz un cambio en el formulario antes de enviarlo.
+                                    </span>
+                                    {% if error %}
+
+                                    <div class="alert alert-danger sizefont"> {{error}} </div>
+                                    {% endif %}
+                                    <button id="user-reset-password"
+                                        class="btn btn-md waves-effect waves-light gcolorbuttonsSmall">Cambiar contraseña</button>
+                                </div>
+
+                                <input type="hidden" name="form_type" value="form4">
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#form-img').on('submit', function(event) {
+     
+        var archivoInput = document.getElementById('customFile');
+        console.log(archivoInput)
+        if (archivoInput.files.length > 0) {
+            var file = archivoInput.files[0];
+            var fileType = file.type.split('/')[0]; // Obtiene el tipo del archivo
+
+            if (fileType !== 'image') {
+                
+                document.getElementById('error-message-img').style.display = 'block';
+                event.preventDefault(); // Evita que se envíe el formulario
+            }else {
+              document.getElementById('error-message-img').style.display = 'none';
+          }
+        }
+    });
+});
+
+
+</script>
+
+{% endblock %}

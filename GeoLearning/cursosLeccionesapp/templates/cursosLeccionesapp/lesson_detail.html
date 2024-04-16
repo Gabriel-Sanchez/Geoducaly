@@ -1,0 +1,1338 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ object }}
+{% endblock title %}
+
+{% block head %}
+<link href="https://cdn.bokeh.org/bokeh/release/bokeh-3.1.0.min.css" rel="stylesheet" type="text/css">
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.1.0.min.js"></script>
+
+{{ bokeh_css|safe }}
+  {{ bokeh_js|safe }}
+{{ script|safe }}
+
+
+
+  
+{% endblock head %}
+
+{% block content %}
+
+<style>
+
+  .redondogeo{
+    border-radius: 15px;
+  }
+  .list-group {
+    max-height: 185px; /* Ajusta esto a la altura que prefieras */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+  }
+  </style>
+
+<style>
+
+  .list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: var(--Gprimary-color);
+    border-color: var(--Gprimary-color);
+}
+</style>
+
+<div id="mensaje_emergente" >
+
+
+</div>
+
+
+
+
+<script>
+    
+    function showMessage() {
+        var messageDiv = document.getElementById('message');
+        if (messageDiv) {
+            messageDiv.style.display = 'block';
+        }
+    }
+
+    
+
+
+    
+    
+</script>
+
+<div tabindex="0">
+
+  
+  <h1 class="h3"
+  style="text-align: center; color: rgb(255, 255, 255); background-color: var(--Gprimary-color); padding-top: 10px; padding-bottom: 10px;">
+  {{ object }}
+ 
+  <div style="display: inline-block;" id="puntaje_perfecto" >
+    
+      
+      {% if score_perfecto.score_perfecto %}
+      
+      <i title="Puntaje perfecto" class="fas fa-star text-warning"></i> 
+      
+      
+      
+      
+      {% endif %}
+    </div>
+
+  </h1>
+
+</div>
+
+<div class="container d-flex justify-content-center align-items-center">
+  {% include "gamesUnityapp/plantillaJuegoUnity.html" %}
+</div>
+
+
+
+<div class="container">
+  <div style=" color: #6b4533;" class="row reset_row mb-4 mt-2">
+    
+    <!-- <div style="background-color: rgb(255, 255, 255);" class="col-sm-8"> -->
+    <div  class="col-sm-8">
+      
+
+
+      <div tabindex="0" class="row redondogeo" style="background-color: var(--GfondoTarjeta);">
+      
+        <p style="text-align: justify;">
+          {{ object.content|safe }}
+      </p>
+
+      <style>
+        p img {
+          max-width: 100%; /* La imagen no será más grande que su contenedor */
+          height: auto; /* La altura se ajustará automáticamente para mantener la proporción */
+      }
+      </style>
+      
+        <!-- {% for par in parrafos %}
+      
+        <p>{{par.contenido}}</p>
+      
+        {% if par.imagen %}
+      
+        <img src="{{ par.imagen.url }}" class="w-100 card-img-top" alt="{{par.alt}}" />
+      
+        <p></p>
+      
+      
+        {% endif %}
+      
+        {% endfor %} -->
+        <br>
+      </div>
+
+      <div class="row mt-2 " >
+        <style>
+          .reset_row{
+            margin-left: 0 ; margin-right: 0; padding-right: 0; padding-left: 0;
+
+          }
+        </style>
+        {% if request.user.estudiante %}
+        
+  
+
+        <!-- quices -->
+        <div class="row reset_row" >
+
+
+
+    
+          
+          <div style="background-color: var(--Gprimary-color); padding-top: 3%; padding-bottom: 3%; " class="redondogeo row reset_row pe-2 ps-2 mb-2 mt-2" >
+
+            <div  style="text-align: center;" class="mt-0 mb-1" >
+              <div style="color: white; font-size: 20px; font-weight: bold; ">
+                Minijuegos
+            </div>
+          </div>
+          <hr style="color: white;" >
+
+
+
+
+
+    <!-- cierto y falso -->
+    {% if testTF %}
+            <div class="col-sm-6 col-md-4 col-6" style="min-height: 10vh;">
+
+              
+              <!-- <h5 style="text-align: center; color: white; margin-bottom: auto">Cierto y Falso</h5> -->
+              <div class="card " style="background-color: #ffffff00;">
+
+                <div class="card-header" style="text-align: center;">Cierto y Falso</div>
+
+                <div class="row reset_row">
+
+             
+
+
+                <div class="col-md-4 col-sm-12 col-12 d-flex justify-content-center align-items-center reset_row" >
+
+                  <img class="img-fluid"  src="{% static '../media/default/iconos/CF.png'  %}" alt="" style="max-height: 70px;">
+                </div>
+
+                <div class="col-md-8 col-sm-12 col-12 card-footer">
+
+                
+
+
+                        
+                    
+
+                <form action="{% url 'terminar'  %}" method="post" id="miFormulario">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <!-- <label class="" for="dificultad_CF">Elija un nivel</label> -->
+                    <select class="form-control" id="dificultad_CF" name="dropdown" >
+                      <option value="" disabled selected hidden>Elige dificultad ...</option>
+                      <option value="1">Fácil</option>
+                      <option value="2">Medio</option>
+                      <option value="3">Difícil</option>
+                    </select>
+                    <div id="errorMensaje" style="display: none; color: red;">Por favor, elige una dificultad.</div>
+                  </div>
+                  <input type="hidden" id="lesson_id" name="lesson_id" value="{{testTF.id}}">
+                  <!-- <button type="submit" class="btn gcolorbuttonsinverso mt-1" >Jugar <span style="white-space: nowrap;">C y F</span> </button> -->
+                  <button type="submit" class="btn gcolorbuttonsinverso mt-1" >Jugar C&nbsp;y&nbsp;F </button>
+                </form>
+
+              </div>
+
+                <script>
+                  document.getElementById('miFormulario').addEventListener('submit', function(event) {
+                    var select = document.getElementById('dificultad_CF');
+                    var errorMensaje = document.getElementById('errorMensaje');
+                    
+                    if (select.value === "") {
+                      event.preventDefault();
+                      errorMensaje.style.display = "block";
+                      setTimeout(function() {
+                        errorMensaje.style.display = "none";
+                      }, 3000);
+                    } else {
+                      errorMensaje.style.display = "none";
+                    }
+                  });
+                  </script>
+
+<!-- 
+                <a href="{% url 'jugar_cf' 1 %}" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Jugar cierto
+                  y falso</a> -->
+
+              </div>
+
+              
+            </div>
+          </div>
+          {% endif %}
+
+<!-- trivia -->
+{% if testTrivia %}
+                <div class="col-sm-6 col-md-4 col-6"style="min-height: 10vh;" >
+
+                   
+                  <!-- <h5 style="text-align: center; color: white; margin-bottom: auto;">Trivia</h5> -->
+                  <div class="card "style="background-color: #ffffff00;">
+                    <div class="card-header"style="text-align: center;">Trivia</div>
+                    <div class="row">
+
+               
+
+                    <div  class="col-md-4 d-flex justify-content-center align-items-center reset_row" >
+
+                      <img class="img-fluid"  src="{% static '../media/default/iconos/trivia.png'  %}" alt="" style="max-height: 70px;">
+
+                    </div>
+
+                    <div class="col-md-8 card-footer" >
+
+                  
+  
+                            
+                        
+  
+                    <form action="{% url 'terminarTrivialeccion'  %}" method="post" id="miFormulario_trivia">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <!-- <label class="" for="dificultad_CF">Elija un nivel</label> -->
+                        <select class="form-control" id="dificultad_CF_trivia" name="dropdown" >
+                          <option value="" disabled selected hidden>Elige dificultad ...</option>
+                          <option value="1">Fácil</option>
+                          <option value="2">Medio</option>
+                          <option value="3">Difícil</option>
+                        </select>
+                        <div id="errorMensaje_trivia" style="display: none; color: red;">Por favor, elige una dificultad.</div>
+                      </div>
+                      <input type="hidden" id="lesson_id" name="lesson_id" value="{{testTrivia.id}}">
+                      <button type="submit" class="btn gcolorbuttonsinverso mt-1">Jugar Trivia</button>
+                    </form>
+
+                  </div>
+  
+                    <script>
+                      document.getElementById('miFormulario_trivia').addEventListener('submit', function(event) {
+                        var select_trivia = document.getElementById('dificultad_CF_trivia');
+                        var errorMensaje_trivia = document.getElementById('errorMensaje_trivia');
+                        
+                        if (select_trivia.value === "") {
+                          event.preventDefault();
+                          errorMensaje_trivia.style.display = "block";
+                          setTimeout(function() {
+                            errorMensaje_trivia.style.display = "none";
+                          }, 3000);
+                        } else {
+                          errorMensaje_trivia.style.display = "none";
+                        }
+                      });
+                      </script>
+  
+  <!-- 
+                    <a href="{% url 'jugar_cf' 1 %}" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Jugar cierto
+                      y falso</a> -->
+  
+                  </div>
+  
+                  
+                  
+                  
+                </div>
+              </div>
+              {% endif %}
+
+
+<!-- pareo cartas -->
+{% if testCards %}
+                <div class="col-sm-6 col-md-4 col-12" style="min-height: 10vh;">
+
+                   
+                  <!-- <h5  style="text-align: center; color: white; margin-bottom: auto;">Pareo</h5> -->
+
+                  <div class="card "style="background-color: #ffffff00;">
+
+                    <div class="card-header"style="text-align: center;">Pareo</div>
+                    <div class="row">
+                      
+
+                    <div class="col-md-4 d-flex justify-content-center align-items-center reset_row" >
+                      <img class="img-fluid"  src="{% static '../media/default/iconos/pareo.png'  %}" alt="" style="max-height: 70px;">
+
+                    </div>
+
+                    <div class="col-md-8 card-footer" >
+
+                   
+
+  
+                            
+                        
+  
+                    <form action="{% url 'card_difuculty'  %}" method="post" id="miFormulario_cards_pareo">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <!-- <label class="" for="dificultad_CF">Elija un nivel</label> -->
+                        <select class="form-control" id="dificultad_cards_pareo" name="dropdown" >
+                          <option value="" disabled selected hidden>Elige dificultad ...</option>
+                          <option value="1">Fácil</option>
+                          <option value="2">Normal</option>
+                        </select>
+                        <div id="errorMensaje_pareo" style="display: none; color: red;">Por favor, elige una dificultad.</div>
+                      </div>
+                      <input type="hidden" id="lesson_id" name="lesson_id" value="{{testCards.id}}">
+                      <button type="submit" class="btn gcolorbuttonsinverso mt-1">Jugar Pareo</button>
+                    </form>
+
+                  </div>
+  
+                    <script>
+                      document.getElementById('miFormulario_cards_pareo').addEventListener('submit', function(event) {
+                        var select_pareo = document.getElementById('dificultad_cards_pareo');
+                        var errorMensaje_pareo = document.getElementById('errorMensaje_pareo');
+                        
+                        if (select_pareo.value === "") {
+                          event.preventDefault();
+                          errorMensaje_pareo.style.display = "block";
+                          setTimeout(function() {
+                            errorMensaje_pareo.style.display = "none";
+                          }, 3000);
+                        } else {
+                          errorMensaje_pareo.style.display = "none";
+                        }
+                      });
+                      </script>
+  
+  <!-- 
+                    <a href="{% url 'jugar_cf' 1 %}" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Jugar cierto
+                      y falso</a> -->
+  
+                  </div>
+  
+                  
+                  
+                  
+                </div>
+              </div>
+              {% endif %}
+
+
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+
+      
+
+
+
+
+    </div>
+
+
+    <div class="col-sm-4 ps-md-4 ps-sm-4">
+      <div >
+        
+        <!-- aqui estan la lista de lecciones -->
+        {% comment %} <div class="row">
+          <div style="background-color: var(--Gprimary-color); padding-top: 3%; padding-bottom: 3%; ">
+
+            <div class="list-group">
+              <div class="list-group-item list-group-item-action " style="text-align: center; margin-bottom: 4%;"
+                tabindex="0">
+                Lecciones
+              </div>
+
+              {% for lesson in a %}
+
+              <a href="{{ lesson.get_absolute_url }}"
+                class="list-group-item list-group-item-action 
+                {% if lesson == object %}
+                active 
+                {% endif %}
+                ">{{lesson.title}}</a>
+
+              {% endfor %}
+            </div>
+
+          </div>
+
+        </div> {% endcomment %}
+
+        <style>
+          
+          .card-list {
+            list-style-type: none;
+          }
+          
+          .card-item {
+            margin-bottom: 5px; /* Espacio entre tarjetas */
+          }
+          
+          .card {
+            border-radius: 10px; /* Bordes redondeados */
+            background-color: rgba(3, 45, 254, 0); /* Fondo semi-transparente */
+            color: rgb(255, 255, 255); /* El color del texto hereda del elemento padre */
+            text-decoration: none; /* Sin subrayado en el enlace */
+            box-shadow: none;
+          }
+          
+          .card .card-body {
+            visibility: hidden; /* Inicialmente oculto */
+            padding: 0.5rem;
+          }
+          
+          .card:hover {
+            background-color: var(--GcolorTitulosFondo); /* Fondo opaco al pasar el mouse */
+            color: rgba(255, 255, 255, 0.958);
+          }
+          
+          .card:hover .card-body,
+          .card.active .card-body {
+            visibility: visible; /* Visible al pasar el mouse o cuando está activo */
+          }
+
+          .card.destacado {
+            background-color:  var(--GcolorTitulosFondo); /* Fondo opaco al pasar el mouse */
+            color: rgba(234, 234, 234, 0.958); /* Fondo opaco */
+          }
+          
+          .card.destacado .card-body {
+            visibility: visible; /* Visible */
+          }
+          
+
+
+        </style>
+        {% comment %} <div class="row" style="background-color: var(--Gprimary-color); padding-top: 3%; padding-bottom: 3%;">
+      
+          
+
+          <div  style="text-align: center;" class="mt-1 mb-1" >
+              <div style="color: white; font-size: 20px; font-weight: bold; ">
+                Lecciones
+            </div>
+          </div>
+          <hr style="color: white;" >
+
+
+          <ul class="card-list">
+
+            {% for lesson in a %}
+
+              <li class="card-item">
+                <a href="{{ lesson.get_absolute_url }}" class="card active 
+                {% if lesson == object %}
+                destacado 
+                {% endif %}
+                ">
+                  <div class="card-body ms-1">
+                    {{lesson.title}}
+                  </div>
+                </a>
+              </li>
+
+            {% endfor %}
+
+          </ul>
+          
+          
+          
+        </div> {% endcomment %}
+
+
+        <!-- Clasificación -->
+        <div class="row " style="  margin-bottom: 4%;">
+
+          <div style="background-color: var(--Gprimary-color); padding-top: 3%; padding-bottom: 3%; " class="redondogeo">
+            <div style="text-align: center;" class="mt-1 mb-1">
+              <div style="color: white; font-size: 20px; font-weight: bold; ">
+                Clasificación
+              </div>
+            </div>
+
+            <hr style="color: white;" >
+
+            <div id="grafico" class="d-flex justify-content-center mb-2" >
+
+              {{ div|safe }}
+            </div>
+        
+        
+        
+            <!-- <ol class="list-group list-group-numbered" id="ol_clasificacion" >
+
+              {% for elemento in tabla_clasificacion %}
+                
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{elemento.estudiante}}
+                <span class="badge bg-primary rounded-pill">{{elemento.score}}</span>
+              </li>
+              {% endfor %}
+            </ol> -->
+        
+          </div>
+        </div>
+
+{% comment %} {% if request.user.estudiante %}
+  
+
+        <!-- quices -->
+        <div class="row mb-2" style="margin-top: 4%; ">
+
+
+
+    
+          
+          <div style="background-color: var(--Gprimary-color); padding-top: 3%; padding-bottom: 3%; ">
+
+            <div  style="text-align: center;" class="mt-1 mb-1" >
+              <div style="color: white; font-size: 20px; font-weight: bold; ">
+                Minijuegos
+            </div>
+          </div>
+          <hr style="color: white;" >
+
+
+
+
+
+    <!-- cierto y falso -->
+            <div>
+
+
+              {% if testTF %}
+              <div class="row">
+
+                <div class="col-3">
+
+                  <img class="img-fluid ms-2"  src="{% static '../media/default/iconos/CF.png'  %}" alt="">
+                </div>
+
+                <div class="col-9">
+
+                
+
+
+                        
+                    
+
+                <form action="{% url 'terminar'  %}" method="post" id="miFormulario">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <!-- <label class="" for="dificultad_CF">Elija un nivel</label> -->
+                    <select class="form-control" id="dificultad_CF" name="dropdown" >
+                      <option value="" disabled selected hidden>Por favor, elige una dificultad ...</option>
+                      <option value="1">Fácil</option>
+                      <option value="2">Medio</option>
+                      <option value="3">Difícil</option>
+                    </select>
+                    <div id="errorMensaje" style="display: none; color: red;">Por favor, elige una opción.</div>
+                  </div>
+                  <input type="hidden" id="lesson_id" name="lesson_id" value="{{testTF.id}}">
+                  <button type="submit" class="btn gcolorbuttonsinverso mt-1">Jugar Cierto y Falso</button>
+                </form>
+
+              </div>
+
+                <script>
+                  document.getElementById('miFormulario').addEventListener('submit', function(event) {
+                    var select = document.getElementById('dificultad_CF');
+                    var errorMensaje = document.getElementById('errorMensaje');
+                    
+                    if (select.value === "") {
+                      event.preventDefault();
+                      errorMensaje.style.display = "block";
+                      setTimeout(function() {
+                        errorMensaje.style.display = "none";
+                      }, 3000);
+                    } else {
+                      errorMensaje.style.display = "none";
+                    }
+                  });
+                  </script>
+
+<!-- 
+                <a href="{% url 'jugar_cf' 1 %}" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Jugar cierto
+                  y falso</a> -->
+
+              </div>
+
+              {% endif %}
+
+
+            </div>
+
+<!-- trivia -->
+                <div>
+
+                    <!-- cambiar el testTF por una busqueda en el view -->
+                  {% if testTrivia %}
+                  <div class="row mt-2">
+
+                    <div  class="col-3 d-flex justify-content-center align-items-center">
+
+                      <img class="img-fluid ms-3"  src="{% static '../media/default/iconos/trivia.png'  %}" alt="">
+
+                    </div>
+
+                    <div class="col-9">
+
+                  
+  
+                            
+                        
+  
+                    <form action="{% url 'terminarTrivialeccion'  %}" method="post" id="miFormulario_trivia">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <!-- <label class="" for="dificultad_CF">Elija un nivel</label> -->
+                        <select class="form-control" id="dificultad_CF_trivia" name="dropdown" >
+                          <option value="" disabled selected hidden>Por favor, elige una dificultad ...</option>
+                          <option value="1">Fácil</option>
+                          <option value="2">Medio</option>
+                          <option value="3">Difícil</option>
+                        </select>
+                        <div id="errorMensaje_trivia" style="display: none; color: red;">Por favor, elige una opción.</div>
+                      </div>
+                      <input type="hidden" id="lesson_id" name="lesson_id" value="{{testTrivia.id}}">
+                      <button type="submit" class="btn gcolorbuttonsinverso mt-1">Jugar Trivia</button>
+                    </form>
+
+                  </div>
+  
+                    <script>
+                      document.getElementById('miFormulario_trivia').addEventListener('submit', function(event) {
+                        var select_trivia = document.getElementById('dificultad_CF_trivia');
+                        var errorMensaje_trivia = document.getElementById('errorMensaje_trivia');
+                        
+                        if (select_trivia.value === "") {
+                          event.preventDefault();
+                          errorMensaje_trivia.style.display = "block";
+                          setTimeout(function() {
+                            errorMensaje_trivia.style.display = "none";
+                          }, 3000);
+                        } else {
+                          errorMensaje_trivia.style.display = "none";
+                        }
+                      });
+                      </script>
+  
+  <!-- 
+                    <a href="{% url 'jugar_cf' 1 %}" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Jugar cierto
+                      y falso</a> -->
+  
+                  </div>
+  
+                  {% endif %}
+
+
+
+                </div>
+
+
+<!-- pareo cartas -->
+                <div>
+
+                    <!-- cambiar el testTF por una busqueda en el view -->
+                  {% if testCards %}
+                  <div class="row mt-2">
+
+                    <div class="col-3 d-flex justify-content-center align-items-center" style="padding-right: 1px;">
+                      <img class="img-fluid pe-3 ps-3 ms-2"  src="{% static '../media/default/iconos/pareo.png'  %}" alt="">
+
+                    </div>
+
+                    <div class="col-9 ">
+
+                   
+
+  
+                            
+                        
+  
+                    <form action="{% url 'card_difuculty'  %}" method="post" id="miFormulario_cards_pareo">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <!-- <label class="" for="dificultad_CF">Elija un nivel</label> -->
+                        <select class="form-control" id="dificultad_cards_pareo" name="dropdown" >
+                          <option value="" disabled selected hidden>Por favor, elige una dificultad ...</option>
+                          <option value="1">Fácil</option>
+                          <option value="2">Normal</option>
+                        </select>
+                        <div id="errorMensaje_pareo" style="display: none; color: red;">Por favor, elige una opción.</div>
+                      </div>
+                      <input type="hidden" id="lesson_id" name="lesson_id" value="{{testCards.id}}">
+                      <button type="submit" class="btn gcolorbuttonsinverso mt-1">Jugar Pareo</button>
+                    </form>
+
+                  </div>
+  
+                    <script>
+                      document.getElementById('miFormulario_cards_pareo').addEventListener('submit', function(event) {
+                        var select_pareo = document.getElementById('dificultad_cards_pareo');
+                        var errorMensaje_pareo = document.getElementById('errorMensaje_pareo');
+                        
+                        if (select_pareo.value === "") {
+                          event.preventDefault();
+                          errorMensaje_pareo.style.display = "block";
+                          setTimeout(function() {
+                            errorMensaje_pareo.style.display = "none";
+                          }, 3000);
+                        } else {
+                          errorMensaje_pareo.style.display = "none";
+                        }
+                      });
+                      </script>
+  
+  <!-- 
+                    <a href="{% url 'jugar_cf' 1 %}" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Jugar cierto
+                      y falso</a> -->
+  
+                  </div>
+  
+                  {% endif %}
+
+
+
+                </div>
+
+
+
+            {% block scripts %}
+            <script src="{% static 'cursosLeccionesapp/main.js' %}" defer></script>
+            {% endblock scripts %}
+
+            <div class="modal fade" id="quizStartModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Iniciar?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body" id="modal-body-confirm"></div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">no</button>
+                    <button type="button" id="start-button" class="btn gcolorbuttonsSmall">sí</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="list-group-item list-group-item-action" style="text-align: center; margin-bottom: 4%;"
+              tabindex="0">Quices
+            </div> -->
+
+
+
+            
+
+          </div>
+        </div>
+        {% endif %} {% endcomment %}
+
+<!-- comentarios -->
+        <div class="row ">
+          <div style="background-color: var(--Gprimary-color); padding-top: 3%; padding-bottom: 3%; " class="redondogeo">
+            {% if request.user.is_anonymous %}
+            <h6 style="color: rgb(255, 255, 255)">Es necesario tener una cuenta para agregar un comentario.</h6>
+            {% else %}
+            <form action="" method="POST" id="form_send_comment">
+              {% csrf_token %}
+<!-- 
+              <div class="list-group-item list-group-item-action" style="text-align: center; margin-bottom: 5%;">
+                Sección de comentarios</div> -->
+
+                <div  style="text-align: center;" class="mt-1 mb-1" >
+                  <div style="color: white; font-size: 20px; font-weight: bold; ">
+                    Comentarios
+                </div>
+              </div>
+              <hr style="color: white;" >
+
+              <div><input id="input_texto_comentario" type="text" name="prd" class="form-control" placeholder="Comentario..."></div>
+              <!-- <div id="errorMensaje_comentario" style="display: none; color: red;">Por favor, elige una opción.</div> -->
+              <div><button type="submit" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Agregar
+                  comentario
+                </button></div>
+              <br>
+             <script>
+                if (window.history.replaceState) { // verificamos disponibilidad
+                  window.history.replaceState(null, null, window.location.href);
+                }
+              </script> 
+            </form>
+            {% endif %}
+            <ul class="list-group" id="lista_comentarios">
+              {% for comment in coment %}
+              <li style="background-color: rgba(249, 252, 251, 0.788); margin-bottom: 5px;" class="list-group-item">
+
+
+                {% if comment.user.estudiante %}
+
+                {% if comment.user.estudiante.picture.url != null %}
+                <img src="{{ comment.user.estudiante.picture.url }}" class="rounded-circle" height="25" width="25" alt=""
+                  loading="lazy" />
+                {% else %}
+                <img src="{% static '..\media\default\user.png' %}" class="rounded-circle" height="25" alt=""
+                  loading="lazy" />
+                {% endif %}
+
+
+                {% elif comment.user.profesor %}
+
+
+                {% if comment.user.profesor.picture.url != null %}
+                <img src="{{ comment.user.profesor.picture.url }}" class="rounded-circle" height="25" width="25" alt=""
+                  loading="lazy" />
+                {% else %}
+                <img src="{% static '..\media\default\user.png' %}" class="rounded-circle" height="25" alt=""
+                  loading="lazy" />
+                {% endif %}
+
+
+
+                {% else %}
+                <img src="{% static '..\media\default\user.png' %}" class="rounded-circle" height="25" alt=""
+                  loading="lazy" />
+                {% endif %}
+
+
+                {{ comment.content }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+    
+
+  </div>
+  {% comment %} <div class="row reset_row mt-6 mb-2">
+
+    <div class="row reset_row redondogeo" style="background-color: var(--Gprimary-color); padding-top: 1%; padding-bottom: 1%; ">
+      <style>
+          .card-list {
+              list-style-type: none;
+              display: flex; /* Add this to make the list horizontal */
+              flex-wrap: wrap; /* Add this to allow the items to wrap to the next line */
+              justify-content: space-around; /* Add this to distribute the items evenly */
+          }
+          
+          .card-item {
+              margin-bottom: 5px; /* Space between cards */
+              display: flex; /* Add this to align the image and text side by side */
+              align-items: center; /* Add this to vertically center the text next to the image */
+          }
+          
+          .card-item img {
+              margin-right: 10px; /* Space between the image and the text */
+          }
+          
+          /* Rest of your styles... */
+      </style>
+    
+      <div style="text-align: center;" class="mt-1 mb-1">
+          <div style="color: white; font-size: 20px; font-weight: bold;">
+              Temas
+          </div>
+      </div>
+      <hr style="color: white;">
+    
+      <ul class="card-list">
+        {% for lesson in a %}
+        <li class="card-item">
+            <a href="{{ lesson.get_absolute_url }}" class="card active {% if lesson == object %}destacado{% endif %}">
+                <img src="{{ lesson.image_url }}"> <!-- Add this line. Replace 'lesson.image_url' with the correct variable for the image URL -->
+                <div class="card-body ms-1">
+                    {{lesson.title}}
+                </div>
+            </a>
+        </li>
+    {% endfor %}
+      </ul>
+    </div>
+  </div> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div>
+
+ <div>
+
+
+  <!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<div class="redondogeo pe-2 ps-2 mb-2 pt-2 pb-2"  style="background-color: var(--Gprimary-color);">
+
+  <div style="text-align: center;" class="mt-1 mb-1">
+    <div style="color: white; font-size: 20px; font-weight: bold;">
+        Temas
+    </div>
+</div>
+<hr style="color: white;">
+
+
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+ 
+    
+    {% for lesson in a %}
+    <div id="{% if lesson == object %}foco_si{% else %}{{lesson.id}}{% endif %}" class="swiper-slide" style="border: 1px solid rgba(255, 255, 255, 0.247); border-radius: 10px;">
+        <a href="{{ lesson.get_absolute_url }}" class="card active {% if lesson == object %}destacado{% endif %}">
+            <div class="row card-body" >
+                <!-- Image on the left -->
+                <div class="col-4 img-container">
+                    <img src="{{ lesson.thumbnail.url }}" class="img-fluid" style="border-radius: 10px;">
+                </div>
+                <!-- Text on the right -->
+                <div class="col-8 d-flex align-items-center">
+                    <div class="card-body ms-1">
+                        {{lesson.title}}
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+{% endfor %}
+
+
+  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <!-- Add Navigation -->
+</div>
+
+</div>
+
+<script>
+
+  window.onload = function() {
+  var centerSlideOnLoad = true;
+  var swiper = new Swiper('.swiper-container', {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+    loop: true,
+    breakpoints: {
+      // when window width is >= 320px
+      320: {
+          slidesPerView: 1,
+          spaceBetween: 2
+      },
+      // when window width is >= 480px
+      480: {
+          slidesPerView: 2,
+          spaceBetween: 4
+      },
+      // when window width is >= 640px
+      640: {
+          slidesPerView: 2,
+          spaceBetween: 4
+      },
+      840: {
+          slidesPerView: 3,
+          spaceBetween: 4
+      }
+  },
+  /*
+  on: {
+    init: function () {
+
+      if (centerSlideOnLoad) {
+        // Centra el slide solo durante la inicialización
+        //this.slideTo('#foco_si');
+        this.slideToIndex(4); // Cambiar el índice según el slide que desees centrar
+        centerSlideOnLoad = false; // Desactiva la centrado del slide en la carga siguiente
+      }
+
+
+      
+      // Center the current slide
+    }
+  }
+  */
+
+ 
+});
+  // Obtén el id del slide abierto desde donde sea que lo estés almacenando
+  var idDelSlideAbierto = 'foco_si';
+
+  // Encuentra el índice del slide con ese id
+  var indiceDelSlideAbierto = Array.prototype.indexOf.call(document.querySelectorAll('.swiper-slide'), document.getElementById(idDelSlideAbierto));
+
+  // Desplázate al slide con ese índice
+  swiper.slideTo(indiceDelSlideAbierto);
+};
+
+</script>
+<style>
+
+
+  .img-container {
+    width: 100px; /* adjust this value to change the image size */
+    height: 100px; /* adjust this value to change the image size */
+    overflow: hidden;
+}
+
+.img-container img {
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+}
+
+
+
+
+  .swiper-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.swiper-button-next, .swiper-button-prev {
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  z-index: 10;
+  cursor: pointer;
+  background: #00000086;
+  opacity: 0.5;
+  /*
+  */
+  transition: all 0.3s ease;
+}
+
+.swiper-button-next:hover, .swiper-button-prev:hover {
+  background: #152859;
+  opacity: 1;
+}
+
+.swiper-button-next {
+  right: 10px;
+}
+
+.swiper-button-prev {
+  left: 10px;
+}
+
+</style>
+ </div>
+    
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+<!-- <script>
+  // Desactivar el canvas de Unity cuando se enfoca un campo de entrada de texto
+document.getElementById('input_texto_comentario').addEventListener('focus', function() {
+  // Desactivar el canvas de Unity
+  var unityInstance = UnityLoader.getInstanceByContainer('unity-container');
+  unityInstance.SetFocus(false);
+  console.log('aaa2')
+});
+
+// Activar el canvas de Unity cuando se pierde el enfoque del campo de entrada de texto
+document.getElementById('input_texto_comentario').addEventListener('blur', function() {
+  // Activar el canvas de Unity
+  var unityInstance = UnityLoader.getInstanceByContainer('unity-container');
+  unityInstance.SetFocus(true);
+  console.log('aa')
+});
+
+</script> -->
+
+
+<script>
+
+
+  var recaptureInputAndFocus = function() {
+    var canvas = document.getElementById ("#canvas");
+    if(canvas) {
+      canvas.setAttribute ("tabindex", "1");
+      canvas.focus ();
+    } else setTimeout (recaptureInputAndFocus, 100);
+  }
+  recaptureInputAndFocus ();
+</script>
+
+
+<script>
+function SendDataToServer(int,str) {
+  console.log(str);
+
+  
+    $.ajax({
+        url: "{% url 'post-data-token' %}",  
+        type: 'POST',
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('X-CSRFToken', '{{csrf_token}}');
+      },
+        data: {
+            'score': int,
+            'Nombrejuego': str,
+            //'Nombrejuego': Nombrejuego
+        },
+        success: function(response) {
+
+          if (response.esEstudiante){
+
+            $('#grafico').empty();
+  
+            // Luego, agrega el nuevo script y div al gráfico.
+            $('#grafico').append(response.div);
+            $('body').append(response.script);
+            
+              console.log(response.clasificacion);
+  
+  
+              var div = $('#ol_clasificacion');
+              div.empty();
+
+              console.log(response.esPerfecto)
+
+
+              if (response.esPerfecto){
+                console.log('esPerfecto')
+                div_puntaje_perfecto = document.getElementById('puntaje_perfecto')
+                div_puntaje_perfecto.innerHTML = ``
+                div_puntaje_perfecto.innerHTML = `<i title="Puntaje perfecto" class="fas fa-star text-warning"></i> `
+              }
+
+
+
+          }else{
+
+            var html_mensaje = document.getElementById('mensaje_emergente')
+            console.log()
+            html_mensaje.innerHTML = `
+            <div class="alert-container">
+                
+                <div class="alert alert-${ response.messagetag } fixed-bottom m-3" id="message" style="display: none;">
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                        ${ response.message }
+                    </div>
+                </div>
+                
+            </div>
+            `
+  
+            showMessage();
+  
+            setTimeout(function() {
+              var messageDiv = document.getElementById('message');
+              if (messageDiv) {
+                  messageDiv.style.display = 'none';
+              }
+          }, 3000);
+          }
+
+
+
+            /*
+            console.log(response.clasificacion)
+            
+            var dataStr = response.clasificacion;
+            var dataObj = JSON.parse(dataStr);
+
+            console.log(dataObj)
+
+            $.each(dataObj, function(i, opc) {
+                //var html = '<div class="col-6"><div class=""><button class="btn btn gcolorbuttons" style="width: 100%;" type="submit" name="respuesta_pk" value="' + opc.pk + '" id="choice-' + (i+1) + '">' + opc.fields.estudiante + '-'+ opc.fields.score +'</button></div></div>';
+                
+                var html = '  <li class="list-group-item d-flex justify-content-between align-items-center">' + opc.estudiante + '<span class="badge bg-primary rounded-pill">' + opc.score +'</span></li>';
+                
+              
+                div.append(html);
+            });
+
+              */
+
+
+
+
+
+        }
+    });
+
+
+
+
+
+
+
+}
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+  $(document).ready(function () {
+    $('#form_send_comment').on('submit', function(event) {
+      event.preventDefault();
+  
+      var content = $('#input_texto_comentario').val();
+  
+      // Verifica si el contenido está vacío
+      if (content.trim() === '') {
+        //alert('El campo de texto está vacío. Por favor, escribe un comentario.');
+        return;
+      }
+  
+      // Continúa con la llamada AJAX si el contenido no está vacío
+      $.ajax({
+          url: "{% url 'courses:set_comment_lesson' %}",  // Reemplaza esto con la URL de tu vista Django
+          type: 'POST',
+          data: {
+              'content': content,
+              'id_lesson': '{{object.id}}'
+          },
+          beforeSend: function(xhr) {
+              xhr.setRequestHeader('X-CSRFToken', '{{csrf_token}}');
+          },
+          success: function(response) {
+            var comments = response.comments;
+            var commentsList = $('#lista_comentarios');
+    
+            // Limpia los comentarios actuales
+            commentsList.empty();
+    
+            // Agrega los comentarios actualizados
+            $.each(comments, function(i, comment) {
+                var html = '<li style="background-color: rgba(249, 252, 251, 0.788); margin-bottom: 5px;" class="list-group-item">';
+                html += '<img src="' + comment.picture_url + '" class="rounded-circle" height="25" width="25" alt="" loading="lazy" />';
+                html += comment.content;
+                html += '</li>';
+                commentsList.append(html);
+            });
+            $('#input_texto_comentario').val('');
+        }
+      });
+    });
+  });
+  
+  
+</script>
+
+
+
+{% endblock %}

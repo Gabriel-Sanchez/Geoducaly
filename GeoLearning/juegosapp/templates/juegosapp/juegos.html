@@ -1,0 +1,102 @@
+{% extends "baseapp/base.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="container">
+
+
+    <div style="padding-top: 2%;">
+        <h1 class="gsubtitulo h2">Interactivo</h1>
+
+
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            
+
+            {% for a in juegos %}
+
+
+
+            <div class="col">
+                <div class="card h-100">
+
+                    <div style="position: relative; padding-bottom: 56.25%; padding-top: 0; height: 0;">
+                        <iframe frameborder="0" width="1200" height="675"
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src={{ a.iframe }}
+                            type="text/html" allowscriptaccess="always" allowfullscreen="true" scrolling="yes"
+                            allownetworking="all">
+                        </iframe>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ a.title }}</h5>
+                        <p class="card-text">
+
+                        </p>
+                        <a href="/juegos/{{ a.id }}"><button class="btn  gcolorbuttons">
+                                Jugar
+                            </button></a>
+
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+    <div style="padding-top: 2%; padding-bottom: 2%;">
+        <h1 class="gsubtitulo h2">Trivia</h1>
+
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            {% for juegos in listNumero %}
+
+            <div class="col">
+                <div class="card h-100">
+                    {% if juegos.0.picture.url != null %}
+                    <img src="{{juegos.0.picture.url}}" class="card-img-top" alt="{{juegos.alt}}" />
+                    {% else %}
+                    <img src="{% static '..\media\default\user.png' %}" class="card-img-top" alt="..." style="height: 15rem"/>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{juegos.0}}</h5>
+                        <p class="card-text">
+
+                        </p>
+                        <a href="/juegos/Juegotrivia/{{juegos.1|add:" 1"}}/{{juegos.0.id}}"><button
+                                class="btn  gcolorbuttons"> Jugar
+                            </button></a>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+
+    <div class="pb-4">
+        
+        <a href="{% url 'tablero' %}"><button
+            class="btn  gcolorbuttons"> Ver tablero de Calificaciones
+        </button></a>
+    </div>
+
+    
+</div>
+
+{% endblock %}

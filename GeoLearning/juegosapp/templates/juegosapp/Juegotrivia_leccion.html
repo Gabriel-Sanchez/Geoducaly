@@ -1,0 +1,711 @@
+{% extends "baseapp/base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+    .btn-back {
+        /*
+        width: 50px;
+        height: 50px;
+        */
+        border-radius: 25px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin-top: 10px;
+        margin-left: 10px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center; /* Centrar horizontalmente */
+        align-items: center; /* Centrar verticalmente */
+      }
+      
+      .btn-back i {
+        margin: 0; /* Asegurar que no haya margen predeterminado */
+      }
+</style>
+
+<div>
+
+    <head>
+        <title>Juego de Cierto y Falso</title>
+    </head>
+    
+    {% comment %} 
+    
+    <div class="d-flex align-items-center justify-content-center" style="height: 80vh;">
+    
+        <div>
+    
+        
+                <h2 class="text-center" >
+                    {{titulo_leccion}}
+                </h2>
+    
+            <h5 class="text-center mb-4" >Juego de Cierto y Falso</h5>
+            
+            <div id="juego" class="text-center position-relative mb-5  ">
+               
+    
+    
+    
+    
+    
+    
+                <form id="gameForm" method="post" action="{% url 'jugar_cf' leccion_id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
+    
+                    <div class="card mx-auto" style="max-width: 28rem;">
+                        {% if pregunta.imagen %}
+                        <img id="pregunta_imagen" src="{{ pregunta.imagen.url }}" alt="Imagen de la pregunta"
+                            class="card-img-top">
+                        {% endif %}
+                        <div class="card-body">
+                            <p id="n_pregunta"> Pregunta N: {{tamanio_listP}}</p>
+                            <p style="text-align: justify;" id="titul_pregunta">{{ pregunta.texto }}</p>
+                        </div>
+                    </div>
+    
+                    <div class="row mt-3" >
+                        <div class="col-md-6 mb-2">
+                            <button type="submit" name="respuesta" value="verdadero"
+                                class="btn btn-success w-100">Verdadero</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" name="respuesta" value="falso" class="btn btn-danger w-100">Falso</button>
+                        </div>
+                    </div>
+                </form>
+    
+            </div>
+            <div id="resultado"
+                class="alert alert-success  fade show mt-3 position-absolute top-0 start-50 translate-middle-x text-center"
+                role="alert" style="display: none;">
+                <span class="text-center" id="resultado-text"></span>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+            </div>
+            <div id="resultado-final" class="alert alert-info  fade show mt-3 top-0 start-50 translate-middle-x text-center"
+                role="alert" style="display: none;">
+                <span class="text-center" id="resultado-text-final"></span>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+            </div>
+    
+    
+    
+    
+                            <!-- <div class="d-flex justify-content-center">
+                        <button id="terminar" class="btn btn-primary">Reiniciar</button>
+                    </div> -->
+            <div class="d-flex justify-content-center">
+    
+                <div class="row" id="formulario_dificultad" style="display: none;">
+    
+    
+    
+    
+                    <form action="{% url 'terminar'  %}" method="post" id="miFormulario">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <!-- <label class="" for="dificultad_CF">Elija un nivel</label> -->
+                            <select class="form-control" id="dificultad_CF" name="dropdown">
+                                <option value="" disabled selected hidden>Por favor, elige una dificultad ...</option>
+                                <option value="1">Fácil</option>
+                                <option value="2">Medio</option>
+                                <option value="3">Difícil</option>
+                            </select>
+                            <div id="errorMensaje" style="display: none; color: red;">Por favor, elige una opción.</div>
+                        </div>
+                        <input type="hidden" id="lesson_id" name="lesson_id" value="{{leccion_id}}">
+                        <button type="submit" class="btn gcolorbuttonsinverso mt-1">Volver a jugar</button>
+                    </form>
+    
+                    <script>
+                        document.getElementById('miFormulario').addEventListener('submit', function (event) {
+                            var select = document.getElementById('dificultad_CF');
+                            var errorMensaje = document.getElementById('errorMensaje');
+    
+                            if (select.value === "") {
+                                event.preventDefault();
+                                errorMensaje.style.display = "block";
+                                setTimeout(function () {
+                                    errorMensaje.style.display = "none";
+                                }, 3000);
+                            } else {
+                                errorMensaje.style.display = "none";
+                            }
+                        });
+                    </script>
+    
+                                    <!-- 
+                            <a href="{% url 'jugar_cf' 1 %}" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Jugar cierto
+                            y falso</a> -->
+    
+                </div>
+            </div>
+    
+    
+        </div>
+    </div> 
+    {% endcomment %}
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+    <script>
+        $(document).ready(function () {
+            var dataGlobal;
+    
+            $("#form_trivia").on('submit', function (event) {
+                event.preventDefault();
+                var buttonValue = $(document.activeElement).val();
+                var formData = $(this).serializeArray();
+                formData.push({ name: 'respuesta_pk', value: buttonValue });
+                $.ajax({
+                    url: "{% url 'jugar_trivia' leccion_id %}",
+                    type: "POST",
+                    data: $.param(formData),
+                    dataType: 'json',
+                    success: function (data) {
+                        dataGlobal = data;
+
+                        if (data.puntaje) {
+                            $('#boton_sigui_pregunta_trivia').text('Terminar'); 
+                        }
+
+                        
+/*
+                        console.log(data.respondida)
+                        if (data.puntaje) {
+                            $("#resultado-text-final").text("Puntaje final: " + data.puntaje.correctas + " correctas, " + data.puntaje.incorrectas + " incorrectas.");
+                            $("#resultado-final").show();
+                            $("#contenedor_trivia").hide();
+                            $("#formulario_dificultad").show();
+
+    
+                        } else 
+                        
+                        {
+                            */
+
+                            /*
+                            if (data.es_correcta) {
+                                $("#resultado").removeClass('alert-danger').addClass('alert-success');
+                                $("#resultado-text").text("¡Respuesta correcta!");
+                            } else {
+                                $("#resultado").removeClass('alert-success').addClass('alert-danger');
+                                $("#resultado-text").text("Respuesta incorrecta.");
+                            }
+                            */
+
+                            
+                            $("#parrafo_trivia").text("tu respuesta: " + data.respondida.texto);
+
+
+
+                            var div_alertas = $('#respuesta_alertas');  // Reemplaza esto con el selector de tu div
+                            div_alertas.empty();  // Limpia el div
+                    
+                            if (data.respondida.correcta) {
+                                div_alertas.append('<div class="alert alert-success sizefont" style="text-align: center;"><h3>tu respuesta es correcta</h3></div>');
+                            } else {
+                                div_alertas.append('<div class="alert alert-danger sizefont" style="text-align: center;">tu respuesta es incorrecta</div>');
+                                div_alertas.append('<div class="alert alert-success sizefont" style="text-align: center;">la respuesta correcta es : ' + data.respondida.LaRespuesta + '</div>');
+                            }
+
+                            var div = $('#botones_opciones');
+                            div.empty();
+                            $('#boton_sigui_pregunta_trivia').show(); 
+
+                            $('#boton_sigui_pregunta_ti').click(function() 
+                            { 
+
+                                $("#parrafo_trivia").text("");
+
+
+                                    console.log(data.opcionesP)
+                                    
+                                    var dataStr = data.opcionesP;
+                                    var dataObj = JSON.parse(dataStr);
+
+                                    console.log(dataObj)
+
+                                    $.each(dataObj, function(i, opc) {
+                                        //var html = '<div class="col-6"><div class=""><button class="btn btn gcolorbuttons" style="width: 100%;" type="submit" name="respuesta_pk" value="' + opc.pk + '" id="choice-' + (i+1) + '">' + opc.fields.texto + '</button></div></div>';
+                                        var html = '<div class="col-6">' +
+                                            '<button class="btn btn gcolorbuttons w-100" type="submit" ' +
+                                                'name="respuesta_pk" value="' + opc.pk + '" ' +
+                                                'id="choice-' + (i+1) + '">' +
+                                                opc.fields.texto +
+                                            '</button>' +
+                                        '</div>';
+                                        
+                                        div.append(html);
+                                    });
+            
+                                    $("#txt_pregunta_trivia").text(data.pregunta_texto);
+                                    $("#n_pregunta").text("Pregunta N: " + data.tamanio_listP);
+                                    $("input[name='pregunta_id']").val(data.pregunta_id);
+            
+                                    if (data.imagen_url) {
+                                        $("#imagen_trivia").attr("src", data.imagen_url);
+                                    } else {
+                                        $("#imagen_trivia").remove();
+                                    }
+                                    $("#resultado").show().delay(4000).fadeOut();
+
+                            });
+                        // }
+                    }
+                });
+            });
+
+            $('#boton_sigui_pregunta_trivia').click(function() { 
+
+
+
+                console.log(dataGlobal.puntaje);
+        
+
+                if (dataGlobal.puntaje) {
+                    $("#resultado-text-final").text("Puntaje final: " + dataGlobal.puntaje.correctas + " correctas, " + dataGlobal.puntaje.incorrectas + " incorrectas.");
+                    $("#resultado-final").show();
+                    $("#contenedor_trivia").hide();
+                    $("#formulario_dificultad").show();
+                }else{
+
+               
+
+
+                $('#boton_sigui_pregunta_trivia').hide(); 
+
+                $("#parrafo_trivia").text("");
+                
+
+
+                var div_alertas = $('#respuesta_alertas'); 
+                div_alertas.empty();
+
+                var div = $('#botones_opciones');
+
+
+                console.log(dataGlobal.opcionesP)
+                
+                var dataStr = dataGlobal.opcionesP;
+                var dataObj = JSON.parse(dataStr);
+
+                console.log(dataObj)
+
+                $.each(dataObj, function(i, opc) {
+                    //var html = '<div class="col-6"><div class=""><button class="btn btn gcolorbuttons" style="width: 100%;" type="submit" name="respuesta_pk" value="' + opc.pk + '" id="choice-' + (i+1) + '">' + opc.fields.texto + '</button></div></div>';
+                    var html = '<div class="col-6">' +
+                        '<button class="btn btn gcolorbuttons w-100" type="submit" ' +
+                            'name="respuesta_pk" value="' + opc.pk + '" ' +
+                            'id="choice-' + (i+1) + '">' +
+                            opc.fields.texto +
+                        '</button>' +
+                    '</div>';
+                    
+                    div.append(html);
+                });
+
+                $("#txt_pregunta_trivia").text(dataGlobal.pregunta_texto);
+                $("#n_pregunta").text("Pregunta N: " + dataGlobal.tamanio_listP);
+                $("input[name='pregunta_id']").val(dataGlobal.pregunta_id);
+
+                if (dataGlobal.imagen_url) {
+                    $("#imagen_trivia").attr("src", dataGlobal.imagen_url);
+                } else {
+                    $("#imagen_trivia").remove();
+                }
+                $("#resultado").show().delay(4000).fadeOut();
+
+
+             
+            }
+                
+
+
+
+
+             });
+    
+            $("#terminar").click(function () {
+                $.ajax({
+                    url: "{% url 'terminar' %}",
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function () {
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+    
+    
+
+
+
+</div>
+
+
+
+<div class="container" style="padding-top: 1.6%; padding-bottom: 1.6%;">
+
+    <!-- inicio de la trivia -->
+
+ 
+
+    {% if titulo_leccion %}
+ 
+
+    <a href="{{titulo_leccion.get_absolute_url}}" class="btn gcolorbuttonsSmall btn-back">
+        <i class="fas fa-arrow-left"></i> 
+        Volver
+      </a>
+
+    
+      
+    {% endif %}
+    <h2 class="text-center" >
+
+                
+        {{titulo_leccion}}
+
+    </h2>
+
+<h5 class="text-center mb-4" >Juego trivia</h5>
+
+
+
+
+    {% if pregunta is None %}
+
+    <div class="d-flex justify-content-center">
+
+    <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" style="text-align: center;">Haz terminado</h5>
+          <p class="card-text alert alert-success sizefont">
+              Su puntaje total es : <strong>{{puntaje}}</strong>
+          </p>
+          <a href="{% url 'alljuegos' %}">
+          <button type="button" style="width: 100%;" class="btn btn gcolorbuttons">volver</button>
+        </a>
+        </div>
+      </div>
+    </div>
+
+
+    {% else %}
+
+    <div class="d-flex justify-content-center"  >
+
+        <div class="card " style="max-width: 33rem; max-height: 50rem;" id="contenedor_trivia">
+            {% if pregunta.picture.url != null %}
+                    <img src="{{pregunta.picture.url}}" class="card-img-top" alt="..." id="imagen_trivia" />
+                    {% endif %}
+            <div class="card-body">
+                <h5 id="txt_pregunta_trivia" class="card-title" style="text-align: center;">{{pregunta.texto}}</h5>
+                <p id="parrafo_trivia" class="card-text" style="text-align: center;">
+                    <!-- {{pregunta.texto}} -->
+                </p>
+
+                <div class="">
+
+
+                    <form action="" method="post" id="form_trivia">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="pregunta_pk" value="{{pregunta.pk}}">
+
+
+
+                        <style>
+                            #botones_opciones .col-6 {
+                                display: flex;
+                                flex-direction: column;
+                            }
+                        
+                            #botones_opciones .btn {
+                                flex-grow: 1;
+                            }
+                        </style>
+                        
+                        <div class="row g-2" id="botones_opciones">
+                            {% for opc in opcionesP %}
+                                <div class="col-6">
+                                    <button class="btn btn gcolorbuttons w-100" type="submit"
+                                        name="respuesta_pk" value="{{opc.pk}}" id="choice-{{forloop.counter}}">
+                                        {{opc.texto}}
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        
+
+
+
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                </form>
+                <div>
+                    <div class="mt-4"  id="respuesta_alertas">
+                    </div>
+                    <button  id="boton_sigui_pregunta_trivia" class="btn btn gcolorbuttons" style="width: 100%; display: none;" >continuar con la siguiente pregunta</button>
+                </div>
+            </div>
+        </div>
+
+{% comment %} 
+        <div class="card " style="max-width: 33rem; max-height: 50rem;" id="contenedor_respuesta_trivia" >
+            {% if respondida.pregunta.picture.url != null %}
+            <img src="{{respondida.pregunta.picture.url}}" class="card-img-top" alt="..." />
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title" style="text-align: center;">{{respondida.pregunta.texto|safe}}</h5>
+                <p class="card-text" style="text-align: center;">
+                    tu respuesta:
+                    {{respondida.respuesta.texto|safe}}
+                </p>
+
+
+                <div>
+
+                
+
+                <div class=""  id="respuesta_alertas">
+
+
+                    {% if respondida.respuesta.correcta %}
+                    <div class="alert alert-success sizefont" style="text-align: center;">
+
+                    <h3>tu respuesta es correcta</h3>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="alert alert-danger sizefont" style="text-align: center;">
+
+                     tu respuesta es incorrecta
+
+                    </div>
+
+                    {% for respuesta in respondida.pregunta.opciones.all %}
+
+                    {% if respuesta.correcta %}
+
+                    <div class="alert alert-success sizefont" style="text-align: center;">
+                         la respuesta correcta es : {{respuesta.texto}}
+                    </div>
+
+                    
+
+                    {% endif %}
+
+                    {% endfor %}
+
+                    {% endif %}
+
+                   
+                    
+                </div>
+                <button  id="" class="btn btn gcolorbuttons" style="width: 100%;">continuar con la siguiente pregunta</button>
+
+            </div>
+
+                </form>
+            </div>
+        </div> 
+        {% endcomment %}
+
+
+
+
+
+        {% endif %}
+
+    </div>
+
+
+
+
+
+</div>
+
+
+
+<div class="d-flex align-items-center justify-content-center" >
+    
+    <div>
+
+    
+    
+
+
+
+        {% comment %} <div id="resultado"
+            class="alert alert-success  fade show mt-3 position-absolute top-0 start-50 translate-middle-x text-center"
+            role="alert" style="display: none;">
+            <span class="text-center" id="resultado-text"></span>
+            <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+        </div> {% endcomment %}
+
+
+        <div id="resultado-final" class="alert alert-info  fade show mt-3 top-0 start-50 translate-middle-x text-center"
+            role="alert" style="display: none;">
+            <span class="text-center" id="resultado-text-final"></span>
+            <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+        </div>
+
+
+
+
+                        <!-- <div class="d-flex justify-content-center">
+                    <button id="terminar" class="btn btn-primary">Reiniciar</button>
+                </div> -->
+        <div class="d-flex justify-content-center">
+
+            <div class="row" id="formulario_dificultad" style="display: none;">
+
+
+
+
+                <form action="{% url 'terminarTrivialeccion'  %}" method="post" id="miFormulario">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <!-- <label class="" for="dificultad_CF">Elija un nivel</label> -->
+                        <select class="form-control" id="dificultad_CF" name="dropdown">
+                            <option value="" disabled selected hidden>Por favor, elige una dificultad ...</option>
+                            <option value="1">Fácil</option>
+                            <option value="2">Medio</option>
+                            <option value="3">Difícil</option>
+                        </select>
+                        <div id="errorMensaje" style="display: none; color: red;">Por favor, elige una opción.</div>
+                    </div>
+                    <input type="hidden" id="lesson_id" name="lesson_id" value="{{leccion_id}}">
+                    <button type="submit" class="btn gcolorbuttonsinverso mt-1">Volver a jugar</button>
+                </form>
+
+                <script>
+                    document.getElementById('miFormulario').addEventListener('submit', function (event) {
+                        var select = document.getElementById('dificultad_CF');
+                        var errorMensaje = document.getElementById('errorMensaje');
+
+                        if (select.value === "") {
+                            event.preventDefault();
+                            errorMensaje.style.display = "block";
+                            setTimeout(function () {
+                                errorMensaje.style.display = "none";
+                            }, 3000);
+                        } else {
+                            errorMensaje.style.display = "none";
+                        }
+                    });
+                </script>
+
+                                <!-- 
+                        <a href="{% url 'jugar_cf' 1 %}" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Jugar cierto
+                        y falso</a> -->
+
+            </div>
+        </div>
+
+
+    </div>
+</div> 
+
+
+
+
+
+
+{% comment %} <div class="container" style="padding-top: 1.6%; padding-bottom: 1.6%;">
+
+
+
+    <div class="d-flex justify-content-center">
+
+        <div class="card " style="max-width: 33rem; max-height: 50rem;">
+            {% if respondida.pregunta.picture.url != null %}
+            <img src="{{respondida.pregunta.picture.url}}" class="card-img-top" alt="..." />
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title" style="text-align: center;">{{respondida.pregunta.texto|safe}}</h5>
+                <p class="card-text" style="text-align: center;">
+                    tu respuesta:
+                    {{respondida.respuesta.texto|safe}}
+                </p>
+
+                <div class="">
+
+
+                    {% if respondida.respuesta.correcta %}
+                    <div class="alert alert-success sizefont" style="text-align: center;">
+
+                    <h3>tu respuesta es correcta</h3>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="alert alert-danger sizefont" style="text-align: center;">
+
+                     tu respuesta es incorrecta
+
+                    </div>
+
+                    {% for respuesta in respondida.pregunta.opciones.all %}
+
+                    {% if respuesta.correcta %}
+
+                    <div class="alert alert-success sizefont" style="text-align: center;">
+                         la respuesta correcta es : {{respuesta.texto}}
+                    </div>
+
+                    
+
+                    {% endif %}
+
+                    {% endfor %}
+
+                    {% endif %}
+
+                    <a href="/juegos/Juegotrivia/{{n_jugada}}/{{respondida.pregunta.listquiz.id}}">
+                        <button class="btn btn gcolorbuttons" style="width: 100%;">continuar con la siguiente pregunta</button>
+                    </a>
+
+
+
+
+
+
+
+
+                </div>
+
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+    </div>
+</div> {% endcomment %}
+
+{% endblock %}

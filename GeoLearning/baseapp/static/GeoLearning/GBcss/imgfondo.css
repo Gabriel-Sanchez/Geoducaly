@@ -1,0 +1,171 @@
+:root {
+    /* --Gprimary-color: rgba(1, 116, 25, 0.767);
+    --Gcolorletras: rgb(196, 196, 196); */
+    --Gprimary-color: #0035bca2;
+    --Gcolorletras: rgb(196, 196, 196);
+    --GcolorTitulosFondo: #152859 ;
+    --GcolorTitulosFondo_puro: #0b142d ;
+    --GcolorSecundario: #cdd2de;
+    /* --GcolorFondo: #63D8F2; */
+    /* --GcolorFondo: #387D7A; */
+    --GcolorFondo: #8FBFE0;
+    --GfondoTarjeta: #ffefda;
+    --GcolorLetrasTexto: #6b4533;
+}
+
+#colorDeFondo{
+  background-color: var(--GcolorFondo);
+}
+
+#colorfondoTarjeta{
+  background-color: var(--GfondoTarjeta);
+}
+
+#imagefondo{
+        /* background-image: url("../images/a.png");  */
+        /* background-color:  #02416f; */
+        background-color:  #A2C7E5;
+        background-color:  #02050c;
+}
+
+#colorfondo{
+    background-color: rgba(216, 16, 16, 0.726)
+}
+
+.gtitulo{
+    text-align: center; 
+    color: var(--Gcolorletras); 
+    background-color: var(--Gprimary-color);
+    padding-top: 10px; 
+    padding-bottom: 10px;
+}
+
+.gsubtitulo{
+    text-align: center;
+    padding-left: 10px; 
+    color:  var(--Gcolorletras);
+    background-color: var(--Gprimary-color);
+    border-radius: 5px;
+}
+
+
+.Gscroll{
+    position: relative;
+    /* height: 300px; */
+    height: 800px;
+  overflow: auto;
+  padding-right: 5px;
+  }
+
+  body::-webkit-scrollbar, section::-webkit-scrollbar , div::-webkit-scrollbar {
+    width: 10px;
+  }
+  body::-webkit-scrollbar-track, section::-webkit-scrollbar-track, div::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+  }
+  body::-webkit-scrollbar-thumb, section::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+  }
+
+
+  .gcolorbuttons{
+    width: 100%;
+    background-color: var(--GcolorTitulosFondo);
+    /* background-color: #1b5e20; */
+    color: white;
+    /* border-radius: 2rem; */
+    /* border-radius: 10rem; */
+  }
+
+  .gcolorbuttons:hover{
+    background-color: var(--GcolorTitulosFondo_puro);
+    color: white;
+  }
+
+
+  .gcolorbuttonsSmall{
+    background-color: var(--GcolorTitulosFondo);
+    color: white;
+  }
+
+  .gcolorbuttonsSmall:hover{
+    background-color: var(--GcolorTitulosFondo_puro);
+    color: white;
+  }
+
+
+
+  .gcolorbuttonsSmallEliminar{
+    background-color: rgb(254, 55, 55);
+    color: white;
+  }
+
+  .gcolorbuttonsSmallEliminar:hover{
+    background-color: rgb(226, 0, 0);
+    color: white;
+  }
+
+
+
+
+  .gcolorbuttonsinverso{
+    width: 100%;
+    background-color: var(--GcolorTitulosFondo_puro);
+    color: white;
+  }
+
+  .gcolorbuttonsinverso:hover{
+    background-color:  var(--GcolorTitulosFondo);
+    color: white;
+  }
+
+  .Gcheck{
+    color: red;
+
+  }
+
+  .Gcheck:checked{
+    background-color: red;
+
+  }
+
+  .Gscroll2{
+    position: relative;
+    /* height: 5rem; */
+  
+  overflow: auto;
+  padding-right: 5px;
+  }
+
+
+  .list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: var(--Gprimary-color);
+    border-color: var(--Gprimary-color);
+     }
+
+.lineNav{
+  /* background-color: #003300;  */
+  background-color: #081125; 
+  padding: 5px;
+}
+
+.Navbar-style{
+  /* background-color: #1b5e20; */
+  background-color: var(--GcolorTitulosFondo);
+}
+
+.titulo-curso {
+  text-align: center;
+  color: rgb(255, 255, 255);
+  background-color: var(--Gprimary-color);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.style-footer{
+  background-color: #000000;
+}

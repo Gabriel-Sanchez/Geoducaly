@@ -1,0 +1,414 @@
+<!-- gameCardPar.html -->
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block head %}
+
+    <title>Juego de Cartas</title>
+    <style>
+        .btn-back {
+            /*
+            width: 50px;
+            height: 50px;
+            */
+            border-radius: 25px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin-top: 10px;
+            margin-left: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center; /* Centrar horizontalmente */
+            align-items: center; /* Centrar verticalmente */
+          }
+          
+          .btn-back i {
+            margin: 0; /* Asegurar que no haya margen predeterminado */
+          }
+    </style>
+    <style>
+        /* Estilos CSS aquí */
+        .card {
+            width: 150px;
+            height: 200px;
+            background-color: #f2f2f2;
+            /*
+            border: 1px solid #ccc;
+            */
+            border-radius: 8px;
+            display: inline-block;
+            margin: 5px;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            border-radius: 8px;
+            text-align: center;
+            /*
+            border: 8px solid #00000000;
+            */
+        }
+        
+        .card .front {
+            /*
+            */
+            border-radius: 8px;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            background-color: var(--background-color, #f2f2f2);
+        }
+
+        .card .back {
+            display: none;
+            border-radius: 0px;
+            text-align: center;
+        }
+        
+        .flipped .card .back {
+            display: block;
+        }
+
+        .card .front img,
+        .card .back img {
+            /*max-width: 80%;
+            max-height: 80%;
+            object-fit: contain; */
+            /*width: 100%; 
+            height: 100%;
+            object-fit: contain;
+            */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            /*
+            */
+            
+
+        }
+
+        
+    </style>
+
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card {
+            margin: 1%;
+        }
+    </style>
+
+{% endblock head %}
+
+{% block content %}
+
+
+
+
+    <!-- <div id="card-container"  class="d-flex justify-content-center align-items-center" style="height: 60vh;">
+        {% for card in cartas %}
+            <div class="card {% if card.is_matched %}matched{% endif %}" data-card-id="{{ card.id }}">
+                <div class="front">
+                    {% if card.set == 1 %}
+                        <img src="{{ card.image.url }}" alt="{{ card.name }}">
+                    {% else %}
+                        {{ card.name }}
+                    {% endif %}
+                </div>
+                <div class="back">
+                    {% if card.set == 1 %}
+                        {{ card.name }}
+                    {% else %}
+                        <img src="{{ card.image.url }}" alt="{{ card.name }}">
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div> -->
+
+
+    {% if titulo_leccion.leccion %}
+     
+    
+    <a href="{{titulo_leccion.leccion.get_absolute_url}}" class="btn gcolorbuttonsSmall btn-back">
+        <i class="fas fa-arrow-left"></i> 
+        Volver
+      </a>
+      
+      
+      {% else %}
+      
+      <a href="{{titulo_leccion.grupofk.get_absolute_url}}" class="btn gcolorbuttonsSmall btn-back">
+          <i class="fas fa-arrow-left"></i> 
+          Volver
+        </a>
+      
+
+      
+    
+    
+      
+    {% endif %}
+
+    <h2 class="text-center mt-4" >
+        {{titulo_leccion}}
+    </h2>
+
+    
+
+<h5 class="text-center mb-4" >Pareo de Cartas</h5>
+
+<h6 class="text-center" id="mensaje_final"></h6>
+<h6 class="text-center" id="score"></h6>
+
+    
+    <div id="card-container">
+            <div  class="card-container d-flex justify-content-center align-items-center" style="height: 40vh;">
+
+        
+        {% for card in cartas %}
+            <div class="card {% if card.is_matched %}matched{% endif %}" data-card-id="{{ card.id }}" >
+                <div class="front">
+                    {% if card.set == 1 %}
+                        <img src="{{ card.image.url }}" alt="{{ card.name }}">
+                    {% else %}
+                        {{ card.name }}
+                    {% endif %}
+                </div>
+                <div class="back">
+                    {% if card.set == 1 %}
+                        {{ card.name }}
+                    {% else %}
+                        <img src="{{ card.image.url }}" alt="{{ card.name }}">
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+    </div> 
+    </div>
+
+
+    <div class="d-flex justify-content-center mt-4" >  
+        
+    
+    <div class="row" style="display: none;" id="form_new_cards">
+  
+                            
+                        
+  
+        <form action="{% url 'card_difuculty'  %}" method="post" id="miFormulario_cards_pareo">
+          {% csrf_token %}
+          <div class="form-group">
+            <!-- <label class="" for="dificultad_CF">Elija un nivel</label> -->
+            <select class="form-control" id="dificultad_cards_pareo" name="dropdown" >
+              <option value="" disabled selected hidden>Por favor, elige una dificultad ...</option>
+              <option value="1">Fácil</option>
+              <option value="2">Normal</option>
+            </select>
+            <div id="errorMensaje_pareo" style="display: none; color: red;">Por favor, elige una opción.</div>
+          </div>
+          <input type="hidden" id="lesson_id" name="lesson_id" value="{{id_lesson}}">
+          <button type="submit" class="btn gcolorbuttonsinverso mt-1">Jugar Pareo</button>
+        </form>
+
+        <script>
+          document.getElementById('miFormulario_cards_pareo').addEventListener('submit', function(event) {
+            var select_pareo = document.getElementById('dificultad_cards_pareo');
+            var errorMensaje_pareo = document.getElementById('errorMensaje_pareo');
+            
+            if (select_pareo.value === "") {
+              event.preventDefault();
+              errorMensaje_pareo.style.display = "block";
+              setTimeout(function() {
+                errorMensaje_pareo.style.display = "none";
+              }, 3000);
+            } else {
+              errorMensaje_pareo.style.display = "none";
+            }
+          });
+          </script>
+
+<!-- 
+        <a href="{% url 'jugar_cf' 1 %}" class="btn gcolorbuttonsinverso" style="margin-top: 5px; width: 100%; ">Jugar cierto
+          y falso</a> -->
+
+      </div>
+
+    </div>
+    
+    <script>
+        /* JavaScript aquí */
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            let flippedCards = [];
+            let pairsFound = 0;
+            let currentColor = null;
+            let score = 5; // Inicializa el puntaje en 5
+
+            // Actualiza el puntaje en la interfaz del usuario
+            function updateScore() {
+                const scoreElement = document.getElementById('score');
+                if (scoreElement) {
+                    scoreElement.textContent = `Intentos restantes: ${score}`;
+                }
+            }
+            function mensajeFinal(mensaje_text) {
+                const scoreElementM = document.getElementById('score');
+                if (scoreElementM) {
+                    scoreElementM.textContent = `Puntaje final: ${score}`;
+                }
+                const scoreElement = document.getElementById('mensaje_final');
+                if (scoreElement) {
+                    scoreElement.textContent = `Fin del juego: ${mensaje_text}`;
+                }
+            }
+
+            updateScore();
+
+            cards.forEach((card) => {
+                card.addEventListener('click', () => flipCard(card));
+            });
+
+            function flipCard(card) {
+                if (!flippedCards.includes(card) && flippedCards.length < 2 && !card.classList.contains('matched')) {
+                    card.classList.add('flipped');
+                    flippedCards.push(card);
+
+                    // Cambiar el color del fondo a uno aleatorio en cada ronda
+                    if (currentColor === null) {
+                        currentColor = getRandomColor();
+                    }
+                    //card.style.setProperty('--background-color', currentColor);
+                    //card.style.setProperty('border-color', currentColor);
+                    card.style.setProperty('border', '8px solid ' + currentColor);
+
+                    console.log(card)
+                    var img = card.querySelector(' img');
+                    console.log(img)
+                    if (img) {
+                        console.log(img)
+                        img.style.setProperty('border-radius', '0'); // Elimina el border-radius
+                    }
+
+
+
+                    if (flippedCards.length === 2) {
+                        setTimeout(checkForPair, 1000);
+                    }
+                }
+            }
+
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
+            function checkForPair() {
+                const [card1, card2] = flippedCards;
+                const id1 = card1.dataset.cardId;
+                const id2 = card2.dataset.cardId;
+
+                if (id1 !== id2) {
+                    score--; 
+                    updateScore();
+                    resetCards();
+                    if (score === 0) { // Si el puntaje llega a 0
+                        //alert('¡Has perdido!');
+                        mensajeFinal('¡Has perdido!');
+                        var div = document.getElementById("form_new_cards");
+                        div.style.display = "block";
+                        var div_cards = document.getElementById("card-container");
+                        // Hacer invisible el div
+                        div_cards.style.display = "none";
+                        // Aquí puedes reiniciar el juego o redirigir al usuario a otra página
+                    }
+        
+                    resetCards();
+                } else {
+                    card1.removeEventListener('click', flipCard);
+                    card2.removeEventListener('click', flipCard);
+                    pairsFound++;
+
+                    // Agregar la clase 'matched' a las cartas emparejadas
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
+
+                    if (pairsFound === cards.length / 2) {
+                        //alert('¡Has ganado!');
+                        mensajeFinal('¡Has ganado!');
+                        var div = document.getElementById("form_new_cards");
+                        div.style.display = "block";
+                        var div_cards = document.getElementById("card-container");
+                        // Hacer invisible el div
+                        div_cards.style.display = "none";
+
+                        enviarPuntaje(score);
+                        
+                        // Puedes realizar una solicitud al backend de Django para guardar el puntaje del usuario aquí.
+                    }
+
+                    // Restablecer el color a null para la siguiente ronda
+                    currentColor = null;
+                }
+
+                flippedCards = [];
+            }
+
+            function resetCards() {
+                flippedCards.forEach((card) => {
+                    card.classList.remove('flipped');
+                    //card.style.removeProperty('--background-color');
+                    //card.style.removeProperty('border-color');
+                    card.style.border = 'none';
+
+                    var img = card.querySelector('img');
+                    if (img) {
+                        img.style.setProperty('border-radius', '8px'); 
+                    }
+
+                    
+
+                });
+            }
+        });
+    </script>
+
+    <script>
+        function enviarPuntaje(score) {
+            console.log('{{id_lesson}}');
+            console.log('group {{is_not_group}}');
+            fetch("{% url 'guardar_score_Post' %}  ", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ 'score': score, 'id_lesson': '{{id_relacion}}' , 'is_not_group': '{{is_not_group}}' }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
+
+{% endblock %}

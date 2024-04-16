@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultado</title>
+</head>
+<body>
+    <h1>Resultado</h1>
+    {% if es_correcta %}
+        <p>¡Respuesta correcta!</p>
+    {% else %}
+        <p>Respuesta incorrecta.</p>
+    {% endif %}
+    <a href="{% url 'jugar' %}">Siguiente pregunta</a>
+</body>
+</html>

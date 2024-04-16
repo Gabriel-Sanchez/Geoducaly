@@ -1,0 +1,410 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<style>
+  .mensaje_error_vacio{
+    
+    text-align: center;
+    border-radius: 15px;
+    background-color: rgba(255, 0, 0, 0.764);
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 10;
+   
+    color: white;
+    text-align: center;
+    width: 100%;
+  }
+  .fondocolor{
+    background-color: var(--Gprimary-color);
+    border-radius: 15px;
+    color: aliceblue;
+  }
+  .fondocolor_titulo{
+    background-color: var(--Gprimary-color);
+    border-radius: 15px;
+    color: aliceblue;
+  }
+  a{
+    color: aliceblue;
+  }
+  .error-message{
+    border-radius: 15px;
+    background-color: rgba(255, 0, 0, 0.764);
+    padding: 5px;
+    display: none;
+    color: white;
+    text-align: center;
+  }
+  #mensaje-div{
+    border-radius: 15px;
+    background-color: rgba(219, 76, 76, 0.764);
+    padding: 5px;
+    display: none;
+    color: white;
+    text-align: center;
+
+  }
+</style>
+
+
+<div class="alert-container">
+  <div id="mensaje-div" class="mt-2 mb-2 alert fixed-top m-3"></div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<div tabindex="0" class="h3 gtitulo"
+  style="text-align: center; padding-top: 10px; padding-bottom: 10px; ">
+  
+  <h4>
+    Crea juego Cierto y falso
+  </h4>
+  <h6>{{grupo_obj.name}}</h6>
+</div>
+<div class="container d-flex justify-content-center align-items-center" >
+
+
+
+  <form method="post" enctype="multipart/form-data" onsubmit="return validarFormulario();" id="form_crea_card">
+    {% csrf_token %}
+    <div class="row mb-2">
+
+      <div class="col fondocolor_titulo ">
+
+        <div class="p-2" style="text-align: center;">
+          <label for="" class="me-2"  > Título juego: </label>
+          {{ form.name }}
+
+        </div>
+  
+      </div>
+    </div>
+    {{ preguntas_formset.management_form }}
+    <div class="mb-6 ">
+
+    
+    {% for pregunta_form in preguntas_formset %}
+      <div class="pregunta-form form-group row mb-1 fondocolor p-2">
+        {% comment %} {{ pregunta_form.as_p }}
+        <button type="button" class="delete-button">Eliminar</button> {% endcomment %}
+
+        {{ pregunta_form.id }}
+     
+       
+          <div class="col-12 d-flex justify-content-center align-items-center mb-1" style="display: flex; flex-direction: column;">
+            <label for="" class="me-2" > Pregunta: </label>
+            {{ pregunta_form.texto |add_class:"form-control"  }}
+          </div>
+          <div class="col-2" style="display: flex; justify-content: flex-start; align-items: center;">
+            <label for="" class="me-2" > Es verdadera: </label>
+            {{ pregunta_form.es_verdadera }}
+          </div>
+          <div class="col-8 d-flex justify-content-center align-items-center mb-1">
+            <label for="" class="me-2" > Image: </label>
+            {{ pregunta_form.imagen }}
+            
+          </div>
+          <div class="col-2" style="display: flex; justify-content: flex-end; align-items: center;">
+            <button type="button" class="delete-button btn btn-danger">Eliminar</button>
+          </div>
+          <div class="col-12 mt-2 mb-2">
+
+            <div class="error-message  "></div>
+          </div>
+        
+    {% endfor %}
+  </div>
+  <div class="mt-4  d-flex justify-content-center align-items-center">
+
+    <button class="btn gcolorbuttonsSmall me-2" type="button" id="add-button">Agregar Pregunta</button>
+    <button class="btn btn-success me-2" type="submit" name="accion1" >Guardar</button>
+    <button class="btn btn-success" type="submit" name="accion2">Guardar y Salir</button>
+  </div>
+  </form>
+</div>
+  <!-- Template for an empty form -->
+  {% comment %}
+<div id="empty-form" style="display:none;">
+  <div class="pregunta-form">
+     {{ preguntas_formset.empty_form.as_p }}
+     <button type="button" class="delete-button">Eliminar</button> 
+    </div>
+  </div>
+  {% endcomment %}
+
+<div id="empty-form" style="display:none;">
+  <div class="pregunta-form form-group row mb-1 fondocolor p-2">
+    {{ preguntas_formset.empty_form.id }}
+   
+    <div class="col-12 d-flex justify-content-center align-items-center mb-1" style="display: flex; flex-direction: column;">
+      <label for="" class="me-2" > Pregunta: </label>
+      {{ preguntas_formset.empty_form.texto|add_class:"form-control" }}
+    </div>
+    <div class="col-2" style="display: flex; justify-content: flex-start; align-items: center;">
+      <label for="" class="me-2" > Es verdadera: </label>
+      {{ preguntas_formset.empty_form.es_verdadera }}
+    </div>
+    <div class="col-8 d-flex justify-content-center align-items-center mb-1">
+      <label for="" class="me-2" > Image: </label>
+      {{ preguntas_formset.empty_form.imagen }}
+      
+    </div>
+    <div class="col-2" style="display: flex; justify-content: flex-end; align-items: center;">
+      <button type="button" class="delete-button btn btn-danger">Eliminar</button>
+    </div>
+    <div class="col-12 mt-2 mb-2">
+
+      <div class="error-message  "></div>
+    </div>
+  </div>
+</div>
+
+
+  <script>
+
+    
+    $('#add-button').click(function () {
+      var formIdx = $('#id_preguntas-TOTAL_FORMS').val();
+      var emptyForm = $('#empty-form .pregunta-form');
+      var newPreguntaForm = emptyForm.clone(true);
+      newPreguntaForm.find('input, select, textarea').each(function() {
+        this.name = this.name.replace(/__prefix__/, formIdx);
+        this.id = 'id_' + this.name;
+        if (this.type !== 'checkbox') {
+          this.value = '';
+        }
+      });
+      $(this).parent().before(newPreguntaForm);
+      $('#id_preguntas-TOTAL_FORMS').val(parseInt(formIdx) + 1);
+      configurarValidacionArchivos()
+    });
+
+    $('form').on('click', '.delete-button', function(e) {
+      e.preventDefault();
+      
+        var formIdx = document.querySelector('#id_preguntas-TOTAL_FORMS').value;
+
+        //this.parentNode.remove();
+        $(this).parent().parent().remove();
+        document.querySelector('#id_preguntas-TOTAL_FORMS').value = parseInt(formIdx) - 1;
+        var i = 0;
+        document.querySelectorAll('.pregunta-form').forEach(function(preguntaForm) {
+          preguntaForm.querySelectorAll('input, select, textarea').forEach(function(input) {
+            input.name = input.name.replace(/-\d+-/, '-' + i + '-');
+            input.id = 'id_' + input.name;
+          });
+          i++;
+        });
+      });
+   
+    /* document.querySelectorAll('.delete-button').forEach(function(button) {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        var formIdx = document.querySelector('#id_preguntas-TOTAL_FORMS').value;
+
+        this.parentNode.remove();
+        document.querySelector('#id_preguntas-TOTAL_FORMS').value = parseInt(formIdx) - 1;
+        var i = 0;
+        document.querySelectorAll('.pregunta-form').forEach(function(preguntaForm) {
+          preguntaForm.querySelectorAll('input, select, textarea').forEach(function(input) {
+            input.name = input.name.replace(/-\d+-/, '-' + i + '-');
+            input.id = 'id_' + input.name;
+          });
+          i++;
+        });
+      });
+    }); 
+    */
+
+
+  </script>
+
+
+  <script>
+    function configurarValidacionArchivos() {
+      // Agregar la clase "pregunta-form-with-files" a los formularios que contienen campos de archivo
+      document.querySelectorAll(".pregunta-form").forEach(function(form, i) {
+        var inputFile = form.querySelector("input[type='file']");
+  
+        if (inputFile) {
+          form.classList.add("pregunta-form-with-files");
+  
+          inputFile.addEventListener("change", function() {
+            var errorMessage = form.querySelector(".error-message");
+            var allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+            var fileExtension = inputFile.files[0].name.split('.').pop().toLowerCase();
+  
+            if (allowedExtensions.indexOf(fileExtension) === -1) {
+              errorMessage.textContent = "El archivo en el formulario #" + (i + 1) + " debe ser una imagen (JPEG, PNG o GIF).";
+              errorMessage.style.display = "block"; // Muestra el div de error al cambiar el archivo
+            } else {
+              errorMessage.style.display = "none"; // Oculta el div de error si el archivo es válido
+            }
+          });
+        }
+      });
+  
+    
+    }
+  
+  
+    // Llamar a la función cuando la página cargue
+    $(document).ready(function() {
+      configurarValidacionArchivos();
+    });
+  
+  
+  
+    document.querySelector("form").addEventListener("submit", function (event) {
+
+
+
+      
+
+
+    var formCount = document.querySelectorAll(".pregunta-form").length;
+    console.log(formCount)
+
+    if (formCount < 3) {
+      event.preventDefault(); // Evita el envío del formulario
+
+      // Muestra el mensaje de error
+      var errorMessageDiv = document.getElementById("mensaje-div");
+      errorMessageDiv.textContent = "El juego debe tener más de 2 cartas";
+      errorMessageDiv.style.display = "block";
+      
+      // Espera 3 segundos y luego oculta el mensaje
+      setTimeout(function() {
+        errorMessageDiv.style.display = "none";
+      }, 3000); // 3000 milisegundos = 3 segundos
+
+      return;
+    } else if (formCount > 20) {
+      event.preventDefault(); // Evita el envío del formulario
+
+      // Muestra el mensaje de error
+      var errorMessageDiv = document.getElementById("mensaje-div");
+      errorMessageDiv.textContent = "El límite de cartas para el juego es 20";
+      errorMessageDiv.style.display = "block";
+
+      // Espera 3 segundos y luego oculta el mensaje
+      setTimeout(function() {
+        errorMessageDiv.style.display = "none";
+      }, 3000); // 3000 milisegundos = 3 segundos
+
+      return;
+    }
+
+
+
+
+
+
+      var formsWithFiles = document.querySelectorAll(".pregunta-form-with-files");
+  
+      for (var i = 0; i < formsWithFiles.length; i++) {
+        var inputFile = formsWithFiles[i].querySelector("input[type='file']");
+        var errorMessage = formsWithFiles[i].querySelector(".error-message");
+  
+        if (inputFile && inputFile.files.length > 0) {
+          var allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+          var fileExtension = inputFile.files[0].name.split('.').pop().toLowerCase();
+          if (allowedExtensions.indexOf(fileExtension) === -1) {
+            errorMessage.textContent = "El archivo en el formulario #" + (i + 1) + " debe ser una imagen (JPEG, PNG o GIF).";
+            errorMessage.style.display = "block"; // Muestra el div de error
+            event.preventDefault(); // Evita el envío del formulario
+            return; // Detiene la validación en caso de un archivo no válido
+          } else {
+            errorMessage.style.display = "none"; // Oculta el div de error si el archivo es válido
+          }
+        } else {
+          errorMessage.style.display = "none"; // Oculta el div de error si no se ha seleccionado ningún archivo
+        }
+      }
+    });
+  </script>
+
+  <script>
+    // Selecciona todos los elementos input con nombres que coincidan con el patrón "preguntas-n-eliminar"
+  const eliminarCheckboxes = document.querySelectorAll('input[name^="preguntas-"][name$="-eliminar"]');
+  
+  // Recorre todos los elementos seleccionados
+  eliminarCheckboxes.forEach(eliminarCheckbox => {
+    // Verifica si el valor del checkbox es "verdadero"
+    if (eliminarCheckbox.value === "true") {
+      // Cambia el valor a "falso"
+      eliminarCheckbox.value = "false";
+    }
+  });
+  
+  </script>
+
+
+
+
+  
+  <script>
+    function validarFormulario() {
+        var inputs = document.querySelectorAll('#form_crea_card input[type=text]');
+        var isValid = true;
+  
+        for (var i = 0; i < inputs.length; i++) {
+            var input = inputs[i];
+            var displayStyle = window.getComputedStyle(input).display;
+            var mensajeId = 'mensaje' + i;
+            var mensajeExistente = document.getElementById(mensajeId);
+  
+            if (displayStyle !== 'none') {
+                if (input.value.trim() === '') {
+                    isValid = false;
+                    input.style.border = '1px solid red';
+  
+                    // Si el mensaje ya existe, actualizamos su texto
+                    if (mensajeExistente) {
+                        mensajeExistente.innerText = 'Este campo no puede estar vacío.';
+                    } else {
+                        // Si el mensaje no existe, lo creamos
+                        var mensaje = document.createElement('div');
+                        mensaje.id = mensajeId;
+                        mensaje.className = 'mensaje_error_vacio';  // Aquí agregas la clase
+                        mensaje.style.color = 'white';
+                        mensaje.innerText = 'Este campo no puede estar vacío.';
+                        input.parentNode.insertBefore(mensaje, input.nextSibling);
+                    }
+                  } else if (/^[^a-zA-Z0-9]+$/.test(input.value)) {
+                    isValid = false;
+                    input.style.border = '1px solid red';
+  
+                    // Si el mensaje ya existe, actualizamos su texto
+                    if (mensajeExistente) {
+                        mensajeExistente.innerText = 'Este campo no puede contener solo caracteres especiales.';
+                    } else {
+                        // Si el mensaje no existe, lo creamos
+                        var mensaje = document.createElement('div');
+                        mensaje.id = mensajeId;
+                        mensaje.className = 'mensaje_error_vacio';  // Aquí agregas la clase
+                        mensaje.style.color = 'white';
+                        mensaje.innerText = 'Este campo no puede contener solo caracteres especiales.';
+                        input.parentNode.insertBefore(mensaje, input.nextSibling);
+                    }
+                } else {
+                    // Si el usuario ha agregado texto válido en el campo, eliminamos el mensaje
+                    if (mensajeExistente) {
+                        mensajeExistente.remove();
+                    }
+                    input.style.border = '1px solid #bdbdbd'
+                }
+            }
+        }
+  
+        return isValid;
+    }
+  </script>
+  
+{% endblock %}
+
+

@@ -1,0 +1,50 @@
+@media (min-width: 350px) {
+
+    .container {
+      justify-content: center;
+      padding-bottom: 20px;
+
+    }
+
+
+  }
+
+  @media(min-width: 800px) {
+
+    .container {
+      justify-content: center;
+      padding-bottom: 20px;
+
+    }
+
+    /* .btn btn-primary{
+          padding-top: 20px;
+          padding-bottom: 20px;
+          padding-left: 20px;
+          background-color: red;
+         
+
+      } */
+    .card-img-top2 {
+      width: 45%;
+      padding-top: 5px;
+      padding-bottom: 5px;
+
+    }
+
+  }
+
+  .card-img-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .card-img-container img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+  
+  .card-img-container img:hover {
+    transform: scale(1.1);
+  }  

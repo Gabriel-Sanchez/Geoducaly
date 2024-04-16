@@ -1,0 +1,296 @@
+{% extends "baseapp/base.html" %}
+{% load static %}
+
+{% block title %}
+Home
+{% endblock title %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'homeapp/home.css' %}">
+
+
+<style>
+
+</style>
+
+<main>
+  <div>
+    <div>
+      <h1 tabindex="0" class="h2 gtitulo">
+        Bienvenidos</h1>
+    </div>
+  </div>
+
+  <div class="containermain ms-4 me-4 mb-4 "  >
+
+
+    <div class="row">
+
+      <div class="col-md-5 col-sm-6">
+
+
+        {% include "home/cursos_home.html" %}
+
+
+
+      </div>
+
+      <div class="col-md-3 col-sm-6 mb-4" >
+
+        <div class="geoimagemapa" style="height: 100%; display: flex; flex-direction: column;">
+      
+          <h1 tabindex="0" class="gsubtitulo h2">
+            Explora
+          </h1>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7475875.873708928!2d-80.88802891999823!3d8.825970195208761!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2spa!4v1622469764525!5m2!1ses!2spa"
+            style="border: 0; flex-grow: 1; width: 100%; height: 50%;"
+            allowfullscreen="" 
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+      
+      
+      
+
+
+      <div class="col-md-4 col-sm-6">
+
+        <div class="row">
+
+          <div class="mb-4">
+            <h1 tabindex="0" class="gsubtitulo h2">Puntuación</h1>
+
+            <div class="row-1">
+              <div class="card table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th scope="col"># Posición</th>
+                      <th scope="col">Usuario</th>
+                      <th scope="col">Puntaje</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {% for user in clasificacion %}
+                    {% if forloop.counter == 1 %}
+                    <tr class="posicion-oro">
+                      <th>
+                        {{ forloop.counter }}
+                        <i class="fas fa-star custom-icon-oro"> </i>
+                      </th>
+                      {% elif forloop.counter == 2 %}
+                    <tr class="posicion-plata">
+                      <th>{{ forloop.counter }} <i class="fas fa-star custom-icon-plata"></i> </th>
+                      {% elif forloop.counter == 3 %}
+                    <tr class="posicion-bronce">
+                      <th>{{ forloop.counter }} <i class="fas fa-star custom-icon-bronce"></i> </th>
+                      {% else %}
+                    <tr>
+                      <th>{{ forloop.counter }} </th>
+                      {% endif %}
+
+                      <th>
+
+                        {% if user.estudiante_obj.picture.url != null %}
+                        <img src="{{user.estudiante_obj.picture.url}}" alt="" style="width: 20px; height: 20px"
+                          class="rounded-circle" />
+                        {% else %}
+                        <img src="{% static '..\media\default\user.png' %}" alt="" style="width: 20px; height: 20px"
+                          class="rounded-circle" />
+                        {% endif %}
+
+                        {{ user.estudiante_obj }}
+                      </th>
+
+
+
+                      <th>{{ user.total_score }} EXP</th>
+                    </tr>
+
+
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+
+                <!-- <a href="{% url 'alljuegos' %}">ver aqui</a> -->
+
+
+
+              </div>
+
+              <!-- <div class="pb-2 pt-2">
+      
+                  <a href="{% url 'alljuegos' %}"><button class="btn gcolorbuttons"> volver a los juegos
+                      </button></a>
+              </div> -->
+            </div>
+
+          </div>
+          <div>
+            <h1 tabindex="0" class="gsubtitulo h2 ">Aprende</h1>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+              {% for dato in datos %}
+                  <div class="col d-flex">
+                      <a href="{{dato.leccion.get_absolute_url}}" class="w-100">
+                          <div class="card h-100 cartas_sabias_que" style="background-color: {{dato.leccion.color}};">
+                              <div class="card-body d-flex flex-column ">
+                                  <h5 class="card-title">{{dato.title}}</h5>
+                                  <div class="card-text overflow-auto" style="max-height: 150px;">
+                                      {{dato.description}}
+                                  </div>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+              {% endfor %}
+          </div>
+          
+          
+          
+          
+            <div>
+              <a type="submit" class=" btn btn-success btn-rounded gcolorbuttons mb-2 mt-2" style="width: 100%;" href="{% url 'datos' 1 %}" >
+                ver todos
+              </a>
+
+            </div> 
+          </div>
+
+
+
+        </div>
+
+
+
+
+
+
+      </div>
+
+    </div>
+
+
+    <!-- <div class="c1">
+
+      <h1 tabindex="0" class="gsubtitulo h2 me-1 ms-1">Aprende</h1>
+      <div class="cardsfluid">
+
+        {% for dato in datos %}
+
+        <div tabindex="0" class="col-6 pe-1 ps-1 pt-1 pb-1">
+          <div class="card h-100">
+            {% comment %} <img src="{{dato.thumbnail.url}}" class="card-img-top" alt="" style="max-width: 100%; height: 60%; " /> {% endcomment %}
+            <div class="card-body">
+              <h5 class="card-title">{{dato.title}}</h5>
+              <div class="card-text Gscroll2" >
+                {{dato.description}}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
+        {% endfor %}
+
+        <a type="submit" class="btn btn-success btn-rounded gcolorbuttons" href="{% url 'datos' 1 %}" style="width: 100%;" >
+          ver todos 
+        </a>
+
+        
+
+      </div>
+
+    </div>
+    
+
+    <div class="c4 h1 geoimagemapa">
+
+      <h1 tabindex="0" class="gsubtitulo h2">
+        Explora
+      </h1>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7475875.873708928!2d-80.88802891999823!3d8.825970195208761!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2spa!4v1622469764525!5m2!1ses!2spa"
+        style="border: 0;  width:100% ;height:93%; padding-top: 10px;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+
+    <div class="c5">
+
+      <h1 tabindex="0" class="gsubtitulo h2">
+        Juega
+      </h1>
+
+      <div style="margin-top: 7%;" >
+
+      <section class="Gscroll geowap" >
+
+       
+
+
+
+        {% for a in juegos %}
+
+
+
+        <div tabindex="0" class="card {{cardsCollors|random}} mb-3 tarjGame" style="max-width: 18rem;">
+          <div class="card-header"  >Juego</div>
+          <div class="card-body">
+            <h5 class="card-title">{{ a.title }}</h5>
+            <p class="card-text">
+            </p>
+            <a href="/juegos/{{ a.id }}" class="btn btn-primary w-100">jugar</a>
+          </div>
+        </div>
+
+        {% endfor %}
+
+      </section>
+
+    </div>
+
+    </div> -->
+
+
+  </div>
+
+
+</main>
+
+{% endblock %}
+
+{% block scripts_footer %}
+
+<script>
+    // Función para determinar el contraste del color de fondo y cambiar el color del texto en consecuencia
+    function setContrastTextColor(elements) {
+        elements.forEach(function(element) {
+            let bgColor = getComputedStyle(element).backgroundColor;
+
+            // Convertir el color de fondo a un valor hexadecimal
+            let hexColor = bgColor.charAt(0) === "#" ? bgColor : "#" + bgColor.slice(4, -1).split(",").map(x => (+x).toString(16).padStart(2, "0")).join("");
+
+            // Convertir el color de fondo a RGB
+            let r = parseInt(hexColor.substr(1, 2), 16);
+            let g = parseInt(hexColor.substr(3, 2), 16);
+            let b = parseInt(hexColor.substr(5, 2), 16);
+
+            // Calcular el coeficiente de luminosidad (Luminance)
+            let luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+            // Establecer el color del texto en blanco o negro dependiendo del contraste
+            let textColor = (luminance > 0.5) ? "black" : "white";
+
+            // Aplicar el color del texto al elemento
+            element.style.color = textColor;
+        });
+    }
+
+    // Obtener todos los elementos con la clase "badge" y llamar a la función setContrastTextColor
+    let badgeElements = document.querySelectorAll('.cartas_sabias_que');
+    setContrastTextColor(badgeElements);
+</script>
+{% endblock scripts_footer %}

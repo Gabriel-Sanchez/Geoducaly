@@ -1,0 +1,141 @@
+{% load static %}
+<style>
+    .custom-icon-oro {
+        color: gold;
+    }
+    .custom-icon-plata {
+        color: rgb(93, 93, 93);
+    }
+    .custom-icon-bronce {
+        color: rgb(150, 100, 0);
+    }
+
+    .posicion-oro{
+        background-color: rgb(251, 251, 133);
+    }
+    .posicion-plata{
+        background-color: rgb(195, 195, 195);
+    }
+    .posicion-bronce{
+        background-color: rgb(202, 168, 99);
+    }
+
+    tr{
+        vertical-align: middle;
+    }
+
+    .self_user{
+        
+        background-color: rgba(26, 65, 193, 0.562);
+    }
+    
+    i{
+        font-size: 24px;
+    }
+    
+</style>
+
+
+<!-- <div class="container" style="padding-top: 1.6%; padding-bottom: 1.6%;"> -->
+<div class="container" >
+
+    <div class="row-1">
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"># Posición</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Puntaje</th>
+                        {% if es_general %}
+                        <th scope="col">Num Estrellas</th>
+                          
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody >
+
+                    {% for user in clasificacion %}
+                        {% if forloop.counter == 1 %}
+                        <tr class="posicion-oro {% if request.user.estudiante == user.estudiante_obj %} self_user
+                        {% endif %}  ">
+                            <th>
+                                {{ forloop.counter }} 
+                                <i class="fas fa-medal custom-icon-oro" > </i> 
+                            </th>
+                            {% elif forloop.counter == 2 %}
+                        <tr class="posicion-plata  {% if request.user.estudiante == user.estudiante_obj %}
+                        self_user
+                        {% endif %} ">
+                            <th>{{ forloop.counter }} <i class="fas fa-medal custom-icon-plata"></i> </th>
+                            {% elif forloop.counter == 3 %}
+                        <tr class="posicion-bronce  {% if request.user.estudiante == user.estudiante_obj %}
+                        self_user
+                        {% endif %}  ">
+                            <th>{{ forloop.counter }} <i class="fas fa-medal custom-icon-bronce"></i> </th>
+                            {% else %}
+                        <tr class="{% if request.user.estudiante == user.estudiante_obj %}
+                        self_user
+                        {% endif %}"  >
+                            <th>{{ forloop.counter }} </th>
+                            {% endif %}
+                
+                    <th>   
+
+                        {% if user.estudiante_obj.picture.url != null %}
+                        <img src="{{user.estudiante_obj.picture.url}}" alt="" style="width: 45px; height: 45px"
+                        class="rounded-circle me-1" />
+                        {% else %}
+                        <img src="{% static '..\media\default\user.png' %}" alt="" style="width: 45px; height: 45px"
+                        class="rounded-circle me-1" />
+                        {% endif %}
+                        
+                        {{ user.estudiante_obj }}</th>
+                  
+
+
+                    <th>{{ user.total_score }} EXP</th>
+
+                    {% if es_general %}
+                      
+                    
+                    <th style="width: 15%;">
+                        <i title="Puntaje perfecto" class="fas fa-star text-warning"></i>
+                        {% if user.estudiante_obj.total_score_perfect %}
+                        {{user.estudiante_obj.total_score_perfect|floatformat:0}}
+                        
+                        {% else %}
+                        
+                        0
+                        
+                        {% endif %}
+                        
+                    </th>
+                    {% endif %}
+                  
+                        </tr>
+
+
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+            <!-- <a href="{% url 'alljuegos' %}">ver aqui</a> -->
+
+
+
+        </div>
+
+        <!-- <div class="pb-2 pt-2">
+
+            <a href="{% url 'alljuegos' %}"><button class="btn gcolorbuttons"> volver a los juegos
+                </button></a>
+        </div> -->
+    </div>
+
+
+
+
+
+</div>

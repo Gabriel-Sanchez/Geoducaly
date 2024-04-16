@@ -1,0 +1,476 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Grupo Profesor
+{% endblock title %}
+
+{% block content %}
+
+
+<style>
+  .nav-tabs .nav-link {
+    color: #505050; /* Color del texto */
+    background-color: #ffffff00; /* Color de fondo */
+  }
+  
+  .nav-tabs .nav-link.active {
+    color: #c4c4c4; /* Color del texto de la pestaña activa */
+    background-color: #3466c8; /* Color de fondo de la pestaña activa */
+  }
+
+  .nav-tabs .nav-link:hover {
+    color: #c4c4c4; /* Color del texto al pasar el cursor */
+    background-color: #152859; /* Color de fondo al pasar el cursor */
+  }
+  
+  .nav-tabs .nav-link {
+    border-radius: 5px; /* Redondea los bordes */
+    padding: 10px 15px; /* Ajusta la altura y el relleno horizontal */
+    font-size: 16px;
+  }
+
+
+
+  .btn-primary{
+    background-color: var(--GcolorTitulosFondo);
+    color: white;
+  }
+
+  .btn-primary:hover{
+    background-color: var(--GcolorTitulosFondo_puro);
+    color: white;
+  }
+  
+
+  </style>
+
+<!-- <style>
+  .nav-link.active {
+    color: #616161;
+    background-color: #12b425;
+    border-color: #e0e0e0 #e0e0e0 #fff;
+  }
+</style> -->
+
+
+
+<style>
+  .btn-secondary{
+    background-color: var(--GcolorTitulosFondo);
+    color: white;
+  }
+
+  .btn-secondary:hover{
+    background-color: var(--GcolorTitulosFondo_puro);
+    color: white;
+  }
+</style>
+
+<style>
+  .btn-eliminar-G{
+    background-color: rgb(238, 61, 61);
+    color: white;
+  }
+
+  .btn-eliminar-G:hover{
+    background-color: rgb(169, 1, 1);
+    color: white;
+  }
+</style>
+
+
+
+
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} fixed-bottom m-3" id="message" style="display: none;">
+            <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <script>
+        
+        function showMessage() {
+            var messageDiv = document.getElementById('message');
+            if (messageDiv) {
+                messageDiv.style.display = 'block';
+            }
+        }
+    
+        
+        setTimeout(function() {
+            var messageDiv = document.getElementById('message');
+            if (messageDiv) {
+                messageDiv.style.display = 'none';
+            }
+        }, 3000);
+    
+        
+        showMessage();
+    </script>
+    
+
+  
+    
+
+
+    {% if grupo %}
+
+    <div tabindex="0" class="h3 gtitulo"
+  style="text-align: center; padding-top: 10px; padding-bottom: 10px; ">
+  
+  <h5>
+
+    Grupo: {{grupo}}
+  </h5>
+  
+</div>
+
+  
+
+ 
+    <form method="post" class="">
+      <div class="row d-flex justify-content-center align-items-center mb-1">
+        {% csrf_token %}
+        <div class="col  justify-content-end align-items-center" style="text-align: end;">
+          <label for="">Grupo:</label>
+        </div>
+        <div class="col-2  justify-content-center align-items-center">
+            {{ form.grupo  }}
+        </div>
+        <div class="col justify-content-center align-items-center">
+          <button type="submit" class="btn btn-primary">Ir</button>
+        </div>
+      </div>
+    </form>
+    
+    
+
+
+<div class="m-4" >
+
+  <div class="row w-100">
+    <div class="col-2">
+      <!-- Tab navs -->
+      <div
+        class="nav flex-column nav-tabs text-center"
+        id="v-tabs-tab"
+        role="tablist"
+        aria-orientation="vertical"
+      >
+        <a
+          class="nav-link active"
+          id="v-tabs-home-tab"
+          data-mdb-toggle="tab"
+          href="#v-tabs-home"
+          role="tab"
+          aria-controls="v-tabs-home"
+          aria-selected="true"
+          >Tabla</a
+        >
+        <a
+          class="nav-link"
+          id="v-tabs-profile-tab"
+          data-mdb-toggle="tab"
+          href="#v-tabs-profile"
+          role="tab"
+          aria-controls="v-tabs-profile"
+          aria-selected="false"
+          >Pareo Cartas</a
+        >
+        <a
+          class="nav-link"
+          id="v-tabs-messages-tab"
+          data-mdb-toggle="tab"
+          href="#v-tabs-messages"
+          role="tab"
+          aria-controls="v-tabs-messages"
+          aria-selected="false"
+          >Cierto y falso</a
+        >
+      </div>
+      <!-- Tab navs -->
+    </div>
+  
+    <div class="col-10">
+      <!-- Tab content -->
+      <div class="tab-content" id="v-tabs-tabContent">
+        <div
+          class="tab-pane fade show active"
+          id="v-tabs-home"
+          role="tabpanel"
+          aria-labelledby="v-tabs-home-tab"
+        >
+         
+        <div class="row mt-0">
+        {% include "gamesUnityapp/template_score_table.html" %}
+
+
+            {% comment %} <div class="col-6" style="background-color: #3466c8;">
+          
+                  <div class="row d-flex justify-content-center align-items-center mb-1" >
+              
+                    <div>
+                      <a class=" btn gcolorbuttonsinverso" href="{% url 'crear_carta' grupo.id %}">crear juego carta <i class="fas fa-plus"></i></a>
+                    </div>
+              
+              
+                  </div>
+              
+                  <div class="row" >
+              
+                    
+                    {% for juego_c in juegos_cartas %}
+                    <div class="col-sm-4 col-3 mb-4">  <!-- Ajusta el número en 'col-sm-' según cuántas tarjetas quieras por fila. 'mb-4' añade espacio debajo de cada tarjeta -->
+                      <div class="card text-center h-100" style="width: 100%;">  <!-- Asegúrate de que la tarjeta tenga un ancho del 100% para que sea responsiva -->
+                        <div class="card-body">
+                          <h5 class="card-title">{{juego_c}}</h5>  <!-- Asegúrate de que estás mostrando el valor correcto aquí -->
+                          <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                          <a href="{% url 'editar_carta' juego_c.id  %}" class=" btn gcolorbuttonsinverso">Editar</a> 
+                        </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              
+            </div>
+          
+          
+            <div class="col-6" style="background-color: #3466c8;">
+          
+              <div class="row d-flex justify-content-center align-items-center mb-1" >
+          
+                <div>
+          
+                  <a class=" btn gcolorbuttonsinverso" href="{% url 'prof_crear_cf' grupo.id %}">crear juego cf <i class="fas fa-plus"></i></a>
+                </div>
+          
+          
+              </div>
+          
+              <div class="row" >
+          
+          
+                
+                
+                {% for juegotruef in juegoTF %}
+                <div class="col-sm-4 mb-4">  <!-- Ajusta el número en 'col-sm-' según cuántas tarjetas quieras por fila. 'mb-4' añade espacio debajo de cada tarjeta -->
+                <div class="card text-center h-100" style="width: 100%;">  <!-- Asegúrate de que la tarjeta tenga un ancho del 100% para que sea responsiva -->
+                  <div class="card-body">
+                    <h5 class="card-title">{{juegotruef}}</h5>  <!-- Asegúrate de que estás mostrando el valor correcto aquí -->
+                    <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                    <a href="{% url 'prof_edit_CF' juegotruef.id  %}" class=" btn gcolorbuttonsinverso">Editar</a>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              
+            </div>
+            </div>
+           {% endcomment %}
+          
+          
+            </div>
+
+
+
+
+        </div>
+        <div
+          class="tab-pane fade"
+          id="v-tabs-profile"
+          role="tabpanel"
+          aria-labelledby="v-tabs-profile-tab"
+        >
+         
+          <div class="col-12" style="background-color: #3465c800;">
+          
+            <div class="row d-flex justify-content-center align-items-center mb-1" >
+        
+              <div>
+                <a class=" btn gcolorbuttonsinverso" href="{% url 'crear_carta' grupo.id %}">crear juego carta</a>
+              </div>
+        
+        
+            </div>
+        
+            <div class="row" >
+        
+              
+              {% for juego_c in juegos_cartas %}
+              <div class="col-sm-4 col-3 mb-4">  <!-- Ajusta el número en 'col-sm-' según cuántas tarjetas quieras por fila. 'mb-4' añade espacio debajo de cada tarjeta -->
+                <div class="card text-center" style="width: 100%;">  <!-- Asegúrate de que la tarjeta tenga un ancho del 100% para que sea responsiva -->
+                  <div class="card-body">
+                    <h5 class="card-title">{{juego_c}}</h5>  <!-- Asegúrate de que estás mostrando el valor correcto aquí -->
+                    <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                    <div class="row" >
+
+                      <a href="{% url 'editar_carta' juego_c.id  %}" class=" btn gcolorbuttonsinverso col me-2 ms-2 mb-1">Editar</a> 
+                      <!-- <a id="botonEliminar" href="{% url 'courses:eliminar_juego_carta' juego_c.id  %}" class=" btn gcolorbuttonsinverso col me-4 ms-2">Eliminar</a> -->
+                      
+                      <a data-toggle="modal" data-target="#confirmationModal{{ juego_c.id }}-321" class="btn btn-eliminar-G col me-2 ms-2 mb-1">Eliminar</a>
+                      
+                    </div>
+                  
+                      <div class="modal fade" id="confirmationModal{{ juego_c.id }}-321" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-body">
+                            ¿Estás seguro de que deseas eliminar el juego {{juego_c}} ?
+                          </div>
+                          <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <a id="botonEliminar" href="{% url 'courses:eliminar_juego_carta' juego_c.id  %}" class="btn btn-danger">Eliminar</a>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        
+      </div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="v-tabs-messages"
+          role="tabpanel"
+          aria-labelledby="v-tabs-messages-tab"
+        >
+        
+          <div class="col-12" 
+          style="background-color: #3465c800;"
+          >
+          
+            <div class="row d-flex justify-content-center align-items-center mb-1" >
+        
+              <div>
+        
+                <a class=" btn gcolorbuttonsinverso" href="{% url 'prof_crear_cf' grupo.id %}">crear juego cf</a>
+              </div>
+        
+        
+            </div>
+        
+            <div class="row" >
+        
+        
+              
+              
+              {% for juegotruef in juegoTF %}
+              <div class="col-sm-4 mb-4">  <!-- Ajusta el número en 'col-sm-' según cuántas tarjetas quieras por fila. 'mb-4' añade espacio debajo de cada tarjeta -->
+              <div class="card text-center" style="width: 100%;">  <!-- Asegúrate de que la tarjeta tenga un ancho del 100% para que sea responsiva -->
+                <div class="card-body">
+                  <h5 class="card-title">{{juegotruef}}</h5>  <!-- Asegúrate de que estás mostrando el valor correcto aquí -->
+                  <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                  <div class="row">
+
+                    <a href="{% url 'prof_edit_CF' juegotruef.id  %}" class=" btn gcolorbuttonsinverso col me-2 ms-2 mb-1">Editar</a>
+                    <!-- <a id="botonEliminar" href="{% url 'courses:eliminar_juego_cf' juegotruef.id  %}" class=" btn gcolorbuttonsinverso col me-4 ms-2">Eliminar</a> -->
+                    
+                    <a data-toggle="modal" data-target="#confirmationModal{{ juegotruef.id }}" class="btn btn-eliminar-G col me-2 ms-2 mb-1">Eliminar</a>
+                  </div>
+                  
+                    <div class="modal fade" id="confirmationModal{{ juegotruef.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-body">
+                          ¿Estás seguro de que deseas eliminar el juego {{juegotruef}}?
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                          <a href="{% url 'courses:eliminar_juego_cf' juegotruef.id %}" class="btn btn-danger">Eliminar</a>
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            
+          </div>
+          </div>
+        </div>
+      </div>
+      <!-- Tab content -->
+    </div>
+  </div>
+
+
+
+</div>
+    
+
+
+
+
+<!-- JavaScript -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const deleteButtons = document.querySelectorAll('[data-toggle="modal"]');
+    const confirmationModals = document.querySelectorAll(".modal.fade");
+  
+    deleteButtons.forEach(function (button, index) {
+      button.addEventListener("click", function () {
+        confirmationModals[index].style.display = "block";
+      });
+    });
+  
+    const confirmDeleteButtons = document.querySelectorAll(".btn-danger");
+    const cancelDeleteButtons = document.querySelectorAll(".btn-secondary");
+  
+    confirmDeleteButtons.forEach(function (button, index) {
+      button.addEventListener("click", function () {
+        confirmationModals[index].style.display = "none";
+        // Realiza la eliminación aquí para el elemento correspondiente.
+      });
+    });
+  
+    cancelDeleteButtons.forEach(function (button, index) {
+      button.addEventListener("click", function () {
+        confirmationModals[index].style.display = "none";
+      });
+    });
+  });
+  </script>
+  
+
+  {% else %}
+
+  <div tabindex="0" class="h3 gtitulo"
+  style="text-align: center; padding-top: 10px; padding-bottom: 10px; ">
+  
+  <h5>
+    {{mensajeVacio}}
+  </h5>
+  
+</div>
+
+
+<div class="d-flex justify-content-center">
+  <div class="p-2 d-flex align-items-center">
+      <strong>Crea un Grupo</strong>
+  </div>
+  <div class="p-2">
+      <a href="{% url 'courses:crea_grupo' %}" type="button" class="gcolorbuttonsSmall btn btn-floating "><i class="fas fa-plus"></i></a>
+  </div>
+</div>
+
+
+
+  {% endif %}
+ 
+
+{% endblock %}

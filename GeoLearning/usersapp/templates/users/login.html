@@ -1,0 +1,127 @@
+{% extends "baseapp/base.html" %}
+{% load static %}
+
+{% block title %}
+Inicio de sesión
+{% endblock title %}
+
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static '/usersapp/login.css' %}">
+<div class="topbotP">
+
+  {% if messages %}
+  <div class="alert-container">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} fixed-bottom m-3" id="message" style="display: none;">
+          <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+              {{ message }}
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+  {% endif %}
+  
+  <script>
+      
+      function showMessage() {
+          var messageDiv = document.getElementById('message');
+          if (messageDiv) {
+              messageDiv.style.display = 'block';
+          }
+      }
+  
+      
+      setTimeout(function() {
+          var messageDiv = document.getElementById('message');
+          if (messageDiv) {
+              messageDiv.style.display = 'none';
+          }
+      }, 3000);
+  
+      
+      showMessage();
+  </script>
+  
+
+  <form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+
+    <div class="modal-dialog">
+      <h1 class="gsubtitulo h2">Inicio de sesión de la cuenta</h1>
+
+
+      <div class="modal-content">
+        
+ 
+
+        <div class="modal-body">
+
+
+
+          <!-- <h6 class="card-header p-3 mb-2 bg-info text-white text-center">Inicio de sesión de la cuenta</h6> -->
+          <h5 class="card-header p-3 mb-2  text-white text-center"></h5>
+          <div class="tab-content">
+            <div class="tab-pane fade in show active" id="navbarLogin-login" role="tabpanel">
+
+              <p class="status"></p>
+
+              <div class="text-center mb-3">
+              </div>
+
+              <div class="form-outline form-auth-mdb mb-4">
+                <input type="text" id="username" class="form-control" name="username" required>
+                <label class="form-label" for="username" style="margin-left: 0px;">Usuario</label>
+                <div class="form-notch">
+                  <div class="form-notch-leading" style="width: 9px;"></div>
+                  <div class="form-notch-middle" style="width: 146.4px;"></div>
+                  <div class="form-notch-trailing"></div>
+                </div>
+              </div>
+
+              <div class="form-outline form-auth-mdb mb-4">
+                <input type="password" id="password" class="form-control" name="password" autocomplete="off" required>
+                <label class="form-label" for="password" style="margin-left: 0px;">Contraseña</label>
+                <div class="form-notch">
+                  <div class="form-notch-leading" style="width: 9px;"></div>
+                  <div class="form-notch-middle" style="width: 92.8px;"></div>
+                  <div class="form-notch-trailing"></div>
+                </div>
+              </div>
+              {% if error %}
+
+              <div class="alert alert-danger sizefont"> {{error}} </div>
+              {% endif %}
+
+              <div class="mb-2" style="text-align: center;">
+
+                <a href="{% url 'password_reset' %}"> ¿Olvidaste tu contraseña? Restablecer</a>
+              </div>
+
+
+              <div class="justify-content-center mb-4">
+
+                <!-- <a href="" type="submit">Olvido su contraseña?</a>
+              </div> -->
+
+              <button class="btn  btn-block mb-4 gcolorbuttons" type="submit" value="LOGIN">Iniciar Sesión</button>
+
+              <div class="text-center">
+                <p>No es un usuario? <a href="{% url 'signup' %}" class="auth-modal-toggle" data-auth-modal-tab="sign-up">Registrarse</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+
+
+
+{% endblock %}

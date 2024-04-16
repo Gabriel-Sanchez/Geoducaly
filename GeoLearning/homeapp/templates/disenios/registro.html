@@ -1,0 +1,189 @@
+
+
+
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<h1></h1>
+<div class="modal-dialog" role="document">
+
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <!-- Modal body -->
+      <div class="modal-body">
+
+        <!-- Pills navs -->
+        <ul class="nav nav-pills nav-justified mb-3">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link show" data-mdb-toggle="pill" href="#navbarLogin-login" role="tab" aria-selected="false">Iniciar Sesión</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" data-mdb-toggle="pill" href="#navbarLogin-signup" role="tab" aria-selected="true">Registro</a>
+          </li>
+        </ul>
+
+        <!-- Pills panels -->
+        <div class="tab-content">
+
+          <!--Panel 1-->
+          <div class="tab-pane fade in" id="navbarLogin-login" role="tabpanel">
+
+            <!-- Default form login -->
+            <form id="login" class="text-center" action="login" method="post" novalidate="novalidate">
+
+              <input type="hidden" id="security" name="security" value="1128f1f261"><input type="hidden" name="_wp_http_referer" value="/wp-admin/admin-ajax.php?p=0">
+              <p class="status"></p>
+
+              <div class="text-center mb-3">
+                
+<!--
+	wsl_render_auth_widget
+	WordPress Social Login 3.0.3.
+	http://wordpress.org/plugins/wordpress-social-login/
+-->
+
+<style type="text/css">
+.wp-social-login-connect-with{}.wp-social-login-provider-list{}.wp-social-login-provider-list a{}.wp-social-login-provider-list img{}.wsl_connect_with_provider{}</style>
+
+
+
+<!-- wsl_render_auth_widget -->
+
+              </div>
+
+              <!-- <p class="text-center">or:</p> -->
+
+              <!-- Email input -->
+              <div class="form-outline form-auth-mdb mb-4">
+                <input type="text" id="username" class="form-control" name="username">
+                <label class="form-label" for="username" style="margin-left: 0px;">Correo electronico o usuario</label>
+              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 146.4px;"></div><div class="form-notch-trailing"></div></div></div>
+
+              <!-- Password input -->
+              <div class="form-outline form-auth-mdb mb-4">
+                <input type="password" id="password" class="form-control" name="password" autocomplete="off">
+                <label class="form-label" for="password" style="margin-left: 0px;">Contraseña</label>
+              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 92.8px;"></div><div class="form-notch-trailing"></div></div></div>
+
+              <!-- 2 column grid layout for inline styling -->
+              <div class="justify-content-center mb-4">
+                  <a href="https://mdbootstrap.com/my-account/lost-password/" type="submit">Olvido su contraseña?</a>
+              </div>
+
+              <button class="btn btn-primary btn-block mb-4" type="submit" value="LOGIN">Iniciar Sesión</button>
+
+              <!-- Register buttons -->
+              <div class="text-center">
+                <p>No es un usuario? <a href="#" class="auth-modal-toggle" data-auth-modal-tab="sign-up">Registrarse</a></p>
+              </div>
+
+            </form>
+            <!-- Default form login -->
+
+          </div>
+          <!--/.Panel 1-->
+
+          <!--Panel 2-->
+          <div class="tab-pane fade active show" id="navbarLogin-signup" role="tabpanel">
+
+            <!-- Default form register  -->
+            <form id="register" class="text-center" action="register" method="post" novalidate="novalidate">
+
+              <input type="hidden" id="signonsecurity" name="signonsecurity" value="486ce82294"><input type="hidden" name="_wp_http_referer" value="/wp-admin/admin-ajax.php?p=0">
+              <!-- Social login -->
+
+              <p class="status"></p>
+
+              <div class="text-center mb-3">
+                
+<!--
+	wsl_render_auth_widget
+	WordPress Social Login 3.0.3.
+	http://wordpress.org/plugins/wordpress-social-login/
+-->
+
+<style type="text/css">
+.wp-social-login-connect-with{}.wp-social-login-provider-list{}.wp-social-login-provider-list a{}.wp-social-login-provider-list img{}.wsl_connect_with_provider{}</style>
+
+
+
+<!-- wsl_render_auth_widget -->
+
+              </div>
+              <!-- Social login -->
+
+              <!-- <p class="text-center">or:</p> -->
+
+              <!-- Name input -->
+              <div class="form-outline form-auth-mdb mb-4">
+                <input type="text" id="signonname" class="form-control" name="signonname">
+                <label for="signonname" class="form-label" style="margin-left: 0px;">Nombre</label>
+              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 68.8px;"></div><div class="form-notch-trailing"></div></div></div>
+
+              <!-- Username input -->
+              <div class="form-outline form-auth-mdb mb-4">
+                <input type="text" id="signonusername" class="form-control" name="signonusername">
+                <label for="signonusername" class="form-label" style="margin-left: 0px;">Usuario</label>
+              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 93.6px;"></div><div class="form-notch-trailing"></div></div></div>
+
+              <!-- Email input -->
+              <div class="form-outline form-auth-mdb mb-4">
+                <input type="email" id="email" class="form-control" name="email">
+                <label for="email" class="form-label" style="margin-left: 0px;">Correo electronico</label>
+              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 68px;"></div><div class="form-notch-trailing"></div></div></div>
+
+              <!-- Password input -->
+              <div class="form-outline form-auth-mdb mb-4">
+                <input type="password" id="signonpassword" class="form-control" name="signonpassword" autocomplete="off">
+                <label for="signonpassword" class="form-label" style="margin-left: 0px;">Contraseña</label>
+              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 92.8px;"></div><div class="form-notch-trailing"></div></div></div>
+
+              <!-- Repeat Password input -->
+              <div class="form-outline form-auth-mdb mb-4">
+                <input type="password" id="password2" class="form-control" name="password2" autocomplete="off">
+                <label for="password2" class="form-label" style="margin-left: 0px;">Repita su contraseña</label>
+              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 106.4px;"></div><div class="form-notch-trailing"></div></div></div>
+
+
+              <div class="d-none">
+
+              
+               <!-- Subscribe checkbox -->
+            
+
+              <!-- Subscribe checkbox -->
+
+              <div class="form-text text-center small text-muted mb-4">
+                By signing up you agree to data processing by the administrator: StartupFlow s.c. located in Kijowska 7, Warsaw. The administrator processes data following the <a target="_blank" href="https://mdbootstrap.com/privacy-policy/">Privacy Policy</a>.
+              </div>
+
+              </div>
+
+
+              
+              <button class="btn btn-primary btn-block mb-3" id="AJAXAuthRegisterBtn" type="submit" value="SIGNUP">
+                Registrarse             </button>
+
+            </form>
+            <!-- Default form register  -->
+
+          </div>
+          <!--/.Panel 2-->
+
+        </div>
+        <!-- Pills panels -->
+
+      </div>
+      <!-- Modal footer -->
+   <!-- -------------------------------------------------------------------------------------------------- -->
+    </div>
+    <!-- Modal content -->
+  </div>
+</div>
+  <!-- ........................................................................................... -->
+
+{% endblock %}

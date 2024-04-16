@@ -1,0 +1,710 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+
+
+
+
+
+<div>
+
+  <style>
+    /* Estilo para ocultar el modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Estilo para el contenido del modal */
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    /* Estilo para el botón de cierre */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</div>
+
+<!-- Botón para abrir el modal -->
+<!-- <button class="btn btn-danger" type="button" data-target="#myModal">Eliminar Quiz</button> -->
+
+<!-- Modal -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close align-self-end">&times;</span>
+    <p>Esta seguro de eliminar el quiz {{Name_quiz}}</p>
+    <div class="row d-flex ">
+      <div class="col d-flex justify-content-end ">
+
+
+
+
+
+
+        <form action="{% url 'courses:delete_quiz' quiz %}" method="post">
+          {% csrf_token %}
+          <input class="btn btn-danger  " type="submit" value="Eliminar">
+        </form>
+
+
+      </div>
+      <div class="col d-flex justify-content-start">
+
+        <button class="btn gcolorbuttonsSmall  close-b ">Cerrar</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- <script>
+		// Obtén el botón que abre el modal
+		var btn = document.querySelector('button[data-target="#myModal"]');
+
+		// Obtén el elemento del modal
+		var modal = document.getElementById("myModal");
+
+		// Obtén el elemento de cierre
+		var span = document.getElementsByClassName("close")[0];
+		var btnClose = document.getElementsByClassName("close-b")[0];
+
+		// Agrega evento click al botón para mostrar el modal
+		btn.addEventListener('click', function() {
+			modal.style.display = "block";
+		});
+
+		// Agrega evento click al elemento de cierre para ocultar el modal
+		span.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
+
+		// Agrega evento click al elemento de cierre para ocultar el modal
+		btnClose.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
+  
+    // Agrega evento click fuera del modal para ocultarlo
+    window.addEventListener('click', function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    });
+  </script>
+  
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- {{quiz}} -->
+
+
+<div class="container  pb-5">
+
+
+  <div id="mdb-panel-tab-content" class="tab-content pt-5">
+
+
+
+
+    <a href="{% url 'courses:list_quices' grupo %}" class="btn gcolorbuttonsSmall mb-2 close-b "> <i
+        class="fas fa-angle-left"></i> </a>
+
+
+    <h2 class="gsubtitulo" style="margin-bottom: 2%;">Creación de quiz
+    </h2>
+
+    <div class="row mb-4">
+      <div class="col mb-4">
+
+
+
+
+
+        <form method="post" id="form-set" action="{% url 'courses:edit_quiz' quiz %}">
+          {% csrf_token %}
+
+          <div class="card mb-4 p-4 pe-4">
+            <div class="card-header">Quiz</div>
+            <div>
+
+              {{quizForm}}
+      
+              
+            </div>
+          </div>
+
+          {{ questForm.management_form }}
+
+
+          {% for form in questForm%}
+          <div class="form-row-b">
+          <div class="card mb-4 p-3">
+            <div class="card-header">Pregunta</div>
+
+
+              {{ form.text }}
+              {{ form.text_n.as_hidden  }}
+              <p></p>
+              <div class="row">
+                <div class="col-10">
+                  {{form.opcion_1}}
+                  {{form.opcion_1_n.as_hidden }}
+                </div>
+                <div class="col-2">
+                  {{form.opcion_1_check}}
+                </div>
+              </div>
+              <p></p>
+              <div class="row">
+                <div class="col-10">
+                  {{form.opcion_2 }}
+                  {{form.opcion_2_n.as_hidden  }}
+                </div>
+                <div class="col-2">
+                  {{form.opcion_2_check }}
+                </div>
+
+              </div>
+              <p></p>
+              <div class="row">
+                <div class="col-10">
+                  {{form.opcion_3 }}
+                  {{form.opcion_3_n.as_hidden  }}
+                </div>
+                <div class="col-2">
+                  {{form.opcion_3_check }}
+                </div>
+
+              </div>
+              <p></p>
+              <div class="row">
+                <div class="col-10">
+                  {{form.opcion_4 }}
+                  {{form.opcion_4_n.as_hidden  }}
+                </div>
+                <div class="col-2">
+                  {{form.opcion_4_check }}
+                </div>
+              </div>
+              <p></p>
+
+
+              <button type="button"
+                class="delete-button-b btn btn-danger"
+                data-delete-index="{{ forloop.index0 }}">Delete</button>
+              <p></p>
+            </div>
+          </div>
+
+          {% endfor %}
+
+
+
+          <!-- 
+          {{ formset.management_form }}
+          {% for i in sublistas %}
+          
+          {% for j in i %}
+          
+          
+          
+          {% if "formb" in j.prefix %}
+          
+          <div class="form-row-b">
+            
+            {{j}}
+            <button type="button" class="delete-button-b" data-delete-index="{{ forloop.index0 }}" >Delete</button>
+          </div>
+          {% else %}
+          <div class="form-row">
+            {{j}}
+            <button type="button" class="delete-button" data-delete-index="{{ forloop.index0 }}">Delete</button>
+          </div>
+          
+          {% endif %} 
+          
+          
+          
+          
+          
+          <p></p>
+          
+          {% endfor %}
+          
+          <p></p>
+          
+            {% endfor %} -->
+
+          <!-- {% for form in formset %}
+              <div class="form-row">
+                {{ form }}
+                {% comment %} <button type="button" class="delete-button">Delete</button>  {% endcomment %}
+                <button type="button" class="delete-button" data-delete-index="{{ forloop.index0 }}">Delete</button>
+              </div>
+              {% endfor %} -->
+
+
+          <!-- <button type="button" id="add-button">Add</button> -->
+          <div class="d-flex row">
+
+
+            <div class="col">
+              <button class="btn gcolorbuttonsSmall " type="button" id="add-button-b">Agregar Pregunta</button>
+              <input class="btn gcolorbuttonsSmall" type="submit" value="Guardar">
+
+            </div>
+
+            <div class="justify-content-end d-flex col-4">
+
+              <button class="btn btn-danger " type="button" data-target="#myModal2">Eliminar Quiz</button>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+<!-- Template for an empty form -->
+<div id="empty-form" style="display:none;">
+  <div class="form-row">
+    {{ formset.empty_form }}
+    <p></p>
+    <button type="button" class="delete-button " data-delete-index="{{ forloop.index0 }}">Delete</button>
+    <!-- <button type="button" class="delete-button">Delete</button> -->
+  </div>
+</div>
+
+<div id="empty-form-2" style="display:none;">
+
+  <div class="form-row-b">
+  <div class="card mb-4 p-3 mt-3">
+    <div class="card-header">Pregunta</div>
+
+
+
+
+
+
+
+
+      {{ questForm.empty_form.text }}
+      {{ questForm.empty_form.text_n.as_hidden  }}
+      <p></p>
+
+      <div class="row">
+        <div class="col-10">
+          {{ questForm.empty_form.opcion_1}}
+          {{ questForm.empty_form.opcion_1_n.as_hidden }}
+        </div>
+        <div class="col-2">
+          {{ questForm.empty_form.opcion_1_check}}
+        </div>
+      </div>
+
+
+
+
+      <p></p>
+
+
+      <div class="row">
+        <div class="col-10">
+          {{ questForm.empty_form.opcion_2 }}
+          {{ questForm.empty_form.opcion_2_n.as_hidden  }}
+        </div>
+        <div class="col-2">
+          {{ questForm.empty_form.opcion_2_check }}
+        </div>
+      </div>
+
+
+
+
+      <p></p>
+
+      <div class="row">
+        <div class="col-10">
+
+          {{ questForm.empty_form.opcion_3 }}
+          {{ questForm.empty_form.opcion_3_n.as_hidden  }}
+        </div>
+        <div class="col-2">
+          {{ questForm.empty_form.opcion_3_check }}
+        </div>
+      </div>
+
+
+      <p></p>
+
+      <div class="row">
+        <div class="col-10">
+          {{ questForm.empty_form.opcion_4 }}
+          {{ questForm.empty_form.opcion_4_n.as_hidden  }}
+        </div>
+        <div class="col-2">
+
+          {{ questForm.empty_form.opcion_4_check }}
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+      <p></p>
+      <button type="button" class="delete-button-b btn btn-danger  "
+        data-delete-index="{{ forloop.index0 }}">Delete</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+  function uncheckOthers(checkbox) {
+    // Obtener el índice del formulario actual a partir del atributo name
+    var name = checkbox.getAttribute('name');
+    var formIndex = name.split('-')[1];
+
+    // Seleccionar todos los checkboxes de formularios con el mismo índice
+    var checkboxes = document.querySelectorAll('[name^="formb-' + formIndex + '-"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i] != checkbox) {
+        checkboxes[i].checked = false;
+      }
+    }
+  }
+</script>
+
+
+
+<script>
+  $(document).ready(function () {
+    // Remove form when "Delete" button is clicked
+    $('#form-set').on('click', '.delete-button', function () {
+      // Get the form index
+      var formIdx = $(this).closest('.form-row').data('form-index');
+
+      // Get the form prefix
+      var prefix = 'forma'
+      //var prefix = $('#form-set').data('prefix');
+      console.log(prefix)
+
+
+      // Remove the form from the DOM
+      $(this).closest('.form-row').remove();
+
+      // Update the management form
+      $('#id_' + prefix + '-TOTAL_FORMS').val(parseInt($('#id_' + prefix + '-TOTAL_FORMS').val()) - 1);
+      //$('#id_' + prefix + '-INITIAL_FORMS').val(parseInt($('#id_' + prefix + '-INITIAL_FORMS').val()) - 1);
+      //$('#id_' + prefix + '-MAX_NUM_FORMS').val(parseInt($('#id_' + prefix + '-MAX_NUM_FORMS').val()) - 1);
+
+      // Update the form indices
+      $('.form-row').each(function (i, element) {
+        // Update the form data-form-index attribute
+        $(element).data('form-index', i);
+
+        // Update the form input names and IDs
+        $(element).find('input, select, textarea').each(function (j, input) {
+          var name = $(input).attr('name').replace(/\d+/, i);
+          $(input).attr({ 'name': name, 'id': 'id_' + name });
+        });
+      });
+    });
+  });
+</script>
+
+
+<script>
+  $(document).ready(function () {
+    // Remove form when "Delete" button is clicked
+    $('#form-set').on('click', '.delete-button-b', function () {
+      // Get the form index
+      var formIdx = $(this).closest('.form-row').data('form-index');
+
+      // Get the form prefix
+      var prefix = 'formb'
+      //var prefix = $('#form-set').data('prefix');
+      console.log(prefix)
+
+
+      // Remove the form from the DOM
+      $(this).closest('.form-row-b').remove();
+
+      // Update the management form
+      $('#id_' + prefix + '-TOTAL_FORMS').val(parseInt($('#id_' + prefix + '-TOTAL_FORMS').val()) - 1);
+      //$('#id_' + prefix + '-INITIAL_FORMS').val(parseInt($('#id_' + prefix + '-INITIAL_FORMS').val()) - 1);
+      //$('#id_' + prefix + '-MAX_NUM_FORMS').val(parseInt($('#id_' + prefix + '-MAX_NUM_FORMS').val()) - 1);
+
+      // Update the form indices
+      $('.form-row-b').each(function (i, element) {
+        // Update the form data-form-index attribute
+        $(element).data('form-index', i);
+
+        // Update the form input names and IDs
+        $(element).find('input, select, textarea').each(function (j, input) {
+          var name = $(input).attr('name').replace(/\d+/, i);
+          $(input).attr({ 'name': name, 'id': 'id_' + name });
+        });
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+    // Add form when "Add" button is clicked
+    $('#add-button').click(function () {
+      var formIdx = $('#id_forma-TOTAL_FORMS').val();
+      $('#form-set').append($('#empty-form').html().replace(/__prefix__/g, formIdx));
+      $('#id_forma-TOTAL_FORMS').val(parseInt(formIdx) + 1);
+    });
+
+  });
+
+</script>
+<script>
+  $(document).ready(function () {
+    // Add form when "Add" button is clicked
+    $('#add-button-b').click(function () {
+      var formIdx = $('#id_formb-TOTAL_FORMS').val();
+      $('#form-set').append($('#empty-form-2').html().replace(/__prefix__/g, formIdx));
+      $('#id_formb-TOTAL_FORMS').val(parseInt(formIdx) + 1);
+      //add_new_form()
+      //add_new_form() 
+      //add_new_form() 
+      //add_new_form() 
+    });
+
+  });
+
+</script>
+
+
+<script>
+  function add_new_form() {
+    var formIdx = $('#id_forma-TOTAL_FORMS').val();
+    $('#form-set').append($('#empty-form').html().replace(/__prefix__/g, formIdx));
+    $('#id_forma-TOTAL_FORMS').val(parseInt(formIdx) + 1);
+  }
+</script>
+
+
+
+
+<script>
+  // Obtén el botón que abre el modal
+  var btn = document.querySelector('button[data-target="#myModal2"]');
+
+  // Obtén el elemento del modal
+  var modal = document.getElementById("myModal");
+
+  // Obtén el elemento de cierre
+  var span = document.getElementsByClassName("close")[0];
+  var btnClose = document.getElementsByClassName("close-b")[0];
+
+  // Agrega evento click al botón para mostrar el modal
+  btn.addEventListener('click', function () {
+    modal.style.display = "block";
+  });
+
+  // Agrega evento click al elemento de cierre para ocultar el modal
+  span.addEventListener('click', function () {
+    modal.style.display = "none";
+  });
+
+  // Agrega evento click al elemento de cierre para ocultar el modal
+  btnClose.addEventListener('click', function () {
+    modal.style.display = "none";
+  });
+
+  // Agrega evento click fuera del modal para ocultarlo
+  window.addEventListener('click', function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  });
+</script>
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} <form method="post" id="form-set" data-prefix="form">
+  {% csrf_token %}
+  {{ formset.management_form }}
+
+  {% for form in formset %}
+  <div class="form-row">
+    {{ form }}
+
+    <button type="button" class="delete-button" data-delete-index="{{ forloop.index0 }}">Delete</button>
+  </div>
+  {% endfor %}
+  <button type="button" id="add-button">Add</button>
+  <input type="submit" value="Submit">
+</form>
+
+<!-- Template for an empty form -->
+<div id="empty-form" style="display:none;">
+  <div class="form-row">
+    {{ formset.empty_form }}
+    <p></p>
+    <button type="button" class="delete-button">Delete</button>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+
+<script>
+  $(document).ready(function () {
+    // Remove form when "Delete" button is clicked
+    $('#form-set').on('click', '.delete-button', function () {
+      // Get the form index
+      var formIdx = $(this).closest('.form-row').data('form-index');
+
+      // Get the form prefix
+      var prefix = $('#form-set').data('prefix');
+
+      // Remove the form from the DOM
+      $(this).closest('.form-row').remove();
+
+      // Update the management form
+      $('#id_' + prefix + '-TOTAL_FORMS').val(parseInt($('#id_' + prefix + '-TOTAL_FORMS').val()) - 1);
+      //$('#id_' + prefix + '-INITIAL_FORMS').val(parseInt($('#id_' + prefix + '-INITIAL_FORMS').val()) - 1);
+      //$('#id_' + prefix + '-MAX_NUM_FORMS').val(parseInt($('#id_' + prefix + '-MAX_NUM_FORMS').val()) - 1);
+
+      // Update the form indices
+      $('.form-row').each(function (i, element) {
+        // Update the form data-form-index attribute
+        $(element).data('form-index', i);
+
+        // Update the form input names and IDs
+        $(element).find('input, select, textarea').each(function (j, input) {
+          var name = $(input).attr('name').replace(/\d+/, i);
+          $(input).attr({ 'name': name, 'id': 'id_' + name });
+        });
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+    // Add form when "Add" button is clicked
+    $('#add-button').click(function () {
+      var formIdx = $('#id_form-TOTAL_FORMS').val();
+      $('#form-set').append($('#empty-form').html().replace(/__prefix__/g, formIdx));
+      $('#id_form-TOTAL_FORMS').val(parseInt(formIdx) + 1);
+    });
+
+  });
+
+</script>
+
+
+
+
+
+
+
+{% endcomment %}

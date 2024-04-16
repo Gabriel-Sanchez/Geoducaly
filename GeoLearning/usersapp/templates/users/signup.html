@@ -1,0 +1,304 @@
+{% extends "baseapp/base.html" %}
+{% load static %}
+
+{% block title %}
+Crear cuenta
+{% endblock title %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static '/usersapp/signup.css' %}">
+
+<div class="topbotP">
+
+   
+
+    <form action="{% url 'signup' %}" method="post" id="formulario_crear_cuenta">
+        {% csrf_token %}
+
+        <h1></h1>
+        <div class="modal-dialog">
+            <h1 class="gsubtitulo h2">Registro</h1>
+
+
+            <div class="modal-content d">
+                <div class="modal-body">
+
+                    <!-- <h6 class="card-header p-3 mb-2 bg-info text-white text-center">Registro</h6> -->
+
+                    <div class="tab-content">
+<!-- 
+                        <div class="tab-pane fade in" id="navbarLogin-login" role="tabpanel">
+
+
+                            <input type="hidden" id="security" name="security" value="1128f1f261"><input type="hidden"
+                                name="_wp_http_referer" value="/wp-admin/admin-ajax.php?p=0">
+                            <p class="status"></p>
+
+                            <div class="text-center mb-3">
+
+                            </div>
+
+                            <div class="form-outline form-auth-mdb mb-4">
+                                <input type="text" id="username" class="form-control" name="username1">
+                                <label class="form-label" for="username" style="margin-left: 0px;">Correo
+                                    electronico o usuario</label>
+                                <div class="form-notch">
+                                    <div class="form-notch-leading" style="width: 9px;"></div>
+                                    <div class="form-notch-middle" style="width: 146.4px;"></div>
+                                    <div class="form-notch-trailing"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-outline form-auth-mdb mb-4">
+                                <input type="password" id="password" class="form-control" name="password1"
+                                    autocomplete="off">
+                                <label class="form-label" for="password" style="margin-left: 0px;">Contraseña</label>
+                                <div class="form-notch">
+                                    <div class="form-notch-leading" style="width: 9px;"></div>
+                                    <div class="form-notch-middle" style="width: 92.8px;"></div>
+                                    <div class="form-notch-trailing"></div>
+                                </div>
+                            </div>
+
+                            <div class="justify-content-center mb-4">
+                                <a href="https://mdbootstrap.com/my-account/lost-password/" type="submit">Olvido su
+                                    contraseña?</a>
+                            </div>
+
+                            <button class="btn btn-primary btn-block mb-4" type="submit" value="LOGIN">Iniciar
+                                Sesión</button>
+
+                            <div class="text-center">
+                                <p>No es un usuario? <a href="#" class="auth-modal-toggle"
+                                        data-auth-modal-tab="sign-up">Registrarse</a></p>
+                            </div>
+
+                        </div>
+ -->
+
+                        <!-- datos para iniciar Sesión -->
+                        <div class="tab-pane fade active show" id="navbarLogin-signup" role="tabpanel">
+
+                            <!-- <input type="hidden" id="signonsecurity" name="signonsecurity" value="486ce82294"><input
+                                type="hidden" name="_wp_http_referer" value="/wp-admin/admin-ajax.php?p=0">
+
+
+                            <p class="status"></p>
+
+                            <div class="text-center mb-3">
+
+                            </div> -->
+
+
+                            <!-- <div class="form-outline form-auth-mdb mb-4">
+                                <input type="text" id="signonname" class="form-control" name="First_name" required>
+
+                                <label for="signonname" class="form-label" style="margin-left: 0px;">Nombre</label>
+                                <div class="form-notch">
+                                    <div class="form-notch-leading" style="width: 9px;"></div>
+                                    <div class="form-notch-middle" style="width: 68.8px;"></div>
+                                    <div class="form-notch-trailing"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-outline form-auth-mdb mb-4">
+                                <input type="text" id="signonname" class="form-control" name="Last_name">
+                                <label for="signonname" class="form-label" style="margin-left: 0px;">Apellido</label>
+                                <div class="form-notch">
+                                    <div class="form-notch-leading" style="width: 9px;"></div>
+                                    <div class="form-notch-middle" style="width: 68.8px;"></div>
+                                    <div class="form-notch-trailing"></div>
+                                </div>
+                            </div> -->
+
+
+                            <!-- Username input -->
+                            <div class="form-outline form-auth-mdb mb-4">
+                                <input type="text" id="signonusername" class="form-control" name="username" required>
+                                <label for="signonusername" class="form-label" style="margin-left: 0px;">Usuario</label>
+                                <span id="error1" class="error-message"></span>
+                                <div class="form-notch">
+                                    <div class="form-notch-leading" style="width: 9px;"></div>
+                                    <div class="form-notch-middle" style="width: 93.6px;"></div>
+                                    <div class="form-notch-trailing"></div>
+                                </div>
+                            </div>
+
+                            <!-- Email input -->
+                            <div class="form-outline form-auth-mdb mb-4">
+                                <input type="email" id="email" class="form-control" name="email" required>
+                                <label for="email" class="form-label" style="margin-left: 0px;">Correo
+                                    electronico</label>
+                                    <span id="error2" class="error-message"></span>
+                                <div class="form-notch">
+                                    <div class="form-notch-leading" style="width: 9px;"></div>
+                                    <div class="form-notch-middle" style="width: 68px;"></div>
+                                    <div class="form-notch-trailing"></div>
+                                </div>
+                            </div>
+
+                            <!-- Password input -->
+                            <div class="form-outline form-auth-mdb mb-4">
+                                <input type="password" id="signonpassword" class="form-control" name="password"
+                                    autocomplete="off" required>
+                                <label for="signonpassword" class="form-label"
+                                    style="margin-left: 0px;">Contraseña</label>
+                                    <span id="error3" class="error-message"></span>
+                                <div class="form-notch">
+                                    <div class="form-notch-leading" style="width: 9px;"></div>
+                                    <div class="form-notch-middle" style="width: 92.8px;"></div>
+                                    <div class="form-notch-trailing"></div>
+                                </div>
+                                <div class="text-end"> <!-- Puedes añadir una clase text-end al contenedor para alinear el botón -->
+                                    <button style="box-shadow: none;" type="button" class="btn rounded-circle p-1 border-0 bg-transparent float-end" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y al menos un carácter especial como !@#$%^&*.">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            
+
+                            <!-- Repeat Password input -->
+                            <div class="form-outline form-auth-mdb mb-4">
+                                <input type="password" id="password2" class="form-control" name="password_confirmation"
+                                    autocomplete="off" required>
+                                <label for="password2" class="form-label" style="margin-left: 0px;">Repita su
+                                    contraseña</label>
+                                    <span id="error4" class="error-message"></span>
+                                <div class="form-notch">
+                                    <div class="form-notch-leading" style="width: 9px;"></div>
+                                    <div class="form-notch-middle" style="width: 106.4px;"></div>
+                                    <div class="form-notch-trailing"></div>
+                                </div>
+                            </div>
+
+                         
+                            
+
+
+
+                            <div class="d-none">
+
+
+
+                            </div>
+
+                            <div>
+
+                                <label class="h6 colorletras">Elija su rol: </label>
+
+                                <!-- <div class="centrarBotones">
+
+
+                                    <div class="btn-group botonesS ">
+                                        <input type="radio" class="btn-check" name="options" id="option1"
+                                            autocomplete="off" checked required="true" />
+
+                                        <input type="radio" value="1" class="btn-check botonescolor" name="options"
+                                            id="option2" autocomplete="off" />
+                                        <label class="btn btn-secondary" for="option2"> Estudiante</label>
+
+                                        <input type="radio" value="2" class="btn-check" name="options" id="option3"
+                                            autocomplete="off" />
+                                        <label class="btn btn-secondary" for="option3">Profesor</label>
+                                    </div>
+
+                                </div> -->
+
+                                
+
+
+                                <div style="margin-top: 2%; margin-bottom: 2%;">
+                                    <!-- Default radio -->
+                                    <div class="form-check "  >
+                                        <input class="form-check-input " value="1" type="radio" name="options"
+                                            id="option1" />
+                                        <label class="form-check-label " for="option1"> Estudiante </label>
+                                    </div>
+    
+                                    <!-- Default checked radio -->
+                                    <div class="form-check">
+                                        <input class="form-check-input" value="2" type="radio" name="options"
+                                            id="option2" checked />
+                                        <label class="form-check-label" for="option2"> Profesor
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            {% if error %}
+
+                            <p class="alert alert-danger"> {{error}} </p>
+                            {% endif %}
+
+                           
+                              
+
+
+                            <button style="margin-top: 2%;" class="btn  btn-block mb-4 gcolorbuttons" id="" type="submit"
+                                value="SIGNUP">
+                                Registrarse </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<style>
+    .error-message {
+        color: red;
+        background-color: rgb(255, 164, 164);
+        margin: 2px;
+        border-radius: 2px;
+        display: none;
+        text-align: center;
+      }
+      
+</style>
+
+<script>
+    // Obtén todos los elementos input
+var inputs = document.getElementsByTagName('input');
+
+// Añade un event listener a cada input
+for(var i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener('keypress', function(event) {
+        // Comprueba si la tecla presionada es un espacio
+        if (event.which === 32) {
+            // Previene la entrada del espacio
+            event.preventDefault();
+        }
+    });
+}
+
+ 
+
+
+      document.getElementById("formulario_crear_cuenta").addEventListener("submit", function(event){
+        var inputs = document.getElementsByTagName('input');
+        console.log(inputs)
+      
+        for(var i = 0; i < inputs.length; i++) {
+          if(inputs[i].type.toLowerCase() == 'text' || inputs[i].type.toLowerCase() == 'password') {
+            var errorMessage = document.getElementById('error' + (i ));
+            if(!inputs[i].value.trim() || inputs[i].value.includes(" ")){
+              errorMessage.textContent = 'Este campo no puede estar vacío o contener espacios.';
+              errorMessage.style.display = 'block';
+              event.preventDefault();
+            } else {
+              errorMessage.textContent = '';
+              errorMessage.style.display = 'none';
+            }
+          }
+        }
+      });
+      
+      
+</script>
+
+{% endblock %}

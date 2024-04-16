@@ -1,0 +1,90 @@
+body { padding: 0; margin: 0 }
+#unity-container.unity-mobile { position: fixed; width: 100%; height: 100% }
+#unity-canvas { background: #231F20; position: relative }
+.unity-mobile #unity-canvas { width: 100%; height: 100% }
+/* #unity-loading-bar { position: relative; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none } */
+#unity-logo { width: 154px; height: 130px; background: url('unity-logo-dark.png') no-repeat center; position: relative }
+#unity-progress-bar-empty { width: 141px; height: 18px; margin-top: 10px; margin-left: 6.5px; background: url('progress-bar-empty-dark.png') no-repeat center }
+#unity-progress-bar-full { width: 0%; height: 18px; margin-top: 10px; background: url('progress-bar-full-dark.png') no-repeat center }
+#unity-footer { position: relative }
+.unity-mobile #unity-footer { display: block }
+#unity-webgl-logo { float:left; width: 204px; height: 38px; background: url('webgl-logo.png') no-repeat center }
+#unity-build-title { float: right; margin-right: 10px; line-height: 38px; font-family: arial; font-size: 18px }
+#unity-fullscreen-button { cursor:pointer; float:right; width:38px;height:38px;background:url('fullscreen-button.png')no-repeat center}
+#unity-warning{position:absolute;left:50%;top:5%;transform:-webkit-translate(-50%);background:#fff;padding:10px;display:none}
+/* #unity-loading-bar {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 999;  Asegura que esté en la parte superior 
+  }
+  #unity-canvas {
+    background: #231F20;
+    position: relative;
+  } */
+  
+  #unity-loading-bar {
+    position: absolute;
+    /*top: 50%;*/
+    top: 30%;
+    left: 50%; 
+
+    transform: translate(-50%, -50%);
+}
+
+/* Estilos para escritorio */
+@media (min-width: 960px) {
+  /* Tus estilos para escritorio van aquí */
+
+  .margen_unity_canvas{
+    margin-left: 11%; margin-right: 11%;
+  }
+
+  #unity-canvas{
+    /* height: 500px !important; */
+    /* height: 90vh !important; */
+    width: 147.5vh !important;
+  }
+
+  #unity-loading-bar {
+    position: absolute;
+    top: 50%;
+    /* top: 30%; */
+    left: 50%; 
+
+    transform: translate(-50%, -50%);
+}
+
+}
+
+/* Estilos para móvil */
+@media (max-width: 959px) {
+  /* Tus estilos para móvil van aquí */
+  
+}
+
+@media (min-width: 1800px) {
+  /* Tus estilos para resoluciones de 1900px van aquí */
+
+  /* #unity-canvas{ */
+    /* height: 700px !important;s */
+    /* width: 2062.22px !important; */
+  /* } */
+  #unity-loading-bar {
+    position: absolute;
+    top: 50%;
+    /* top: 30%; */
+    left: 50%; 
+
+    transform: translate(-50%, -50%);
+}
+
+.margen_unity_canvas{
+  margin-left: 0; margin-right: 0;
+}
+/* .container{
+  max-width: 0;
+} */
+}

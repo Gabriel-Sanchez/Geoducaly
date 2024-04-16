@@ -1,0 +1,96 @@
+{% extends "baseapp/base.html" %}
+{% load static %}
+{% block content %}
+
+
+
+
+
+
+
+<div class="container" style="padding-top: 1.6%; padding-bottom: 1.6%;">
+
+
+
+    <div class="d-flex justify-content-center">
+
+        <div class="card " style="max-width: 33rem; max-height: 50rem;">
+            {% if respondida.pregunta.picture.url != null %}
+            <img src="{{respondida.pregunta.picture.url}}" class="card-img-top" alt="..." />
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title" style="text-align: center;">{{respondida.pregunta.texto|safe}}</h5>
+                <p class="card-text" style="text-align: center;">
+                    tu respuesta:
+                    {{respondida.respuesta.texto|safe}}
+                </p>
+
+                <div class="">
+
+
+                    {% if respondida.respuesta.correcta %}
+                    <div class="alert alert-success sizefont" style="text-align: center;">
+
+                    <h3>tu respuesta es correcta</h3>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="alert alert-danger sizefont" style="text-align: center;">
+
+                     tu respuesta es incorrecta
+
+                    </div>
+
+                    {% for respuesta in respondida.pregunta.opciones.all %}
+
+                    {% if respuesta.correcta %}
+
+                    <div class="alert alert-success sizefont" style="text-align: center;">
+                         la respuesta correcta es : {{respuesta.texto}}
+                    </div>
+
+                    
+
+                    {% endif %}
+
+                    {% endfor %}
+
+                    {% endif %}
+
+                    <a href="/juegos/Juegotrivia/{{n_jugada}}/{{respondida.pregunta.listquiz.id}}">
+                        <button class="btn btn gcolorbuttons" style="width: 100%;">continuar con la siguiente pregunta</button>
+                    </a>
+
+
+
+
+
+
+
+
+                </div>
+
+                </form>
+            </div>
+        </div>
+
+
+
+
+        <h3>
+            {{pregunta.texto}}
+        </h3>
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+{% endblock %}

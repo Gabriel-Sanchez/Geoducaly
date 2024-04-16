@@ -1,0 +1,42 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+
+<div>
+<h1><p>aqui se vera el video de los cursos </p></h1>
+<h1>{{request.user.username}}</h1>
+{% for list in listaCursos %}
+{% for clase in clases %}
+
+
+
+
+<div style="color: red;">
+
+    {% if list == clase.course %}
+    
+    <!-- <h2> 1 {{clase.course}}</h2> -->
+    <!-- <h2> 2 {{clase.title}}</h2> -->
+    <h2> 3 {{clase.estudiante}}</h2>
+    <!-- <h2> 4 {{clase.profesor}}</h2> -->
+        {% endif %}
+</div>
+
+{% endfor %}
+
+
+
+{% endfor %}
+
+</div>
+
+
+{% for list in listaCursos %}
+<h2> 4 {{list}}</h2>
+{% endfor %}
+{% endblock %}

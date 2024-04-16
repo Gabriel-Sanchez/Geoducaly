@@ -1,0 +1,56 @@
+.h3{
+    color:rgb(16, 114, 24);
+   text-align: center;
+}
+
+.h5{
+    color:rgb(16, 114, 24);
+   text-align: center;
+}
+
+.card-text{
+    color:black;
+    font-weight: bold;
+    text-align: justify;
+}
+
+
+
+/* .mision {
+    background: white;
+    width: 50%;
+ } */
+
+.card{
+    width: 40%;
+    align-content: center;
+}
+
+#arriba{
+    width: 100% !important;
+}
+
+ .row {
+   text-align: justify;
+   align-items: flex-start;
+ }
+
+ .imagenes{
+     width: 18rem;
+     height: 30%;
+     align-self: center;
+ }
+
+ .container{
+  width: 100%;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ }
+
+
+ .logo{
+    background: rgb(255, 255, 255);
+    width: 50%;
+    margin-left: 50%;
+ }

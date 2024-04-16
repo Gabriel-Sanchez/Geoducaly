@@ -1,0 +1,125 @@
+{% extends "baseapp/base.html" %}
+
+{% load embed_video_tags %}
+
+{% load static %}
+
+{% block content %}
+
+<div style="padding-left: 5%; padding-top: 2%; background-color: cadetblue;">
+  <p></p>
+  <h1>{{ object }}</h1>
+  </p>
+</div>
+
+<div style="padding: 3%;" class="row">
+
+  <div style="background-color: black;" class="col-8">
+    <iframe width="100%" height="450" src={{ object.video_e }} frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+
+  </div>
+
+  <div style="background-color: rgb(101, 245, 233); padding-top: 2%;" class="col-4">
+
+
+    <div class="container" style="background-color: rgb(255, 255, 255)">
+      <div class="row">
+
+
+        <ul style="padding-left: 10%;" class="list-unstyled">
+
+
+          {% for lesson in a %}
+          <a href="{{ lesson.get_absolute_url }}">
+            <hr>
+
+            <li style="padding-top: 2%;" class="media">
+
+
+              <img style="width: 15%;" src="{{ lesson.thumbnail.url }}" alt="Generic placeholder image">
+              <div class="media-body">
+                <h5 class="mt-0 mb-1">{{ lesson.title }}</h5>
+              </div>
+
+
+            </li>
+          </a>
+
+          {% endfor %}
+        </ul>
+
+      </div>
+
+      <div class="row" style="background-color: rgb(101, 245, 233); padding-left: 10%; ">
+
+        <!-- {% video object.video_e 'medium' %} -->
+
+        <!--<h1>{{ ruta_c }}{{ ruta_l}}</h1>-->
+        <div style=" background-color:rgb(101, 245, 233); padding-left: 10%; padding-right: 10%; padding-top: 5%; padding-bottom: 5%;">
+          
+          {% if request.user.is_anonymous %}
+
+          <h6 style="color: rgb(0, 0, 0)">Es necesario tener una cuenta para agregar un comentario.</h6>
+            
+
+          {% else %}
+
+            <form action="/vistacurso/vistasc/{{ ruta_c }}/{{ ruta_l}}" method="POST" style="width: 15rem;"> {% csrf_token %}
+              <label><center><b>Sección de comentarios</label></center></b>
+
+              
+
+              <center><input type="text" name="prd" size="30" class="form-control" placeholder="Comentario..."></center> 
+              
+              <center><button type="submit"  class="btn btn-success" size="50">Agregar comentario </button></center>
+              <br>
+              <script>
+                if (window.history.replaceState) { // verificamos disponibilidad
+                  window.history.replaceState(null, null, window.location.href);
+                }
+              </script>
+            </form>
+
+          {% endif %}
+
+           
+
+         
+
+
+          <ul class="list-group">
+            {% for comment in coment %}
+
+            
+            <li style="background-color: paleturquoise;" class="list-group-item">
+            {% if comment.user.estudiante.picture.url != null %}
+            <img class="rounded-circle" src="{{ comment.user.estudiante.picture.url }}"  width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+            {% else %}
+            <img class="rounded-circle" src="{% static '..\media\default\user.png' %}"  width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+            {% endif %}
+              {{ comment.content }}
+            </li>
+            {% endfor %}
+
+          </ul>
+
+        </div>
+
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+  </div>
+</div>
+
+{% endblock %}

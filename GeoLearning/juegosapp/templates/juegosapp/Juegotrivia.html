@@ -1,0 +1,90 @@
+{% extends "baseapp/base.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="container" style="padding-top: 1.6%; padding-bottom: 1.6%;">
+
+
+
+
+    {% if pregunta is None %}
+
+    <div class="d-flex justify-content-center">
+
+    <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" style="text-align: center;">Haz terminado</h5>
+          <p class="card-text alert alert-success sizefont">
+              Su puntaje total es : <strong>{{puntaje}}</strong>
+          </p>
+          <a href="{% url 'alljuegos' %}">
+          <button type="button" style="width: 100%;" class="btn btn gcolorbuttons">volver</button>
+        </a>
+        </div>
+      </div>
+    </div>
+
+
+    {% else %}
+
+    <div class="d-flex justify-content-center">
+
+        <div class="card " style="max-width: 33rem; max-height: 50rem;">
+            {% if pregunta.picture.url != null %}
+                    <img src="{{pregunta.picture.url}}" class="card-img-top" alt="..." />
+                    {% endif %}
+            <div class="card-body">
+                <h5 class="card-title" style="text-align: center;">{{pregunta.texto}}</h5>
+                <p class="card-text" style="text-align: center;">
+                    {{pregunta.texto}}
+                </p>
+
+                <div class="">
+
+
+                    <form action="" method="post">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="pregunta_pk" value="{{pregunta.pk}}">
+
+
+
+                        <div class="row g-2">
+
+                            {% for opc in opcionesP %}
+
+
+
+
+                            <div class="col-6">
+                                <div class="">
+                                    <button class="btn btn gcolorbuttons" style="width: 100%;" type="submit"
+                                        name="respuesta_pk" value="{{opc.pk}}" id="choice-{{forloop.counter}}">
+                                        {{opc.texto}}</button>
+                                </div>
+                            </div>
+
+
+                            {% endfor %}
+
+                        </div>
+                </div>
+
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

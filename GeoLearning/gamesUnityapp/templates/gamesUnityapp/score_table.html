@@ -1,0 +1,19 @@
+{% extends "baseapp/base.html" %}
+{% load static %}
+{% block title %}
+Puntuación Global
+{% endblock title %}
+{% block content %}
+
+<!-- <div class="container d-flex justify-content-center align-items-center"> -->
+    <div>
+        <h4 class="h3"
+        style="text-align: center; color: rgb(255, 255, 255); background-color: var(--Gprimary-color); padding-top: 10px; padding-bottom: 10px;">
+        <!-- los {{contar_user}} mejores jugadores -->
+        Tabla de Puntuación Global
+    </h4>
+    
+    {% include "gamesUnityapp/template_score_table.html" %}
+  </div>
+
+{% endblock %}

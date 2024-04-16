@@ -1,0 +1,178 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Lista de Grupos
+{% endblock title %}
+
+{% load custom_filters %}
+
+{% block content %}
+
+<style>
+    .imagen-cuadrada {
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+    }
+    
+    .imagen-cuadrada img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+
+<div style="padding-top: 2%;">
+
+
+
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} fixed-bottom m-3" id="message" style="display: none;">
+            <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <script>
+    
+        function showMessage() {
+            var messageDiv = document.getElementById('message');
+            if (messageDiv) {
+                messageDiv.style.display = 'block';
+            }
+        }
+    
+       
+        setTimeout(function() {
+            var messageDiv = document.getElementById('message');
+            if (messageDiv) {
+                messageDiv.style.display = 'none';
+            }
+        }, 3000);
+    
+        
+        showMessage();
+    </script>
+    
+
+
+
+
+    <div class="container-sm pb-4">
+           
+        {% if request.user.estudiante %}
+          
+        
+
+        <form method="post" action="{% url 'courses:unirse_grupo' 1 %}" class="form-inline mb-2">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="texto" class="me-3 d-flex align-items-center">Únete al grupo usando el código: </label>
+              <input type="text" name="texto" class="form-control me-1" autocomplete="off" placeholder="Escribe el código aquí ...">
+              <div class="input-group-append">
+                <button type="submit" class="btn gcolorbuttonsSmall">Enviar</button>
+              </div>
+            </div>
+          </form>
+          {% endif %}
+          
+          
+
+
+        <h1 tabindex="0" class="gsubtitulo h2">Lista de los grupos</h1>
+
+        {% if list_grupos %}
+          
+   
+        
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+
+            {% for dato in list_grupos %}
+
+
+
+
+            <div class="col">
+                <div class="card h-100">
+
+                    
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+
+                                
+                                
+                                {% if dato.imagen_grupo.url != null %}
+                                <div class="imagen-cuadrada">
+
+                                    <img src="{{dato.imagen_grupo.url}}" alt="" class="card-img-top" />
+                                </div>
+                                {% else %}
+                                <img src="{% static '../media/images_groups/default/default_group.jpg' %}" alt=""
+                                class="card-img-top" />
+                                
+                                {% endif %}
+                            </div>
+                            <div class="col-8">
+
+                                <h5 class="card-title">{{dato.name}}</h5>
+                                <p class="card-text">{{dato.description}}</p>
+                                <p class="card-text"><small class="text-muted">
+                                    <!-- {{dato.course}} -->
+                                    {{dato.profesor}} {{dato.codigo_unico}}</small></p>
+                                </div>
+                        </div>
+                  </div>
+                  <div class="card-footer d-flex justify-content-center">
+                    <small class="text-muted">
+                        
+                        {% if grupos_estudiantes_esta != None %}
+                        {% if dato.id|in_list:grupos_estudiantes_esta %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="text-success me-3 my-auto">Ya estás en este grupo</h5>
+                            <a class="btn gcolorbuttonsSmall" href="{% url 'view_grupo_general' dato.id  %}">Ir</a>
+                        </div>
+                        
+                                {% else %}
+                                <form action="{% url 'courses:unirse_grupo' dato.id %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="texto" value="{{ dato.codigo_unico }}">
+                                    <button type="submit" class="btn gcolorbuttonsSmall">Unirse</button>
+                                </form>
+                        {% endif %}
+                        
+                        {% else %}
+                        <h5 class="text-info">Solo estudiantes</h5>
+                          
+                        {% endif %}
+                        
+                        
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+
+            {% endfor %}
+        </div>
+
+        {% else %}
+
+        <h2 tabindex="0" class="gsubtitulo h5">No se han creado grupos</h2>
+
+          
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

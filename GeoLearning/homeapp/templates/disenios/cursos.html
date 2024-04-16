@@ -1,0 +1,136 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style type="text/css">
+  @media (min-width: 350px) {
+
+    h2 {
+      text-align: center;
+      color: rgb(255, 255, 255);
+      font-weight: bold;
+      line-height: 1.5;
+      border-top-style: none;
+      border-right-style: solid;
+      border-bottom-style: none;
+      border-left-style: solid;
+    }
+
+    .card {
+      /* width: 45%;
+      padding-top: 20px;
+      padding-right: 50px;
+      padding-bottom: 20px;
+      padding-left: 50px; */
+      text-align: justify;
+      /* margin-top: 20px; */
+      margin-right: 10px;
+      margin-bottom: 10px;
+      /* justify-content: center; */
+    }
+
+
+  }
+
+  @media(min-width: 800px) {
+
+    /* h2 {
+      text-align: center;
+      color: rgb(255, 255, 255);
+      font-weight: bold;
+      line-height: 1.5;
+      border-top-style: none;
+      border-right-style: solid;
+      border-bottom-style: none;
+      border-left-style: solid;
+      border-width: 10px;
+      padding: 10px;
+
+    } */
+
+    .container {
+      justify-content: center;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      width: 45%;
+      padding-top: 20px;
+      padding-right: 50px;
+      padding-bottom: 20px;
+      padding-left: 50px;
+      text-align: justify;
+      /* margin-top: 20px; */
+      margin-right: 10px;
+      margin-bottom: 10px;
+      /* justify-content: center; */
+    }
+
+  }
+</style>
+<h4 class="h3" style="text-align: center; color: rgb(255, 255, 255); background-color: rgba(1, 116, 25, 0.767); padding-top: 10px; padding-bottom: 10px;">
+  CURSOS</h4>
+<div class="container">
+
+  <div class="card">
+    <img src="https://cpb-us-e1.wpmucdn.com/blog.lrei.org/dist/3/10899/files/2012/10/53867780_d2f10dc726.jpg"
+      class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Geografia: Primer año.</h5>
+      <p class="card-text">
+        La República de Panamá es una gran franja ístmica con una superficie total de 75,417 km² y 319,823.9 km²​ de
+        superficie de aguas territoriales.
+      </p>
+      <a href="#!" class="btn btn-primary">Ingresar</a>
+    </div>
+
+  </div>
+  <div class="card" id="2">
+    <img src="https://www.caracteristicas.co/wp-content/uploads/2017/07/geografia-1-e1571191548230.jpg"
+      class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Geografia: Sengundo año.</h5>
+      <p class="card-text">
+        Corresponde a la segunda masa de tierra más grande del planeta, después de Asia, con una extensión aproximada de
+        42,111,231 km².Está compuesta por cuatro subcontinentes: América del Norte, América Central, América del Sur y
+        Antillas.
+      </p>
+      <a href="#!" class="btn btn-primary">Ingresar</a>
+    </div>
+  </div>
+  <div class="card" id="3">
+    <img
+      src="https://3.bp.blogspot.com/-EhxEfn6dasU/V2bvvJt2HII/AAAAAAAAATA/y6FJLQ4dwjw_69ZPwGwj301X_HrwjmDnACLcB/s1600/continents%2Band%2Boceans.gif"
+      class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Geografia: Tercer año.</h5>
+      <p class="card-text">
+        El globo terráqueo es un objeto tridimensional de forma esférica donde se encuentran representados los
+        continentes y los mares, que a su vez pueden exhibir la división política del mundo, o simplemente a mostrar los
+        relieves de la topografía terrestre y marítima, o ambos inclusive.
+      </p>
+      <a href="#!" class="btn btn-primary">Ingresar</a>
+    </div>
+  </div>
+  <div class="card" id="4">
+    <img src="https://i2.wp.com/geografia.weebly.com/uploads/9/5/2/8/952826/9334312_orig.jpg" class="card-img-top"
+      alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Geografia: Contenido extra.</h5>
+      <p class="card-text">
+        La geografía es la disciplina que trata del estudio, la descripción o de la representación gráfica de la Tierra.
+        En sentido amplio es la ciencia que estudia la superficie terrestre, las sociedades que la habitan y los
+        territorios, paisajes, lugares o regiones que la forman al relacionarse entre sí.
+      </p>
+      <a href="#!" class="btn btn-primary">Ingresar</a>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

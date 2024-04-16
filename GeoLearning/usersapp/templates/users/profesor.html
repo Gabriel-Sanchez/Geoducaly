@@ -1,0 +1,25 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div>
+  <h1><p>aqui se vera el video de los cursos </p></h1>
+  <h1>{{clases.course}}</h1>
+  {% for clase in clases %}
+  
+  <div style="color: red;">
+      <h2> 1 {{clase.course}}</h2>
+      <h2> 2 {{clase.title}}</h2>
+      <h2> 3 {{clase.estudiante}}</h2>
+      <h2> 4 {{clase.profesor}}</h2>
+  
+  
+  </div>
+  
+  {% endfor %}
+  
+  
+  </div>
+{% endblock %}

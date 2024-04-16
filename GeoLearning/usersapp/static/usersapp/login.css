@@ -1,0 +1,40 @@
+/* @media (max-width: 800px){ */
+    .margenes{
+        padding-left: 5%;
+        padding-right: 5%;
+        padding-top: 4%;
+        padding-bottom: 5%;
+    }
+/* } */
+
+
+@media (min-width: 550px){
+    .margenes{
+        padding-left: 20%;
+        padding-right: 20%;
+        padding-top: 4%;
+        padding-bottom: 5%;
+    }
+
+}
+
+@media (min-width: 900px){
+.margenes{
+    padding-left: 35%;
+    padding-right: 35%;
+    padding-top: 4%;
+    padding-bottom: 5%;
+}
+}
+
+
+
+.sizefont{
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.topbotP{
+    padding-top: 5%;
+    padding-bottom: 1%;
+}

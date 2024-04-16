@@ -1,0 +1,271 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Diccionario
+{% endblock title %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'defapp/datos.css' %}">
+
+<div style="padding-top: 2%;">
+
+    <div class="container-sm pb-4">
+
+        <h1 tabindex="0" class="gsubtitulo h2">  ¿Sabías que...? </h1>
+
+        {% if mensaje %}
+
+        <h4 style="padding: 6px;" class="alert {{tipoMensaje}}">{{mensaje}}</h4>
+
+        {% endif %}
+
+        <!-- <div class="alert-container">
+            
+            <div class="alert alert-{{ message.tags }} fixed-bottom m-3" id="message" style="display: none;">
+                <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                    {{ message }}
+                </div>
+            </div>
+        </div> -->
+
+        
+
+
+        <div class="d-flex justify-content-between mb-2">
+            <div>
+                <form action="{% url 'datos' 'filtro' %}" method="GET" id="miFormulario_filtro">
+                    <span id="errorMensaje_filtro" style="display: none; font-size: 16px; margin-left: 10px; margin-top: 5px;" class="badge rounded-pill badge-notification bg-danger">Por favor, elige una lección.</span>
+                    <div class="form-group mr-2 d-flex" >
+                        <!-- <div id="errorMensaje_filtro"  style="display: none; color: red;">Por favor, elige una lección.</div> -->
+                        <select class="form-control" name="leccion" id="select_filtro">
+                            <option value="" disabled   {% if selected_lesson is None %}selected{% endif %} hidden>Filtra por lección</option>
+                            {% for lesson in lessons %}
+                                <option value="{{ lesson.id }}" {% if selected_lesson == lesson.id %}selected{% endif %}>{{ lesson.title }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn gcolorbuttonsSmall" style="overflow: visible;">Filtrar</button>
+                    </div>
+                </form>
+            </div>
+
+            <script>
+                document.getElementById('miFormulario_filtro').addEventListener('submit', function(event) {
+                  var select_pareo = document.getElementById('select_filtro');
+                  var errorMensaje_pareo = document.getElementById('errorMensaje_filtro');
+                  
+                  if (select_pareo.value === "") {
+                    event.preventDefault();
+                    errorMensaje_pareo.style.display = "block";
+                    setTimeout(function() {
+                      errorMensaje_pareo.style.display = "none";
+                    }, 3000);
+                  } else {
+                    errorMensaje_pareo.style.display = "none";
+                  }
+                });
+                </script>
+        
+            <div>
+                <form action="{% url 'datos' 0 %}" method="GET">
+                    <div class="input-group">
+                        <div class="form-outline d-flex">
+                            <input style="background-color: white;" type="text" class="form-control" name="prd" required
+                            oninvalid="this.setCustomValidity('El campo esta vacío')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <label class="form-label" for="form1">buscar</label>
+                            <button type="submit" class="gcolorbuttonsSmall btn btn-success ">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+
+        {% for dato in alldatos %}
+
+        <div id="colorfondoTarjeta"  tabindex="0" class="card mb-3">
+            <div class="row g-0">
+                <!-- {% if dato.thumbnail %}
+                <div class="col-md-2">
+                    <img src="{{dato.thumbnail.url}}" alt="{{dato.alt}}"  class="card-img-top"
+                        style="height: 100%; width: 100%;" />
+                    </div>
+                    {% endif %} -->
+                <div class="col-md-10">
+                    <div class="card-body " >
+                        <h5 class="card-title">{{dato.title}}</h5>
+                       
+                        <div class="card-text">
+                            {{dato.description}}
+                        </div>
+                        <div class="card-text">
+                            <a href="{{dato.leccion.get_absolute_url}}  ">
+
+                                <span class="badge rounded-pill" style="background-color: {{dato.leccion.color}};">  {{dato.leccion.title}} </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+
+        <!-- <nav aria-label="">
+            <ul class="pagination pagination-lg justify-content-center gsubtitulo " style="color: aliceblue;">
+              <li class="page-item {{disabled.0}}">
+                <a class="page-link" href="{% url 'datos' NumPag|add:'-1' %}" tabindex="-1" aria-disabled="true">Anterior</a>
+              </li>
+    
+              {% for Nbut in arrayNumBoton %}
+    
+              {% if Nbut == NumPag %}
+    
+              <li class="page-item active" aria-current="page" >
+                <a class="page-link link-success" href="{% url 'datos' Nbut %}">{{Nbut}} <span class="visually-hidden">(current)</span></a>
+              </li>
+                
+              {% else %}
+    
+              <li class="page-item" ><a class="page-link" href="{% url 'datos' Nbut %}">{{Nbut}}</a></li>
+    
+                
+              {% endif %}
+              
+    
+    
+                
+              {% endfor %}
+    
+    
+    
+              
+              <li class="page-item  {{disabled.1}}">
+                <a class="page-link" href="{% url 'datos' NumPag|add:'1' %}">siguiente</a>
+              </li>
+            </ul>
+          </nav> -->
+
+
+
+
+          <style>
+            .page-link{
+                color: white;
+                font-size: medium;
+        
+            } .ulmod{
+                margin-top: 0;
+                margin-bottom: 0;
+        }
+
+        </style>
+        
+        <div class=" pagination pagination-lg justify-content-center gsubtitulo align-items-center">
+            <div class="d-flex justify-content-center align-items-center">
+        
+                <ul class="pagination d-flex justify-content-center align-items-center ulmod">
+                    <!-- <span class="step-links"> -->
+                        {% if alldatos.has_previous %}
+                        <li class="page-item"> 
+                            <a href="{{search}}?page=1" class="page-link">&laquo; Primera</a>
+        
+                        </li>
+                        <li class="page-item"> 
+                            <a href="{{search}}?page={{ alldatos.previous_page_number }}" class="page-link">Anterior</a>
+                             </li>
+                        
+                        {% endif %}
+                
+                        <span class="current pe-4 ps-4">
+                            Página {{ alldatos.number }} de {{ alldatos.paginator.num_pages }}
+                        </span>
+                
+                        {% if alldatos.has_next %}
+                        <li class="page-item">
+                            <a href="{{search}}?page={{ alldatos.next_page_number }} " class="page-link">Siguiente</a>
+                        </li>
+        
+                        <li class="page-item">
+                            <a href="{{search}}?page={{ alldatos.paginator.num_pages }}" class="page-link">Último &raquo;</a>
+        
+                        </li>
+                        {% endif %}
+                    <!-- </span> -->
+                </ul>
+        
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block scripts_footer %}
+
+<script>
+    // Función para determinar el contraste del color de fondo y cambiar el color del texto en consecuencia
+    function setContrastTextColor(elements) {
+        elements.forEach(function(element) {
+            let bgColor = getComputedStyle(element).backgroundColor;
+
+            // Convertir el color de fondo a un valor hexadecimal
+            let hexColor = bgColor.charAt(0) === "#" ? bgColor : "#" + bgColor.slice(4, -1).split(",").map(x => (+x).toString(16).padStart(2, "0")).join("");
+
+            // Convertir el color de fondo a RGB
+            let r = parseInt(hexColor.substr(1, 2), 16);
+            let g = parseInt(hexColor.substr(3, 2), 16);
+            let b = parseInt(hexColor.substr(5, 2), 16);
+
+            // Calcular el coeficiente de luminosidad (Luminance)
+            let luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+            // Establecer el color del texto en blanco o negro dependiendo del contraste
+            let textColor = (luminance > 0.5) ? "black" : "white";
+
+            // Aplicar el color del texto al elemento
+            element.style.color = textColor;
+        });
+    }
+
+    // Obtener todos los elementos con la clase "badge" y llamar a la función setContrastTextColor
+    let badgeElements = document.querySelectorAll('.badge');
+    setContrastTextColor(badgeElements);
+</script>
+{% endblock scripts_footer %}

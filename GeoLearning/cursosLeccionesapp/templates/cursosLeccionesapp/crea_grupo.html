@@ -1,0 +1,302 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+
+<style>
+    .btn-secondary{
+      background-color: var(--GcolorTitulosFondo);
+      color: white;
+    }
+  
+    .btn-secondary:hover{
+      background-color: var(--GcolorTitulosFondo_puro);
+      color: white;
+    }
+  </style>
+
+<style>
+
+    .fondocolor_form{
+        background-color: var(--Gprimary-color);
+        border-radius: 10px;
+        color: aliceblue;
+        padding: 10px;
+        padding-bottom: 20px;
+      }
+    .fondocolor_form_del{
+        background-color: var(--Gprimary-color);
+        border-radius: 10px;
+        color: aliceblue;
+        padding: 10px;
+      }
+
+
+
+    .gcolorbuttonsSmallEliminar{
+        background-color: rgb(254, 55, 55);
+        color: white;
+      }
+    
+      .gcolorbuttonsSmallEliminar:hover{
+        background-color: rgb(226, 0, 0);
+        color: white;
+      }
+    
+    .imagen-cuadrada {
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      border-radius: 15px;
+    }
+    
+    .imagen-cuadrada img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #error1, #error2{
+      border-radius: 15px;
+      background-color: rgba(255, 167, 167, 0);
+      display: none;
+      color: rgb(255, 0, 0);
+      text-align: center;
+    }
+  </style>
+
+<div class="container-sm mt-5 mb-5">
+
+    <div class="ms-5 me-5" >
+
+        {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} fixed-bottom m-3" id="message" style="display: none;">
+                <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <script>
+        
+            function showMessage() {
+                var messageDiv = document.getElementById('message');
+                if (messageDiv) {
+                    messageDiv.style.display = 'block';
+                }
+            }
+        
+           
+            setTimeout(function() {
+                var messageDiv = document.getElementById('message');
+                if (messageDiv) {
+                    messageDiv.style.display = 'none';
+                }
+            }, 3000);
+        
+            
+            showMessage();
+        </script>
+
+        <h1 class="gsubtitulo h2 p-1">Grupo</h1>
+        
+        <form method="post"  action="{% url 'courses:crea_grupo' %}"  enctype="multipart/form-data" class="mb-2 fondocolor_form" id="form_grupo_profesor">
+
+          
+            {% csrf_token %}
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="form-group form-inline mb-2">
+                            {{ form.id }}
+                            <label for="{{ form.name.id_for_label }}" class="mr-2">Nombre:</label>
+                            {{ form.name }}
+                            <span id="error1" class="error-message"></span>
+                            {% if form.name.errors %}
+                            <div class="text-danger mensaje_error_g" >
+                              {{form.name.errors}}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <!-- <div class="form-group form-inline">
+                            <label for="{{ form.course.id_for_label }}" class="mr-2">Curso:</label>
+                            {{ form.course }}
+                        </div> -->
+                        <div class="form-group form-inline mb-2">
+                            <label for="{{ form.description.id_for_label }}" class="mr-2">Descripción:</label>
+                            {{ form.description }}
+                            <span id="error2" class="error-message"></span>
+                            {% if form.description.errors %}
+                            <div class="text-danger mensaje_error_g" >
+                              {{form.description.errors}}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group form-inline mb-2">
+                            <label for="{{ form.privado.id_for_label }}" class="mr-2">Privado:</label>
+                            {{ form.privado }}
+                        </div>
+                    </div>
+                    <div class="col-md-6 align-items-center">
+                        <div class="form-group form-inline">
+
+                          {% if imagen_guardada %}
+
+                          {{imagen_guardada}}
+
+                          <label for="" style="margin-right: 35px;"> Image Actual: </label>
+                          <div class="imagen-cuadrada mb-4">
+                            <a href="{{ imagen_guardada.url }}">
+                              <img src="{{ imagen_guardada.url }}" alt="Imagen actual" >
+                          </a>
+                          
+                      </div>
+                            
+                          {% endif %}
+                          
+                            {% if form.imagen_grupo.value %}
+            
+                            <label for="" style="margin-right: 35px;"> Image Actual: </label>
+                            <div class="imagen-cuadrada mb-4">
+                              <a href="{{ form.imagen_grupo.value.url }}">
+                                <img src="{{ form.imagen_grupo.value.url }}" alt="Imagen actual" >
+                            </a>
+                            
+                        </div>
+                        {% endif %}
+                        <label for="{{ form.imagen_grupo.id_for_label }}" class="mr-2">Imagen del Grupo:</label>
+                        {{ form.imagen_grupo }}
+                        <div class="mensaje_error_grupo" id="error-message-grupo"  style="color: red; display: none;">
+                      
+                           El archivo seleccionado no es una imagen. Por favor, elige un archivo de imagen.
+                        
+
+                        </div>
+                        {% if form.imagen_grupo.errors %}
+                        <div class="text-danger mensaje_error_g" >
+                          {{form.imagen_grupo.errors}}
+                        </div>
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                <button type="submit" class="btn gcolorbuttonsSmall me-2">Guardar Grupo</button>
+                {% if boton_del == 1 %}
+                <a id="openModalButton" class="btn gcolorbuttonsSmallEliminar" data-toggle="modal" data-target="#confirmDeleteModal">Eliminar Grupo</a>
+                {% endif %}
+            </div>
+        </form>
+        {% if boton_del == 1 %}
+
+        <!-- Botón para abrir el modal -->
+
+        <!-- <div class="d-flex justify-content-center mt-4 fondocolor_form_del">
+            <a id="openModalButton" class="btn gcolorbuttonsSmallEliminar" data-toggle="modal" data-target="#confirmDeleteModal">Eliminar Grupo</a>
+        </div> -->
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body" style="text-align: center;">
+        ¿Estás seguro de que deseas eliminar este grupo?
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <form action="{% url 'courses:delete_grupo' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="texto" value="{{ id }}">
+          <button type="submit" class="btn gcolorbuttonsSmallEliminar">Eliminar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#openModalButton').on('click', function(){
+          $('#confirmDeleteModal').modal('show');
+        });
+      });
+      
+</script>
+  
+        {% endif %}
+        
+        
+        
+        
+        <!-- <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Crear Grupo</button>
+        </form> -->
+        
+        
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#form_grupo_profesor').on('submit', function(event) {
+     
+        var archivoInput = document.getElementById('id_imagen_grupo');
+        console.log(archivoInput)
+        if (archivoInput.files.length > 0) {
+            var file = archivoInput.files[0];
+            var fileType = file.type.split('/')[0]; // Obtiene el tipo del archivo
+
+            if (fileType !== 'image') {
+                
+                document.getElementById('error-message-grupo').style.display = 'block';
+                event.preventDefault(); // Evita que se envíe el formulario
+            }else {
+              document.getElementById('error-message-grupo').style.display = 'none';
+          }
+        }
+    });
+});
+
+
+document.getElementById("form_grupo_profesor").addEventListener("submit", function(event) {
+  var campoTexto = document.getElementById('id_name');
+  var campoTextarea = document.getElementById('id_description');
+  var errorTexto = document.getElementById('error1');
+  var errorTextarea = document.getElementById('error2');
+
+  if (!campoTexto.value.trim() ) {
+      errorTexto.textContent = 'Este campo no puede estar vacío o contener solo espacios.';
+      errorTexto.style.display = 'block';
+      event.preventDefault();
+  } else {
+      errorTexto.textContent = '';
+      errorTexto.style.display = 'none';
+  }
+
+  if (!campoTextarea.value.trim() ) {
+      errorTextarea.textContent = 'Este campo no puede estar vacío o contener solo espacios.';
+      errorTextarea.style.display = 'block';
+      event.preventDefault();
+  } else {
+      errorTextarea.textContent = '';
+      errorTextarea.style.display = 'none';
+  }
+});
+
+
+</script>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,26 @@
+ {% extends "baseapp/base.html" %}
+
+ {% load static %}
+
+{% block content %}
+  <h1>Calendario</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Evento</th>
+        <th>Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in calendar.events.all %}
+        <tr>
+          <td>{{ event.start }}</td>
+          <td>{{ event.title }}</td>
+          <td>{{ event.description }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

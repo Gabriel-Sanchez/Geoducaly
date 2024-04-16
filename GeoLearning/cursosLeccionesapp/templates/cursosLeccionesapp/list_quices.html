@@ -1,0 +1,53 @@
+{% extends "baseapp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    
+    
+    <h2 class="gsubtitulo" style="margin-bottom: 2%;">Lista Quices
+    </h2>
+    
+    
+    <div class="card mb-4 p-4">
+
+        <h2 class="gsubtitulo" style="margin-bottom: 2%;">
+            {{grupo}}
+        </h2>
+        
+        <a href="{% url 'courses:create_quiz' id_grupo %}" style=" margin-left: 17px; margin-bottom: 10px;" class="btn gcolorbuttonsSmall col-2 align-self-end ">Nuevo Quiz</a>
+       
+        
+    
+
+
+<div class="list-group list-group-light">
+    {% for quiz in list_Q %}
+    
+    <a href="{% url 'courses:edit_quiz' quiz.id %}" class="row d-flex list-group-item list-group-item-success me-0 ms-0"> 
+        
+        <div class="col-11 align-self-start">
+            {{quiz}} 
+
+        </div>
+
+        
+        <div class="col-1 align-self-end">
+            editar
+            
+        </div>
+    </a>
+    
+    
+    <br>
+    
+    {% endfor %}
+</div>
+
+
+</div>
+</div>
+
+{% endblock %}
