@@ -32,7 +32,7 @@ urlpatterns = [
     path('juegos/', include('juegosapp.urls')),
     
     
-    path('calendario/', include('calendarioapp.urls')),
+   
     path('truefalse/', include('ciertoFalsoapp.urls')),
     
     

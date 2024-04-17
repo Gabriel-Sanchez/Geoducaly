@@ -5,9 +5,7 @@ GeoLearning/homeapp/__pycache__/*
 /.vscode/
 **/.vscode/
 gamesUnityapp/static/gamesUnityapp/juegos_unity/
-GeoducalyVenv/
-
-
+GeoducalyV2/
 # Django #
 *.log
 *.pot

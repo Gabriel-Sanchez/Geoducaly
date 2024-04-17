@@ -55,7 +55,7 @@ from django import forms
 class LessonAdminForm(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['slug', 'title', 'course', 'position', 'video_url', 'thumbnail', 'video_e', 'description', 'content', 'ejercicio', 'alt', 'contentenido', 'mostrar', 'color']
+        fields = ['slug', 'title', 'course', 'position', 'video_url', 'thumbnail', 'description', 'content', 'ejercicio', 'alt', 'contentenido', 'mostrar', 'color']
 
         widgets = {
             'color': forms.TextInput(attrs={'type': 'color'}),  # Utiliza un input de tipo 'color' para el campo de color

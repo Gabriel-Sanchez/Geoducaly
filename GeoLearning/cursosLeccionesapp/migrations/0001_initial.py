@@ -5,7 +5,7 @@ import cursosLeccionesapp.models
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import embed_video.fields
+# import embed_video.fields
 
 
 class Migration(migrations.Migration):
@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ('position', models.IntegerField()),
                 ('video_url', models.CharField(max_length=200)),
                 ('thumbnail', models.ImageField(upload_to='lesson')),
-                ('video_e', embed_video.fields.EmbedVideoField()),
+                # ('video_e', embed_video.fields.EmbedVideoField()),
                 ('description', models.TextField(blank=True)),
                 ('content', models.TextField(blank=True)),
                 ('ejercicio', models.CharField(blank=True, max_length=100)),

@@ -6,7 +6,7 @@ from django.db import models
 
 from django.urls import reverse
 
-from embed_video.fields import EmbedVideoField
+# from embed_video.fields import EmbedVideoField
 
 from django.contrib.auth.models import User
 
@@ -57,7 +57,7 @@ class Lesson(models.Model):
     position = models.IntegerField()
     video_url = models.CharField(max_length=200)
     thumbnail = models.ImageField(upload_to='lesson')
-    video_e = EmbedVideoField()
+    # video_e = EmbedVideoField()
     description = models.TextField(blank=True)
     content = models.TextField(blank=True)
     ejercicio = models.CharField(max_length=100, blank=True)

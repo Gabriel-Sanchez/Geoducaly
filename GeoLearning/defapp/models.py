@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.urls import reverse
-from embed_video.fields import EmbedVideoField
+# from embed_video.fields import EmbedVideoField
 from cursosLeccionesapp.models import course, Lesson
 
 
