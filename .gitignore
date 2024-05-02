@@ -13,6 +13,8 @@ GeoducalyV2/
 __pycache__
 #db.sqlite3
 #media
+variables_entorno.sh
+staticfiles
 
 # Backup files # 
 *.bak 
