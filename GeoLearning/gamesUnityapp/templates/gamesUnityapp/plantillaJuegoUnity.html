@@ -27,7 +27,8 @@
   <head>
 
     <!-- <link rel="shortcut icon" href="/static/gamesUnityapp/juegos_unity/{{name_path_game.ruta_juego }}/TemplateData/favicon.ico"> -->
-    <link rel="stylesheet" href="/static/gamesUnityapp/css//TemplateData/style.css"> 
+    {% comment %} <link rel="stylesheet" href="/static/gamesUnityapp/css/TemplateData/style.css">  {% endcomment %}
+    <link rel="stylesheet" href=" {% static "/gamesUnityapp/css/TemplateData/style.css" %}"> 
   </head>
  
     <div class="d-flex justify-content-center align-items-center margen_unity_canvas" >
@@ -98,7 +99,7 @@
         }
         updateBannerVisibility();
       }
-      var buildUrl = "/static/gamesUnityapp/juegos_unity/{{name_path_game.ruta_juego }}/Build";
+      var buildUrl = "https://pub-38cd3edb1f0c49b8a575750eb1dd23b7.r2.dev/gamesUnityapp/juegos_unity/{{name_path_game.ruta_juego }}/Build";
       var loaderUrl = buildUrl + "/{{name_path_game.ruta_juego }}.loader.js";
       var config = {
         dataUrl: buildUrl + "/{{name_path_game.ruta_juego }}.data.gz",

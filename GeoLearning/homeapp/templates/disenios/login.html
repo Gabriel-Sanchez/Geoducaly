@@ -97,7 +97,7 @@
             {% if comment.user.estudiante.picture.url != null %}
             <img class="rounded-circle" src="{{ comment.user.estudiante.picture.url }}"  width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
             {% else %}
-            <img class="rounded-circle" src="{% static '..\media\default\user.png' %}"  width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+            <img class="rounded-circle" src="{% static 'media/default/user.webp' %}"  width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
             {% endif %}
               {{ comment.content }}
             </li>

@@ -32,7 +32,7 @@
  
   <link href="{% static 'GeoLearning/css/mdb.min.css' %}" rel="stylesheet">
 
-  <link rel="shortcut icon" href="{% static '..\media\logoGEOL.png' %}">
+  <link rel="shortcut icon" href="{% static '/media/default/logoGEOL.webp' %}">
 
   <link rel="stylesheet" href="{% static 'cursosLeccionesapp/style.css' %}">
 
@@ -95,7 +95,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           
           <a class="navbar-brand ms-2 mt-2 mt-lg-0" href="{% url 'home' %}">
-            <img src="{% static '..\media\logoGEOL.png' %}" height="35" alt="logo de GeoLearning" loading="lazy" />
+            <img src="{% static '/media/default/logoGEOL.webp' %}" height="35" alt="logo de GeoLearning" loading="lazy" />
             <a class="navbar-brand" href="{% url 'home' %}">Geoducaly</a>
           </a>
           <ul class="navbar-nav me-auto ms-4 mb-2 mb-lg-0">
@@ -196,7 +196,7 @@
                       <img src="{{ request.user.estudiante.picture.url }}" class="rounded-circle" height="25" width="25" alt=""
                       loading="lazy" />
                       {% else %}
-                      <img src="{% static '..\media\default\user.png' %}" class="rounded-circle" height="25" alt=""
+                      <img src="{% static 'media/default/user.webp' %}" class="rounded-circle" height="25" alt=""
                       loading="lazy" />
                       {% endif %}
 
@@ -208,14 +208,14 @@
             <img src="{{ request.user.profesor.picture.url }}" class="rounded-circle" height="25" width="25" alt=""
                     loading="lazy" />
             {% else %}
-            <img src="{% static '..\media\default\user.png' %}" class="rounded-circle" height="25" alt=""
+            <img src="{% static 'media/default/user.webp' %}" class="rounded-circle" height="25" alt=""
             loading="lazy" />
             {% endif %}
 
 
 
                     {% else %}
-            <img src="{% static '..\media\default\user.png' %}" class="rounded-circle" height="25" alt=""
+            <img src="{% static 'media/default/user.webp' %}" class="rounded-circle" height="25" alt=""
               loading="lazy" />
             {% endif %}
 

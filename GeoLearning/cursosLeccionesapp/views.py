@@ -1598,7 +1598,7 @@ def set_comment_lesson(request):
         elif hasattr(comment.user, 'profesor') and comment.user.profesor.picture:
             picture_url = comment.user.profesor.picture.url
         else:
-            picture_url = '/media/default/user.png'
+            picture_url = '/media/default/user.webp'
         comments_data.append({
             'content': comment.content,
             'picture_url': picture_url

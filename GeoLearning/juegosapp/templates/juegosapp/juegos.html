@@ -62,7 +62,7 @@
                     {% if juegos.0.picture.url != null %}
                     <img src="{{juegos.0.picture.url}}" class="card-img-top" alt="{{juegos.alt}}" />
                     {% else %}
-                    <img src="{% static '..\media\default\user.png' %}" class="card-img-top" alt="..." style="height: 15rem"/>
+                    <img src="{% static 'media/default/user.webp' %}" class="card-img-top" alt="..." style="height: 15rem"/>
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{juegos.0}}</h5>
