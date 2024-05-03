@@ -54,7 +54,7 @@ INSTALLED_APPS = [
      'widget_tweaks',
      'nested_admin',
 
-
+    'storages'
 ]
 
 X_FRAME_OPTIONS='SAMEORIGIN'
@@ -152,6 +152,7 @@ MEDIA_URL='/media/'
 MEDIA_ROOT= BASE_DIR / 'media'
 LOGIN_URL = '/users/login'
 
+STATIC_ROOT = BASE_DIR / "static"
 
 # settings.py
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -173,3 +174,13 @@ CKEDITOR_CONFIGS = {
         'width': '100%',   
     },
 }
+
+
+AWS_ACCESS_KEY_ID= os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY=os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME=os.environ.get("AWS_STORAGE_BUCKET_NAME")
+DEFAULT_FILE_STORAGE=os.environ.get("DEFAULT_FILE_STORAGE")
+STATICFILES_STORAGE=os.environ.get("STATICFILES_STORAGE")
+# AWS_S3_CUSTOM_DOMAIN=os.environ.get("AWS_S3_CUSTOM_DOMAIN")
+AWS_S3_ENDPOINT_URL=os.environ.get("AWS_S3_ENDPOINT_URL")
+AWS_S3_SIGNATURE_VERSION = 's3v4'
