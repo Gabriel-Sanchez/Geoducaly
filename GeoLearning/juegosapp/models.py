@@ -192,6 +192,9 @@ class Lesson_cards(models.Model):
         questions = list(self.cartas_de_leccion.all())
         random.shuffle(questions)
         return questions[:numero_preguntas]
+    def get_cards_lend(self):
+        number = self.cartas_de_leccion.all().count()
+        return number
     
     def get_cards(self, numero_preguntas):
         # cards_lesson = self.preguntas_test_tf.all().order_by('?')[:numero_preguntas]
@@ -201,8 +204,8 @@ class Lesson_cards(models.Model):
         
         if numero_preguntas == 1:
             total_nivel = cards_lesson[:total//3]
-        elif numero_preguntas == 2:
-            total_nivel = cards_lesson[:total//2]
+        elif numero_preguntas == 2 and total >= 3:
+            total_nivel = cards_lesson[:3]
         elif numero_preguntas == 3:
             total_nivel = cards_lesson[:total]
         return total_nivel

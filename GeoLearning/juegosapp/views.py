@@ -270,7 +270,10 @@ def game_view(request):
     id_lesson = int (request.session['lesson_dificultad_cards']['lesson'])
     lesson_cards = Lesson_cards.objects.get(id=id_lesson)
     
-    cards = list(lesson_cards.get_cards(2) )
+    if lesson_cards.get_cards_lend() >= 3:
+        cards = list(lesson_cards.get_cards(2) )
+    else:
+        cards = list(lesson_cards.get_cards(3) )    
     cards2 = copy.deepcopy(cards )
     
     for card in cards:
@@ -321,7 +324,10 @@ def cardsPareo(request):
     print(cards)
     print('cards 2 despues de 0 =')
     print(cards2)
-    cards = list(lesson_cards.get_cards(2) )
+    if lesson_cards.get_cards_lend() >= 3:
+        cards = list(lesson_cards.get_cards(2) )
+    else:
+        cards = list(lesson_cards.get_cards(3) )    
     cards2 = copy.deepcopy(cards )
     print("cards 1 despues de fultro")
     print(cards)
